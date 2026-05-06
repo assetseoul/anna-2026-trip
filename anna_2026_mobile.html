@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anna 2026 — Full Trip</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep:#0F1923; --gold:#C9A84C; --stone:#8C8C7A; --bl:#E8E4DC; --bg:#F7F4EF;
+  --anna:#2B6CB0; --anna-bg:#EBF4FF;
+  --emma:#9B2C7C; --emma-bg:#FDF2F8;
+  --hj:#6B46C1;   --hj-bg:#F3EEFF;
+  --mira:#276749; --mira-bg:#E6F4EE;
+  --hyojin:#C05621; --hyojin-bg:#FFF0E6;
+  --ej:#B7791F;   --ej-bg:#FFFBEB;
+  --warn:#C53030; --warn-bg:#FFF5F5;
+  --ok:#276749;   --ok-bg:#E6F4EE;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--bg); color: #1A1A2E; font-size: 13px; }
+
+/* MASTHEAD */
+.mh { background: var(--deep); padding: 20px 16px 18px; position: relative; overflow: hidden; }
+.mh::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 0%, rgba(201,168,76,.15) 0%, transparent 60%); }
+.mh-inner { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.mh-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; }
+.mh h1 { font-family: 'Fraunces', serif; font-size: clamp(18px, 5vw, 26px); font-weight: 300; color: #fff; line-height: 1.15; }
+.mh h1 em { font-style: italic; color: var(--gold); }
+.mh-stats { display: flex; gap: 16px; flex-shrink: 0; }
+.stat { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.stat-n { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 300; color: var(--gold); line-height: 1; }
+.stat-l { font-size: 8px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.35); font-family: 'DM Mono', monospace; }
+
+/* LEGEND */
+.lg { background: white; border-bottom: 1px solid var(--bl); padding: 9px 16px; display: flex; flex-wrap: wrap; gap: 5px 14px; }
+.li { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--stone); }
+.ld { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* CHAPTER */
+.ch { background: var(--deep); padding: 9px 16px; display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.ch-n { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 300; color: var(--gold); opacity: .5; line-height: 1; width: 26px; flex-shrink: 0; font-style: italic; }
+.ch-info { flex: 1; min-width: 0; }
+.ch-title { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 300; font-style: italic; color: #fff; line-height: 1.3; }
+.ch-sub { font-size: 9px; color: rgba(255,255,255,.35); font-family: 'DM Mono', monospace; letter-spacing: .04em; margin-top: 2px; }
+.ch-ppl { display: flex; gap: 3px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* SECTION LABEL */
+.sec { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--stone); padding: 9px 16px 3px; background: var(--bg); border-bottom: 1px solid var(--bl); display: block; }
+
+/* CARD */
+.card { background: white; border-bottom: 1px solid var(--bl); padding: 12px 16px; display: grid; grid-template-columns: 58px 1fr; gap: 10px; }
+.dt { text-align: right; padding-top: 1px; }
+.dm { font-family: 'Fraunces', serif; font-size: 13px; font-weight: 300; color: #1A1A2E; line-height: 1.1; }
+.ds { font-size: 9px; color: var(--stone); margin-top: 2px; }
+.ct { display: flex; flex-direction: column; gap: 3px; }
+.ro { font-size: 13px; font-weight: 500; color: #1A1A2E; line-height: 1.3; }
+.ri { font-size: 11px; color: var(--stone); line-height: 1.6; }
+.hn { font-size: 12px; font-weight: 500; color: #374151; margin-top: 3px; }
+.hs { font-size: 11px; color: var(--stone); line-height: 1.5; }
+.rf { font-family: 'DM Mono', monospace; font-size: 9px; color: #A0A090; margin-top: 1px; }
+.nt { font-size: 10px; color: var(--stone); font-style: italic; margin-top: 2px; }
+.bag { font-size: 11px; font-weight: 500; color: #374151; margin-top: 2px; }
+
+/* STAY */
+.stay { background: #FDFCFA; border-bottom: 1px solid var(--bl); padding: 8px 16px 8px 74px; }
+.sy { font-size: 10px; color: var(--stone); margin-bottom: 2px; }
+.sn { font-size: 12px; font-weight: 500; color: #374151; }
+
+/* BADGES */
+.bgs { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+.b { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 500; }
+.ba  { background: var(--anna-bg);   color: var(--anna); }
+.be  { background: var(--emma-bg);   color: var(--emma); }
+.bh  { background: var(--hj-bg);     color: var(--hj); }
+.bm  { background: var(--mira-bg);   color: var(--mira); }
+.bhj { background: var(--hyojin-bg); color: var(--hyojin); }
+.bej { background: var(--ej-bg);     color: var(--ej); }
+.bw  { background: var(--warn-bg);   color: var(--warn); }
+.bo  { background: var(--ok-bg);     color: var(--ok); }
+.lk  { font-size: 9px; color: #2B6CB0; text-decoration: none; border-bottom: 1px solid rgba(43,108,176,0.3); }
+
+/* FOOTER */
+.ft { background: var(--deep); padding: 16px; margin-top: 8px; }
+.ft-logo { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 300; color: var(--gold); font-style: italic; }
+.ft p { font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(255,255,255,.3); letter-spacing: .05em; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="mh">
+  <div class="mh-inner">
+    <div>
+      <div class="mh-label">Anna Heo · A.SSET · 2026</div>
+      <h1>5/16 — 6/17<br><em>Full Trip Dossier</em></h1>
+    </div>
+    <div class="mh-stats">
+      <div class="stat"><div class="stat-n">6</div><div class="stat-l">개국</div></div>
+      <div class="stat"><div class="stat-n">33</div><div class="stat-l">박</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">챕터</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="lg">
+  <div class="li"><div class="ld" style="background:var(--anna)"></div>안나 (전 일정)</div>
+  <div class="li"><div class="ld" style="background:var(--emma)"></div>엠마 (~5/23)</div>
+  <div class="li"><div class="ld" style="background:var(--hj)"></div>회준 (5/24~5/30)</div>
+  <div class="li"><div class="ld" style="background:var(--mira)"></div>미라 (5/30~6/10)</div>
+  <div class="li"><div class="ld" style="background:var(--hyojin)"></div>효진 (6/3~6/9)</div>
+  <div class="li"><div class="ld" style="background:var(--ej)"></div>은정 (6/11~)</div>
+</div>
+
+<!-- ═══ CH1 스카우팅 ═══ -->
+<div class="ch">
+  <div class="ch-n">1</div>
+  <div class="ch-info">
+    <div class="ch-title">동유럽 스카우팅 트립</div>
+    <div class="ch-sub">5/16 — 5/30 · 트빌리시 · 예레반 · 소피아 · 부쿠레슈티 · 베오그라드 · 자그레브</div>
+  </div>
+  <div class="ch-ppl"><span class="b ba">안나</span><span class="b be">엠마</span><span class="b bh">회준</span></div>
+</div>
+
+<span class="sec">트빌리시 — Georgia</span>
+<div class="card" data-date="0516"><div class="dt"><div class="dm">5/16</div><div class="ds">토</div></div><div class="ct">
+  <div class="ro">ICN → 트빌리시</div>
+  <div class="ri">에어아스타나 KC910/139 · 11:10→21:20 · 알마티 환승</div>
+  <div class="bag">위탁 2개 × 32kg (비즈니스)</div>
+  <div class="rf">PNR: EQJXXN</div>
+  <div class="hn">Swissôtel Tbilisi</div><div class="hs">CI: 21:20 이후</div>
+  <div class="rf">#QHSHCSHK · 트윈룸</div>
+  <div class="bgs"><span class="b bo">✓ 예약완료</span></div>
+  <div class="nt">엠마 ICN 09:40→IST 22:10 (CZ340/8089) · PNR: PC0WPZ</div>
+</div></div>
+<div class="card" data-date="0517"><div class="dt"><div class="dm">5/17</div><div class="ds">일 새벽</div></div><div class="ct">
+  <div class="ro">IST → 트빌리시 합류</div>
+  <div class="ri">터키항공 TK376 · 01:50→05:15</div>
+  <div class="rf">PNR: RLHJ8L · 위탁 30kg 총량</div>
+  <div class="bgs"><span class="b be">엠마 합류</span></div>
+</div></div>
+<div class="stay"><div class="sy">5/17~20 · 3박 · MA 미팅 · 캐스팅</div><div class="sn">Swissôtel Tbilisi · CO: 5/20</div><div class="bgs"><span class="b ba">안나</span><span class="b be">엠마</span></div></div>
+
+<span class="sec">예레반 — Armenia</span>
+<div class="card" data-date="0520"><div class="dt"><div class="dm">5/20</div><div class="ds">수</div></div><div class="ct">
+  <div class="ro">TBS → EVN</div>
+  <div class="ri">조지아항공 A9723 · 08:20→08:50 · 위탁 1개×23kg</div>
+  <div class="rf">PNR: 0023DV</div>
+  <div class="hn">Courtyard by Marriott Yerevan</div><div class="hs">CI: 08:50 도착</div>
+  <div class="rf">#80466808 · 트윈룸</div>
+  <div class="bgs"><span class="b bw">⚠ 얼리체크인 요청</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b be">엠마</span></div>
+</div></div>
+<div class="stay"><div class="sy">5/20~21 · 1박 · MA 미팅</div><div class="sn">Courtyard Yerevan · CO: 5/21 새벽</div><div class="bgs"><span class="b ba">안나</span><span class="b be">엠마</span></div></div>
+
+<span class="sec">소피아 — Bulgaria</span>
+<div class="card" data-date="0521"><div class="dt"><div class="dm">5/21</div><div class="ds">목 새벽</div></div><div class="ct">
+  <div class="ro">EVN → SOF</div>
+  <div class="ri">에게항공 A3899/A3980 · 04:25→11:10 · 아테네 환승</div>
+  <div class="bag">위탁 1개 × 23kg</div>
+  <div class="rf">PNR: BCU5NQ</div>
+  <div class="hn">Junó Hotel Sofia</div><div class="hs">CI: 11:10 도착</div>
+  <div class="rf">#80544579 · 트윈룸</div>
+  <div class="bgs"><span class="b bw">⚠ 얼리체크인 요청</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b be">엠마</span></div>
+</div></div>
+<div class="stay"><div class="sy">5/21~23 · 2박 · MA 미팅 · 캐스팅</div><div class="sn">Junó Hotel Sofia · CO: 5/23 (엠마 아웃)</div><div class="bgs"><span class="b ba">안나</span><span class="b be">엠마 5/23 아웃</span></div></div>
+
+<span class="sec">소피아 해산 / 회준 출발 — 5/23</span>
+<div class="card" data-date="0523"><div class="dt"><div class="dm">5/23</div><div class="ds">토</div></div><div class="ct">
+  <div class="ro">SOF → OTP (안나)</div>
+  <div class="ri">타롬항공 RO292 · 10:05→11:10 · 위탁 1개×23kg</div>
+  <div class="rf">PNR: 9SH32C</div>
+  <div class="hn">InterContinental Athénée Palace</div>
+  <div class="hs">CI: 11:10 · King Junior Suite · 단독 1박</div>
+  <div class="rf">#84189437</div>
+  <div class="bgs"><span class="b bw">⚠ 얼리체크인 요청</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs"><span class="b ba">안나</span></div>
+  <div class="nt">엠마: SOF→IST 15:50 (TK1032) → 5/24 IST→ICN 귀국</div>
+</div></div>
+<div class="card" data-date="0523"><div class="dt"><div class="dm">5/23</div><div class="ds">토</div></div><div class="ct">
+  <div class="ro">ICN → IST (회준 출발)</div>
+  <div class="ri">중국남방항공 CZ340/8089 · 09:40→22:10 · 광저우 환승</div>
+  <div class="bag">위탁 2개 × 23kg</div>
+  <div class="rf">PNR: NX7XT8</div>
+  <div class="hn">Holiday Inn Express 이스탄불</div>
+  <div class="hs">CI: 15:00 / CO: 5/24 12:00 · 싱글룸 · 조식 포함</div>
+  <div class="rf">확인번호: 21718571</div>
+  <div class="bgs"><span class="b bh">회준</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+
+<span class="sec">부쿠레슈티 — Romania</span>
+<div class="card" data-date="0524"><div class="dt"><div class="dm">5/24</div><div class="ds">일</div></div><div class="ct">
+  <div class="ro">IST → OTP (회준 합류)</div>
+  <div class="ri">터키항공 TK1039 · 13:20→14:35 · 위탁 30kg 총량</div>
+  <div class="rf">PNR: TVVPZI</div>
+  <div class="hn">Mercure Bucharest Cantemir</div>
+  <div class="hs">CI: 14:35 이후 · 별도 객실</div>
+  <div class="rf">#QHTPBDCK</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bh">회준 합류</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+<div class="stay"><div class="sy">5/24~26 · 2박 · MA 미팅</div><div class="sn">Mercure Bucharest Cantemir · CO: 5/26</div><div class="bgs"><span class="b ba">안나</span><span class="b bh">회준</span></div></div>
+
+<span class="sec">베오그라드 — Serbia</span>
+<div class="card" data-date="0526"><div class="dt"><div class="dm">5/26</div><div class="ds">화</div></div><div class="ct">
+  <div class="ro">OTP → BEG</div>
+  <div class="ri">에어세르비아 JU103 · 16:05→16:20 · 위탁 1개×23kg ✓</div>
+  <div class="rf">PNR: UXSQLH</div>
+  <div class="hn">Courtyard Belgrade City Center</div>
+  <div class="hs">CI: 16:20 이후 · 킹침대 디럭스룸 2개</div>
+  <div class="rf">#80759708</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bh">회준</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+<div class="stay"><div class="sy">5/26~28 · 2박 · MA 미팅</div><div class="sn">Courtyard Belgrade · CO: 5/28</div><div class="bgs"><span class="b ba">안나</span><span class="b bh">회준</span></div></div>
+
+<span class="sec">자그레브 (→ 리예카 옵션) — Croatia</span>
+<div class="card" data-date="0528"><div class="dt"><div class="dm">5/28</div><div class="ds">목 새벽</div></div><div class="ct">
+  <div class="ro">BEG → ZAG</div>
+  <div class="ri">에어세르비아 JU600 · 07:50→09:10 · 위탁 1개×23kg ✓</div>
+  <div class="rf">PNR: QEWSJA</div>
+  <div class="ri">SIXT 렌트카 픽업 11:00 · BMW X1 · €423.66</div>
+  <div class="rf">#9733701454 · 취소가능</div>
+  <div class="hn">DoubleTree by Hilton Zagreb</div>
+  <div class="hs">CI: 15:00 · CO: 5/29 12:00 · Family Connecting Room · 3인 · €371.95</div>
+  <div class="rf">#3467452644</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bh">회준</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs"><span class="b bw">⚠ 무료취소 5/23 23:59까지</span></div>
+</div></div>
+<div class="stay"><div class="sy">5/28~29 · 1박 · MA 미팅</div><div class="sn">DoubleTree by Hilton Zagreb · CO: 5/29 12:00</div><div class="bgs"><span class="b ba">안나</span><span class="b bh">회준</span></div></div>
+<div class="card" data-date="0529"><div class="dt"><div class="dm">5/29</div><div class="ds">금</div></div><div class="ct">
+  <div class="ro">ZAG → 리예카 → 스플리트</div>
+  <div class="ri">렌트카 자그레브→리예카 (1.5h) · MA 미팅 (~18:00 종료)</div>
+  <div class="ri">리예카→스플리트 약 4.5h · 도착 ~22:30</div>
+  <div class="hn">Hotel Oscar 스플리트</div>
+  <div class="hs">CI: 22:30 예정 · CO: 5/30</div>
+  <div class="rf">#9745685</div>
+  <div class="bgs"><span class="b ba">안나 → 스플리트</span><span class="b bh">회준 → 슬로베니아</span></div>
+  <div class="bgs"><span class="b bo">✓ 예약완료</span></div>
+  <div class="nt">회준 귀국: 6/13 IST→ICN (CZ8066/CZ337) · PNR: NX7XT8</div>
+</div></div>
+
+<!-- ═══ CH2 안나+미라 ═══ -->
+<div class="ch">
+  <div class="ch-n">2</div>
+  <div class="ch-info">
+    <div class="ch-title">안나 · 미라</div>
+    <div class="ch-sub">5/29 — 6/2 · 스플리트 · 브라치 섬 · 두브로브니크</div>
+  </div>
+  <div class="ch-ppl"><span class="b ba">안나</span><span class="b bm">미라</span></div>
+</div>
+
+<span class="sec">스플리트 → 브라치 섬</span>
+<div class="card" data-date="0530"><div class="dt"><div class="dm">5/30</div><div class="ds">토</div></div><div class="ct">
+  <div class="ro">ZAG SIXT 반납 → SPU SIXT 픽업</div>
+  <div class="ri">자그레브 SIXT 반납 11:00 · #9733701454</div>
+  <div class="ri">스플리트 SIXT 픽업 12:00 · #9730372753</div>
+  <div class="ri">페리 스플리트→수페타르 Line 631 · 50분 · 선착순 ~€40</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라 합류</span></div>
+  <div class="bgs"><a class="lk" href="https://www.jadrolinija.hr/en/travel/split_-_supetar_brac" target="_blank">🕐 페리 시간표 (Line 631)</a></div>
+</div></div>
+
+<span class="sec">브라치 섬 / 볼 — 2박</span>
+<div class="card" data-date="0530"><div class="dt"><div class="dm">5/30–6/1</div><div class="ds">2박</div></div><div class="ct">
+  <div class="ro">브라치 / 볼</div>
+  <div class="ri">즐라트니 라트 · Vidova Gora · 섬 드라이브</div>
+  <div class="hn">Lifestyle Hotel Vitar</div>
+  <div class="hs">CI: 14:00~23:00 · CO: 6/1 05:00~11:00</div>
+  <div class="hs">Sea View Room · 조식 포함 · €396</div>
+  <div class="rf">#0NZOOJ · 무료취소 5/22까지</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs"><a class="lk" href="https://hotelvitar.book.rentl.io/reservations/af2851e4-d595-48bc-8ec6-4af3bb241e21?language=en" target="_blank">📎 예약확인서</a></div>
+</div></div>
+
+<span class="sec">브라치 → 스톤 → 두브로브니크</span>
+<div class="card" data-date="0601"><div class="dt"><div class="dm">6/1</div><div class="ds">월</div></div><div class="ct">
+  <div class="ro">수마르틴 → 두브로브니크</div>
+  <div class="ri">페리 수마르틴→마카르스카 08:30 · Line 638 · €39.80</div>
+  <div class="ri">렌트카 D8 해안 드라이브 · 스톤 굴 점심</div>
+  <div class="rf">#5849039-0270</div>
+  <div class="bgs"><a class="lk" href="https://www.notion.so/5-29-6-3-302c50f0f2fb807da696fee0a0067c47?source=copy_link#354c50f0f2fb804096e5c6d6f6234f1b" target="_blank">📎 페리 티켓</a></div>
+  <div class="hn">두브로브니크 숙소 6/1~6/3</div>
+  <div class="hs">Villa Argentina 개장 시 우선 · 아니면 Hilton 예약 예정</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bw">⏳ 미확정</span></div>
+</div></div>
+<div class="stay"><div class="sy">6/1~6/3 · 2박 · 성벽 · 로크룸섬 · 케이블카</div><div class="sn">두브로브니크 숙소 (미확정) · CO: 6/3</div><div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span></div></div>
+
+<!-- ═══ CH3 안나+미라+효진 ═══ -->
+<div class="ch">
+  <div class="ch-n">3</div>
+  <div class="ch-info">
+    <div class="ch-title">안나 · 미라 · 효진</div>
+    <div class="ch-sub">6/3 — 6/10 · 코토르만 · 헤르체그노비 · 두브로브니크</div>
+  </div>
+  <div class="ch-ppl"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진</span></div>
+</div>
+
+<span class="sec">두브로브니크 → 코토르만</span>
+<div class="card" data-date="0603"><div class="dt"><div class="dm">6/3</div><div class="ds">수</div></div><div class="ct">
+  <div class="ro">DBV → 코토르만</div>
+  <div class="ri">렌트카 · 약 2시간 · Pasjača 비치 경유 (~12:30)</div>
+  <div class="ri">크로아티아/몬테네그로 국경 ~13:40</div>
+  <div class="bgs"><span class="b bw">⚠ 여권 + SIXT서류 + 해외운행 확인</span></div>
+  <div class="hn">Mövenpick Teuta Kotor Bay</div>
+  <div class="hs">CI: ~14:30 도착 · CO: 6/6</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진 합류</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="nt">효진 포드고리차 공항 → 택시로 먼저 도착 예정</div>
+</div></div>
+<div class="stay"><div class="sy">6/3~6/6 · 3박 · 코토르 구시가지 · UNESCO 성벽 · 보카만 크루즈</div><div class="sn">Mövenpick Teuta Kotor Bay · CO: 6/6</div><div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진</span></div></div>
+
+<span class="sec">코토르만 → 헤르체그노비 — 6/6</span>
+<div class="card" data-date="0606"><div class="dt"><div class="dm">6/6</div><div class="ds">토</div></div><div class="ct">
+  <div class="ro">코토르 → Igalo (헤르체그노비)</div>
+  <div class="ri">렌트카 · 약 30분</div>
+  <div class="hn">Palmon Bay Hotel & SPA</div>
+  <div class="hs">CI: 14:00 이후 · CO: 6/7 12:00 · 조식 포함</div>
+  <div class="hs">더블룸 2개 (안나 1인 + 미라·효진 2인)</div>
+  <div class="rf">PH26682917 (1인 €161.50) · PH26682913 (2인 €163.00)</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs">
+    <a class="lk" href="https://www.notion.so/6-3-7-2fdc50f0f2fb80caa27dfc309a561183?source=copy_link#302c50f0f2fb80d4ad7bfc23c42f9bae" target="_blank">📎 확인서 1</a>
+    <a class="lk" href="https://www.notion.so/6-3-7-2fdc50f0f2fb80caa27dfc309a561183?source=copy_link#302c50f0f2fb80e4ba00fdb3b8bb77c9" target="_blank">📎 확인서 2</a>
+  </div>
+</div></div>
+
+<span class="sec">헤르체그노비 → 두브로브니크 — 6/7~6/10</span>
+<div class="card" data-date="0607"><div class="dt"><div class="dm">6/7</div><div class="ds">일</div></div><div class="ct">
+  <div class="ro">Igalo → 두브로브니크</div>
+  <div class="ri">렌트카 · 몬테네그로/크로아티아 국경 통과 · 약 1.5h</div>
+  <div class="bgs"><span class="b bw">⚠ 차량번호 Villa Dubrovnik 사전 통보 필요</span></div>
+  <div class="hn">Villa Dubrovnik</div>
+  <div class="hs">CI: 6/7 15:00 이후 · CO: 6/9 12:00 · 2박 · 3인</div>
+  <div class="hs">Deluxe Grand Sea View · 조식 포함 · €5,368.85</div>
+  <div class="rf">#7027SG021263</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진</span><span class="b bo">✓ 예약완료 (엑스트라베드)</span></div>
+  <div class="bgs"><a class="lk" href="https://be.synxis.com/signin?&chain=24447&hotel=7027&src=30" target="_blank">📎 예약확인서</a></div>
+</div></div>
+<div class="stay"><div class="sy">6/7~6/9 · 2박 · 구시가지 · 수상보트 무료 셔틀</div><div class="sn">Villa Dubrovnik · CO: 6/9 12:00</div><div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진</span></div></div>
+
+<div class="card" data-date="0609"><div class="dt"><div class="dm">6/9</div><div class="ds">화</div></div><div class="ct">
+  <div class="ro">두브로브니크 — 효진 아웃</div>
+  <div class="ri">효진 두브로브니크 공항 → 서울 귀국</div>
+  <div class="hn">Palace Natali</div>
+  <div class="hs">CI: 6/9 · CO: 6/10 · 1박 · 2인 (안나+미라)</div>
+  <div class="hs">Suite with Balcony · Privežna 21, Dubrovnik</div>
+  <div class="rf">#24691605</div>
+  <div class="bgs"><span class="b bhj">효진 → 서울 귀국</span></div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+
+<div class="card" data-date="0610"><div class="dt"><div class="dm">6/10</div><div class="ds">수</div></div><div class="ct">
+  <div class="ro">DBV → 각자 출발</div>
+  <div class="ri">SIXT 렌트카 반납 · #9730372753 · 12:00 전 권장</div>
+  <div class="ri">안나: DBV→CDG 15:40 (OU476) · 미라: DBV→파리 (별도편)</div>
+  <div class="bgs"><span class="b ba">안나 → 파리</span><span class="b bm">미라 → 파리</span></div>
+</div></div>
+
+<!-- ═══ CH4 안나+은정 ═══ -->
+<div class="ch">
+  <div class="ch-n">4</div>
+  <div class="ch-info">
+    <div class="ch-title">안나 · 은정 — 파리 &amp; 노르망디</div>
+    <div class="ch-sub">6/10 — 6/17 · 파리 에이전시 · 노르망디 · 리츠 파리</div>
+  </div>
+  <div class="ch-ppl"><span class="b ba">안나</span><span class="b bej">은정</span></div>
+</div>
+
+<span class="sec">파리 에이전시 미팅 — 4박</span>
+<div class="card" data-date="0610"><div class="dt"><div class="dm">6/10</div><div class="ds">수</div></div><div class="ct">
+  <div class="ro">DBV → 파리 CDG</div>
+  <div class="ri">크로아티아항공 OU476 · 15:40→18:05 · 비즈니스</div>
+  <div class="bag">위탁 2개 × 32kg</div>
+  <div class="rf">PNR: YFFBXW · 예약 #1400826614963022</div>
+  <div class="hn">Pullman Paris Tour Eiffel</div>
+  <div class="hs">CI: 6/10 · CO: 6/14 · 에이전시 미팅</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="nt">은정 6/11 합류</div>
+</div></div>
+<div class="stay"><div class="sy">6/10~6/14 · 4박 · 패션 모델 에이전시 미팅</div><div class="sn">Pullman Paris Tour Eiffel · CO: 6/14</div><div class="bgs"><span class="b ba">안나</span><span class="b bej">은정 6/11~</span></div></div>
+
+<div class="card" data-date="0612"><div class="dt"><div class="dm">6/12</div><div class="ds">금</div></div><div class="ct">
+  <div class="ro">파리 — 미슐랭 디너</div>
+  <div class="ri">⏳ <b>Kei</b> 대기 5번째 · 19:4x · 2명 🥇 우선 (5 rue Coq Héron)</div>
+  <div class="ri">✅ <b>L'Ambroisie</b> · 20:00 · 2명 (9 Place des Vosges)</div>
+  <div class="bgs"><span class="b bw">⚠ 무료취소 6/11 20:00까지</span></div>
+  <div class="ri">✅ <b>Le Cinq</b> · 19:30 · 2명 · #17002 (31 Av. George V)</div>
+  <div class="nt">Kei 확정 시 L'Ambroisie·Le Cinq 캔슬 예정</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bej">은정</span></div>
+</div></div>
+
+<div class="card" data-date="0613"><div class="dt"><div class="dm">6/13</div><div class="ds">토</div></div><div class="ct">
+  <div class="ro">파리 — La Tour d'Argent</div>
+  <div class="ri">디너 19:00 · 2명 · 압착 오리 (Caneton Frédéric Delair) 주문 예정</div>
+  <div class="ri">15 Quai de la Tournelle, 75005</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bej">은정</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+
+<span class="sec">노르망디 로드트립 — 미니쿠퍼 컨버터블</span>
+<div class="card" data-date="0614"><div class="dt"><div class="dm">6/14</div><div class="ds">일</div></div><div class="ct">
+  <div class="ro">파리 → 에트르타</div>
+  <div class="ri">미니쿠퍼 컨버터블 09:00 픽업 · 지베르니 모네 정원 경유</div>
+  <div class="hn">Les Tilleuls Étretat</div>
+  <div class="hs">CI: 6/14 · CO: 6/15</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bej">은정</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+
+<div class="card" data-date="0615"><div class="dt"><div class="dm">6/15</div><div class="ds">월</div></div><div class="ct">
+  <div class="ro">에트르타 → 캉칼 → 몽생미셸</div>
+  <div class="ri">에트르타→캉칼 굴 점심 (2h)→몽생미셸 (45분)</div>
+  <div class="ri">몽생미셸 저녁 만조 감상</div>
+  <div class="hn">Château Richeux (캉칼)</div>
+  <div class="hs">CI: 6/15 · CO: 6/16 · Le Coquillage 월요일 휴무로 불가</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bej">은정</span><span class="b bo">✓ 예약완료</span></div>
+</div></div>
+
+<span class="sec">리츠 파리 &amp; 귀국</span>
+<div class="card" data-date="0616"><div class="dt"><div class="dm">6/16</div><div class="ds">화</div></div><div class="ct">
+  <div class="ro">몽생미셸 → 파리</div>
+  <div class="ri">몽생미셸→파리 3.5h · 미니쿠퍼 반납</div>
+  <div class="ri">ESMOD 견학 15:00 (9구)</div>
+  <div class="ri">Le Bon Georges 단체 디너 19:00 · 테라스 · 8명</div>
+  <div class="ri">45 Rue Saint-Georges, 75009</div>
+  <div class="hn">Ritz Paris</div>
+  <div class="hs">CI: 6/16 · CO: 6/17</div>
+  <div class="bgs"><span class="b ba">안나</span><span class="b bej">은정</span><span class="b bo">✓ 예약완료</span></div>
+  <div class="bgs"><span class="b bw">⚠ Le Bon Georges 무료취소 6/16 11:00까지</span></div>
+</div></div>
+
+<div class="card" data-date="0617"><div class="dt"><div class="dm">6/17</div><div class="ds">수</div></div><div class="ct">
+  <div class="ro">Le Gabriel 런치 → CDG 귀국</div>
+  <div class="ri">13:00 Le Gabriel 런치 · 2명 · 42 Ave Gabriel, 75008</div>
+  <div class="bgs"><span class="b bw">⚠ 6/15까지 48시간 전 재확인 필수!</span></div>
+  <div class="ri">20:35→15:50+1 · 대한항공 KE902 · 프레스티지</div>
+  <div class="rf">FW7IJ4 · Le Gabriel #9H7J5Z4K6HGF</div>
+  <div class="bgs"><span class="b bw">⏳ 귀국편 대기 (FW7IJ4 · 6/17~6/20 병행)</span></div>
+  <div class="bgs"><span class="b ba">안나</span></div>
+</div></div>
+
+<!-- FOOTER -->
+<div class="ft">
+  <div class="ft-logo">Anna · A.SSET 2026</div>
+  <p>5/16 ICN → 6/17 CDG · 동유럽 6개국 · 크로아티아 · 몬테네그로 · 파리 · 33박</p>
+</div>
+
+
+<script>
+(function() {
+  // Target date: today - 1 day
+  const today = new Date();
+  today.setDate(today.getDate() - 1);
+  const targetMMDD = String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0');
+  const targetNum = parseInt(targetMMDD);
+
+  // Trip date range
+  const tripStart = 516;
+  const tripEnd = 617;
+
+  // Get all cards with data-date
+  const cards = Array.from(document.querySelectorAll('[data-date]'));
+  if (!cards.length) return;
+
+  // Find closest card
+  let closest = null;
+  let minDiff = Infinity;
+
+  cards.forEach(card => {
+    const cardNum = parseInt(card.dataset.date);
+    const diff = Math.abs(cardNum - targetNum);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = card;
+    }
+  });
+
+  if (closest) {
+    // Scroll with offset so it's not hidden under fixed elements
+    setTimeout(() => {
+      const y = closest.getBoundingClientRect().top + window.scrollY - 60;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+
+      // Highlight briefly
+      closest.style.transition = 'background 0.3s';
+      closest.style.background = '#FFF9E6';
+      setTimeout(() => {
+        closest.style.background = '';
+      }, 1500);
+    }, 300);
+  }
+})();
+</script>
+
+
+<script>
+(function() {
+  const today = new Date();
+  today.setDate(today.getDate() - 1);
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const targetNum = parseInt(mm + dd);
+
+  const cards = Array.from(document.querySelectorAll('[data-date]'));
+  if (!cards.length) return;
+
+  let closest = null;
+  let minDiff = Infinity;
+
+  cards.forEach(card => {
+    const cardNum = parseInt(card.dataset.date);
+    if (isNaN(cardNum) || cardNum === 0) return;
+    const diff = Math.abs(cardNum - targetNum);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = card;
+    }
+  });
+
+  if (closest) {
+    setTimeout(() => {
+      const y = closest.getBoundingClientRect().top + window.scrollY - 60;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      closest.style.transition = 'background 0.4s';
+      closest.style.background = '#FFF8DC';
+      setTimeout(() => { closest.style.background = ''; }, 1800);
+    }, 400);
+  }
+})();
+</script>
+
+</body>
+</html>
