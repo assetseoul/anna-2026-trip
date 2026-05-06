@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Anna 2026 — Croatia & Paris</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="2026 Trip">
+<meta name="theme-color" content="#0F1923">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230F1923'/%3E%3Ctext x='50%25' y='52%25' font-size='100' text-anchor='middle' dominant-baseline='middle'%3E🌍%3C/text%3E%3Ctext x='50%25' y='82%25' font-size='18' text-anchor='middle' fill='%23C9A84C' font-family='serif' font-style='italic'%3E2026%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Anna%202026%20Trip%22%2C%22short_name%22%3A%222026%20Trip%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230F1923%22%2C%22theme_color%22%3A%22%230F1923%22%7D">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -400,7 +406,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-title">Croatia · Montenegro · Paris</div>
+  <div class="topbar-title">Croatia · Montenegro</div>
   <span id="sync-indicator" style="font-size:10px;color:var(--gold);opacity:0;transition:opacity 0.3s;margin-right:4px;">✓ 저장됨</span>
   <a href="https://www.notion.so/2fdc50f0f2fb80a3938edcfe4f3373f4?source=copy_link" target="_blank" class="notion-btn">
     <span class="notion-icon">𝒩</span> 노션
@@ -429,7 +435,6 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     <div class="lg"><div class="ld" style="background:var(--anna)"></div>안나</div>
     <div class="lg"><div class="ld" style="background:var(--mira)"></div>미라 (5/30~6/10)</div>
     <div class="lg"><div class="ld" style="background:var(--hyojin)"></div>효진 (6/3~6/9)</div>
-    <div class="lg"><div class="ld" style="background:var(--ej)"></div>은정 (6/11~)</div>
   </div>
 
   <div id="schedule-content">
@@ -715,7 +720,8 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     </div>
   </div>
   <div class="stay" data-searchable="두브로브니크 구시가지 수상보트">
-    <div class="stay-sub">6/7~6/9 · 2박 · 구시가지 · 수상보트 무료 셔틀</div>
+    <div class="stay-sub">6/7~6/9 · 2박 · 구시가지 관광</div>
+  <div class="stay-sub" style="margin-top:2px">🚐 무료 셔틀 밴 매시 정각 15:00~23:00 출발 · 귀환: Ploče Gate 매시 5분</div>
     <div class="stay-name">Villa Dubrovnik · CO: 6/9 12:00</div>
     <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라</span><span class="b bhj">효진</span></div>
   </div>
@@ -962,8 +968,8 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   </div>
 </div>
 
+<!-- Firebase SDK -->
 <script type="module">
-// ── Firebase 실시간 동기화 ──
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, remove, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -980,28 +986,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// DB 함수 전역 노출
+window._fb = {
+  setFund: (val) => set(ref(db, 'fund'), val),
+  pushEntry: (entry) => push(ref(db, 'entries'), entry),
+  removeEntry: (fbKey) => remove(ref(db, 'entries/' + fbKey)),
+  onFund: (cb) => onValue(ref(db, 'fund'), snap => cb(snap.val() || 0)),
+  onEntries: (cb) => onValue(ref(db, 'entries'), snap => {
+    const data = snap.val() || {};
+    cb(Object.entries(data).map(([fbKey, v]) => ({ ...v, fbKey })));
+  })
+};
+
+// Firebase 준비 완료 신호
+window.dispatchEvent(new Event('firebase-ready'));
+</script>
+
+<script>
 const EUR_RATE = 1720;
 let entries = [];
 let fundAmount = 0;
 let currentPayer = '';
 let currentFilter = 'all';
 
-// ── 실시간 데이터 수신 ──
-onValue(ref(db, 'fund'), snap => {
-  fundAmount = snap.val() || 0;
-  renderFund();
-  calcSettle();
-  renderSummary();
-});
+// ── Firebase 연결 (준비되면 구독) ──
+function initFirebase() {
+  window._fb.onFund(val => {
+    fundAmount = val;
+    renderFund();
+    calcSettle();
+    renderSummary();
+  });
+  window._fb.onEntries(data => {
+    entries = data;
+    renderFund();
+    renderSummary();
+    calcSettle();
+    renderEntries();
+  });
+}
 
-onValue(ref(db, 'entries'), snap => {
-  const data = snap.val() || {};
-  entries = Object.entries(data).map(([fbKey, v]) => ({ ...v, fbKey }));
-  renderFund();
-  renderSummary();
-  calcSettle();
-  renderEntries();
-});
+if (window._fb) {
+  initFirebase();
+} else {
+  window.addEventListener('firebase-ready', initFirebase);
+}
 
 // ── 동기화 표시 ──
 function showSync() {
@@ -1037,10 +1066,8 @@ function autoScroll() {
   const mm = String(today.getMonth()+1).padStart(2,'0');
   const dd = String(today.getDate()).padStart(2,'0');
   const targetNum = parseInt(mm+dd);
-
   const cards = Array.from(document.querySelectorAll('[data-date]'));
   if (!cards.length) return;
-
   let closest = null, minDiff = Infinity;
   cards.forEach(card => {
     const n = parseInt(card.dataset.date);
@@ -1048,7 +1075,6 @@ function autoScroll() {
     const diff = Math.abs(n - targetNum);
     if (diff < minDiff) { minDiff = diff; closest = card; }
   });
-
   if (closest) {
     setTimeout(() => {
       const y = closest.getBoundingClientRect().top + window.scrollY - 100;
@@ -1065,7 +1091,7 @@ function setFund() {
   const val = parseFloat(document.getElementById('fund-init-input').value);
   if (isNaN(val)) return;
   fundAmount = val;
-  set(ref(db, 'fund'), val);
+  if (window._fb) window._fb.setFund(val);
   showSync();
   renderFund();
 }
@@ -1073,10 +1099,15 @@ function setFund() {
 function renderFund() {
   const pubSpent = entries.filter(e=>e.payer==='공금').reduce((s,e)=>s+e.eur,0);
   const balance = fundAmount - pubSpent;
-  document.getElementById('fund-balance').textContent = '€' + balance.toFixed(2);
-  document.getElementById('fund-balance-krw').textContent = '₩' + Math.round(balance*EUR_RATE).toLocaleString();
-  document.getElementById('fund-init-input').value = fundAmount || '';
-  document.getElementById('fund-init-input').placeholder = fundAmount ? `현재: €${fundAmount}` : '초기 공금 입력 (€)';
+  const balEl = document.getElementById('fund-balance');
+  const krwEl = document.getElementById('fund-balance-krw');
+  const inEl = document.getElementById('fund-init-input');
+  if (balEl) balEl.textContent = '€' + balance.toFixed(2);
+  if (krwEl) krwEl.textContent = '₩' + Math.round(balance*EUR_RATE).toLocaleString();
+  if (inEl) {
+    inEl.value = fundAmount || '';
+    inEl.placeholder = fundAmount ? `현재: €${fundAmount}` : '초기 공금 입력 (€)';
+  }
 }
 
 // ── SETTLEMENT ──
@@ -1084,22 +1115,18 @@ function calcSettle() {
   const members = ['안나','미라','효진'];
   const paid = {안나:0, 미라:0, 효진:0};
   let personal_total = 0;
-
   entries.forEach(e => {
     if (e.payer !== '공금') {
       paid[e.payer] = (paid[e.payer]||0) + e.eur;
       personal_total += e.eur;
     }
   });
-
   const share = personal_total / 3;
-  const net = {};
-  members.forEach(m => { net[m] = (paid[m]||0) - share; });
-
+  const idMap = {안나:'anna', 미라:'mira', 효진:'hyojin'};
   members.forEach(m => {
-    const el = document.getElementById('settle-' + {안나:'anna',미라:'mira',효진:'hyojin'}[m]);
+    const el = document.getElementById('settle-' + idMap[m]);
     if (!el) return;
-    const v = net[m];
+    const v = (paid[m]||0) - share;
     el.textContent = (v>=0?'+':'') + '€' + v.toFixed(0);
     el.className = 'settle-net ' + (v>0.5?'pos':v<-0.5?'neg':'zero');
   });
@@ -1110,34 +1137,28 @@ function renderSummary() {
   const total = entries.reduce((s,e)=>s+e.eur,0);
   const pub = entries.filter(e=>e.payer==='공금').reduce((s,e)=>s+e.eur,0);
   const prv = total - pub;
-  document.getElementById('total-spent').textContent = '€' + total.toFixed(2);
-  document.getElementById('pub-spent').textContent = '€' + pub.toFixed(2);
-  document.getElementById('prv-spent').textContent = '€' + prv.toFixed(2);
+  const t = document.getElementById('total-spent');
+  const p = document.getElementById('pub-spent');
+  const r = document.getElementById('prv-spent');
+  if (t) t.textContent = '€' + total.toFixed(2);
+  if (p) p.textContent = '€' + pub.toFixed(2);
+  if (r) r.textContent = '€' + prv.toFixed(2);
 }
 
 // ── ENTRIES ──
 function renderEntries() {
   const list = document.getElementById('entry-list');
   const empty = document.getElementById('empty-budget');
+  if (!list) return;
   const filtered = currentFilter==='all' ? entries :
     currentFilter==='공금' ? entries.filter(e=>e.payer==='공금') :
     entries.filter(e=>e.payer!=='공금');
-
-  // Clear existing items (but keep empty state)
   list.querySelectorAll('.entry-item').forEach(el=>el.remove());
-
-  if (!filtered.length) {
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
+  if (!filtered.length) { if (empty) empty.style.display='block'; return; }
+  if (empty) empty.style.display='none';
   const catIcons = {식사:'🍽',숙소:'🏨',교통:'🚗',페리:'⛴',관광:'🏛',쇼핑:'🛍',기타:'📌'};
   const payerClass = {공금:'public',안나:'anna',미라:'mira',효진:'hyojin'};
-
-  // Sort by date desc
-  const sorted = [...filtered].sort((a,b)=>b.id-a.id);
-
+  const sorted = [...filtered].sort((a,b) => (b.date||'').localeCompare(a.date||''));
   sorted.forEach(e => {
     const div = document.createElement('div');
     div.className = 'entry-item ' + (payerClass[e.payer]||'');
@@ -1159,15 +1180,8 @@ function renderEntries() {
 
 function deleteEntry(fbKey) {
   if (!confirm('삭제할까요?')) return;
-  remove(ref(db, 'entries/' + fbKey));
+  if (window._fb) window._fb.removeEntry(fbKey);
   showSync();
-}
-
-function renderAll() {
-  renderFund();
-  renderSummary();
-  calcSettle();
-  renderEntries();
 }
 
 // ── MODAL ──
@@ -1196,14 +1210,11 @@ function addEntry() {
   const eur = parseFloat(document.getElementById('f-eur').value);
   const cat = document.getElementById('f-cat').value;
   const memo = document.getElementById('f-memo').value.trim();
-
   if (!date || !desc || isNaN(eur) || eur<=0 || !currentPayer) {
     alert('날짜, 내용, 금액, 결제자를 모두 입력해주세요.');
     return;
   }
-
-  const entry = { date, desc, eur, cat, payer: currentPayer, memo };
-  push(ref(db, 'entries'), entry);
+  if (window._fb) window._fb.pushEntry({ date, desc, eur, cat, payer: currentPayer, memo });
   showSync();
   closeModal();
 }
