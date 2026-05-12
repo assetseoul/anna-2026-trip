@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="파리·노르망디 2026">
+<meta name="theme-color" content="#2D3E50">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>은정이와 세원이의 파리 & 노르망디 2026</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Italiana&family=Nanum+Myeongjo:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --gold: #C9A961;
+  --gold-soft: #D4B574;
+  --gold-deep: #A88838;
+  --blue: #5A8FA8;
+  --blue-deep: #3D6B82;
+  --cream: #F4E8D6;
+  --cream-soft: #FAF3E5;
+  --ivory: #FBF7EE;
+  --navy: #2D3E50;
+  --navy-soft: #3D526B;
+  --terracotta: #C97B5C;
+  --text: #2D3E50;
+  --text-soft: #5A6B7C;
+  --line: rgba(45,62,80,0.12);
+  --shadow: 0 4px 20px rgba(45,62,80,0.08);
+  --shadow-lg: 0 12px 40px rgba(45,62,80,0.15);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: var(--ivory);
+  color: var(--text);
+  font-family: 'Nanum Myeongjo', 'Cormorant Garamond', serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  background: 
+    radial-gradient(ellipse at top, rgba(201,169,97,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(90,143,168,0.05) 0%, transparent 50%),
+    var(--ivory);
+  min-height: 100vh;
+}
+
+/* ── 헤더 ── */
+.hero {
+  position: relative;
+  padding: 24px 20px 28px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--cream-soft) 0%, transparent 100%);
+  border-bottom: 1px solid var(--line);
+}
+.hero-icon {
+  width: 72px; height: 72px;
+  border-radius: 16px;
+  margin: 0 auto 14px;
+  box-shadow: var(--shadow);
+  display: block;
+}
+.hero-eyebrow {
+  font-family: 'Italiana', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--gold-deep);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.hero-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  margin: 0 0 4px;
+}
+.hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-soft);
+  letter-spacing: 0.04em;
+}
+.hero-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin-top: 12px;
+}
+.hero-ornament::before, .hero-ornament::after {
+  content: ''; width: 30px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.hero-ornament span { color: var(--gold); font-size: 12px; }
+
+/* ── 동기화 표시 ── */
+#sync-indicator {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 10px);
+  right: 14px;
+  background: var(--navy);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 5px 11px;
+  border-radius: 100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ── 탭 네비게이션 (하단 고정) ── */
+.tabnav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(251,247,238,0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--line);
+  padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  display: flex;
+  z-index: 50;
+}
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.tab .ticon { font-size: 18px; line-height: 1; }
+.tab.active { color: var(--navy); font-weight: 600; }
+.tab.active .ticon { transform: scale(1.1); }
+
+/* ── 컨텐츠 영역 ── */
+.content { padding: 16px 16px 30px; }
+.page { display: none; animation: fadein 0.3s; }
+.page.active { display: block; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── 섹션 헤더 ── */
+.section-head {
+  margin: 28px 0 14px;
+  text-align: center;
+}
+.section-head:first-child { margin-top: 8px; }
+.section-eyebrow {
+  font-family: 'Italiana', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.section-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--navy);
+  margin: 0;
+}
+.section-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 8px;
+}
+.section-ornament::before, .section-ornament::after {
+  content: ''; width: 24px; height: 1px;
+  background: var(--gold);
+}
+.section-ornament span { color: var(--gold); font-size: 10px; }
+
+/* ── 카드 ── */
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 18px 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.card.featured {
+  background: linear-gradient(135deg, white 0%, var(--cream-soft) 100%);
+  border-color: rgba(201,169,97,0.3);
+}
+.card-stripe {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+}
+
+/* ── 일자 카드 ── */
+.day-card {
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.day-head {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+  color: var(--cream);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.day-head.normandy {
+  background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue) 100%);
+}
+.day-num {
+  font-family: 'Italiana', serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  opacity: 0.8;
+  margin-bottom: 2px;
+}
+.day-date {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 17px;
+}
+.day-tag {
+  font-family: 'Italiana', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 4px 10px;
+  border: 1px solid rgba(201,169,97,0.5);
+  border-radius: 100px;
+  color: var(--gold-soft);
+}
+.day-body { padding: 14px 16px; }
+
+/* ── 이벤트 아이템 ── */
+.event {
+  display: flex; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.event:last-child { border-bottom: none; padding-bottom: 0; }
+.event:first-child { padding-top: 0; }
+.event-time {
+  flex-shrink: 0;
+  width: 54px;
+  font-family: 'Italiana', serif;
+  font-size: 13px;
+  color: var(--gold-deep);
+  font-weight: 600;
+  padding-top: 2px;
+}
+.event-body { flex: 1; min-width: 0; }
+.event-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.event-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+.event-meta strong { color: var(--navy); font-weight: 600; }
+.event-tag {
+  display: inline-block;
+  font-family: 'Italiana', serif;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  padding: 2px 7px;
+  border-radius: 100px;
+  margin-right: 4px;
+  margin-top: 4px;
+  vertical-align: middle;
+}
+.tag-confirmed { background: rgba(90,143,168,0.12); color: var(--blue-deep); }
+.tag-waiting { background: rgba(201,123,92,0.15); color: var(--terracotta); }
+.tag-michelin { background: rgba(201,169,97,0.18); color: var(--gold-deep); }
+.tag-hotel { background: rgba(45,62,80,0.08); color: var(--navy); }
+.tag-flight { background: rgba(201,169,97,0.1); color: var(--gold-deep); border: 1px solid rgba(201,169,97,0.3); }
+
+/* ── 액션 버튼 ── */
+.actions {
+  display: flex; gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--cream-soft);
+  color: var(--navy);
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+  transition: all 0.2s;
+}
+.btn:active { transform: scale(0.96); background: var(--gold); color: white; }
+.btn.primary { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+.btn.primary:active { background: var(--gold-deep); color: white; }
+.btn.gold { background: var(--gold); color: white; border-color: var(--gold); }
+
+/* ── 레스토랑 카드 (예약 페이지) ── */
+.resto-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  position: relative;
+}
+.resto-michelin {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: 'Italiana', serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--gold-deep);
+}
+.resto-name {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.resto-name-fr {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-deep);
+  margin-bottom: 8px;
+}
+.resto-info {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.resto-info strong { color: var(--navy); font-weight: 600; }
+.deadline {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: rgba(201,123,92,0.08);
+  border-left: 3px solid var(--terracotta);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--terracotta);
+  font-weight: 500;
+}
+.deadline.urgent { background: rgba(217,83,79,0.1); border-color: #D9534F; color: #B33A35; }
+.deadline.ok { background: rgba(90,143,168,0.08); border-color: var(--blue); color: var(--blue-deep); }
+.deadline.passed { background: rgba(45,62,80,0.05); border-color: var(--text-soft); color: var(--text-soft); }
+
+/* ── 체크리스트 ── */
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 11px 14px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.checklist-item:active { transform: scale(0.99); }
+.checklist-item.done { background: var(--cream-soft); opacity: 0.7; }
+.checkbox {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  border: 1.5px solid var(--gold);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  background: white;
+  margin-top: 1px;
+}
+.checklist-item.done .checkbox {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.checklist-item.done .checkbox::after {
+  content: '✓'; color: white; font-size: 12px; font-weight: bold;
+}
+.cl-body { flex: 1; }
+.cl-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--navy);
+}
+.checklist-item.done .cl-title { text-decoration: line-through; color: var(--text-soft); }
+.cl-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-soft);
+  margin-top: 2px;
+}
+
+/* ── 노르망디 드라이브 ── */
+.drive-leg {
+  display: flex;
+  margin-bottom: 14px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.drive-marker {
+  flex-shrink: 0;
+  width: 50px;
+  background: linear-gradient(180deg, var(--blue-deep) 0%, var(--blue) 100%);
+  color: var(--cream);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 14px 0;
+  font-family: 'Italiana', serif;
+}
+.drive-marker .step {
+  font-size: 22px;
+  font-weight: 700;
+}
+.drive-marker .of {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+.drive-body {
+  flex: 1;
+  padding: 12px 14px;
+  min-width: 0;
+}
+.drive-place {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--navy);
+}
+.drive-place-fr {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--gold-deep);
+  margin-bottom: 6px;
+}
+.drive-info {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+/* ── 정보 페이지 ── */
+.info-block {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+.info-label {
+  font-family: 'Italiana', serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.info-value {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.info-detail {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+/* ── 메모 입력 ── */
+.memo-area {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 13px;
+  color: var(--navy);
+  resize: vertical;
+}
+.memo-area:focus { outline: none; border-color: var(--gold); }
+.memo-save {
+  margin-top: 8px;
+  background: var(--navy);
+  color: var(--cream);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+/* ── 카운트다운 ── */
+.countdown {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--blue-deep) 100%);
+  color: var(--cream);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.countdown::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -20%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(201,169,97,0.25) 0%, transparent 70%);
+}
+.countdown-label {
+  font-family: 'Italiana', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold-soft);
+  margin-bottom: 6px;
+  position: relative;
+}
+.countdown-num {
+  font-family: 'Italiana', serif;
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  line-height: 1;
+  position: relative;
+}
+.countdown-unit {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  margin-left: 6px;
+  color: var(--cream);
+}
+.countdown-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  margin-top: 6px;
+  color: rgba(251,231,214,0.7);
+  position: relative;
+}
+
+/* ── 빠른 액션 (홈) ── */
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.quick-card {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 12px;
+  border: 1px solid var(--line);
+  text-align: center;
+  text-decoration: none;
+  color: var(--navy);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.quick-card:active { transform: scale(0.97); }
+.quick-icon { font-size: 22px; margin-bottom: 4px; display: block; }
+.quick-label {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 12px;
+}
+.quick-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  color: var(--text-soft);
+  margin-top: 2px;
+}
+
+/* ── 정보 그리드 ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.info-mini {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+}
+.info-mini-label {
+  font-family: 'Italiana', serif;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gold-deep);
+  margin-bottom: 3px;
+}
+.info-mini-value {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--navy);
+}
+
+/* ── 푸터 ── */
+.footer {
+  text-align: center;
+  padding: 30px 20px 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.footer-ornament {
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<div id="sync-indicator">동기화됨</div>
+
+<!-- ── 헤더 ── -->
+<div class="hero">
+  <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACQAJADASIAAhEBAxEB/8QAHAAAAwEAAwEBAAAAAAAAAAAABQYHBAIDCAEA/8QAPBAAAgEDAwIFAgQEBQMEAwAAAQIDBAURABIhBjEHEyJBURRhMnGBkRUjQqEWUmLB0RczsQgkJXJT4fD/xAAbAQADAQEBAQEAAAAAAAAAAAACAwQFAQYAB//EADMRAAIBAgQDBwMEAQUAAAAAAAECAwARBBIhQTFRYQUTInGBkbHB4fAUMqHRI0JDUqLx/9oADAMBAAIRAxEAPwD2LUzxU0DTTuEjUck6VL31Y0e6Khp3kkPYA4I/P/gaH9XXeSruc0EJBgo28tRuxulx6m++3IA++dAo2VDiMyJker1Zyfz1nl2nJsbKNPPn6fNVpGEAvxrtmu8s0yfVho3lbYvuSdpPv+WiVLCJ4fTmTI4DAA/n99T/AK3IHVvQ7F3BW6PhQeD6M8/t+xOqRFWRJ+GABh/UD76z2w/iIUD2q8OMoNZpbbOIwYxIze6mMcawSU86k7sZz/lGmEVs0isA5CEe55Gs6RSzyeWHLfppqIg/co9hQNc70BamkPORj/6j/jWd6cSK3/ukjK++1Tz99M1VQTRw7Y1CzEekE9v30vjpWaeTmTuc4Hb99JlniXQIPYUccVxctWKljMk3li4F2JxxEMH8uNGPoHpoS0kySSEelSmf3AHGuL22qtCq6P5ozjAAOigqmgpw806RllBGYskcdtFhnErZcg9vtQYhAgzBv5penWuTBJWLPOBHj/yNdG6tz/3SfzVf+NEVv1rNakNXeYQ7MFHmAhc/qONBrx1pYaGaqMlNWTCnkCf+3iV/NB/qUA9uPfGt2OXAxnJIi38h/VY0iTsMysfc0SjNY3PmkfkoH+2v0kdQeWfP5qP+NB5fEGwUlI1RVUtbAA3pjfyvMZfZtu/PJz+2u3/qL0Yqx/V1z0bykbEmTJIIzn0FsADBOeeRxpn6nsw/8P8ArSu7xXNvc1u+nqqh9iKZWx2CA/7axNRusu9A8Eqnh4iY3H6jGtLeIHSlJO6fxmljdSNytG45PbPp99FaOtttxH1lNNFVblDeiQMAD2PyOx7/ABqgRYOT/bU+goC2IX/Wfc11WnrC/WNgLiZbxb1/GSo+qiHyCOJAPg86ptqr6O6W+GvoJ0qKaZd0ciHgj/Y/b21NJIkaqw7NlvUzn4+dcul7gnTPV9LQRuRab5IUVf6YavbkEfAcAjHyBrOmQYZg0ZJQmxBv4TzBOpF9OnlVsTGYWceLY8/TnXXaaB6q3wyvJHuZBI5Zx+JyWOf313mjC49J1xtVwigs1CslZHAGpUyHGM+ke+tKVVIyhvNByM+kbv3x21jwTZIlDHatdoszEgUheJf8nqvowCNjivZiRjjj/wDX9tUZ6cBzgHGpd4tVtMerenVScbopQVU5ByVc88flqxUscU1PHMCSrqGBB75GhWcF21omSyi9YIomz9tbaaNgeJCh/bXdFCA/pb+2dfK6ppaPAmkXcRnbsZmH57QcaIyjiaWeQrnIsJRFmJk285zxrpQSeSC8kUcRPp2jk/YAd9YHroqqdRFKfIXJZPKdWk/05ZQB9/tovBTBoxJVkE4zt7Ko+PyGlr/lPhoWOQa0LnnZ8pDHVTAfDKn/AIBOhNfQCZG+pobnED/UsgkA/MYU/sdNkzxvA8KO9NuQlHACnHyB39tcLfUxGjgK1DVO9A/mDHIbkcd/ft8aZZg2UPbTp/7S7gi5HzUM62uHUPR8S1dHajeqSc+W1arARU+faRW9Sk449j7HSB1PQdTdQbGnqaONIJVkmpWXy4UUruDsQo3HOOSSTwNer7pa4KyGQpFEXdCrK67o5VPdWHuDqE9XeGtbc6uWnt99FDQ7t0NNJDM5iyPUrlVw4zjnOSANfYeLDxSXn47Hb7Ghl7yRbJw5VIKJqqls0qmmka4ybwK6EBklBbO1yD6cYztHs3Pxpn6Set6lvNJSQyyvXQ0R83ydqyCJU9TNkckhQuBhskce+mmr8N+q+mLPPdrRVW66+UBNPToHVyU53LG4w2ACccnvqY+HviZD/iWepulJRQNsMbS8RvI3sQOwwVH7+2teMxSKShBAqIhkIDaU13+701TS3aiWiyEmmd3RCHncFl3yH42+32yMaZul+oKmyU1HVUqQyUdbDHHPtRiqSLuXcW+QcDGckZOOM6nHW3WHTclxd6SaGJpj5cpiRyPw5DnIOT7Z/wCdM3R13tdb4E3gzTRstP8AUPK25kkR1Csu0e/cYONaEHMVLObaXp+vvWdyoqhqOSlh3/TQzSAqQV8xc4I9ux0Ar+s6y5wNSCmiikhP1ULqCCskX8wHv/pP76ROh+rG6l6gq7hfPrJxPQxiSbzE3PNHhB6Qc5ZRnsBnn303VFZa6y5IlJTSUbrQyx7DGRvYQvljn3PvzqucJJg3LJrlbX0NQJI6YpAr6Zl+RVct1nkrrFQM1dKI3poyYjggEL7fGt1FYEi24qpo8clSQy5/TQfpDrSwNNTdNNUTx11LTRLIXhxFuKBsBvyI+2uHjT1S3T3QU9TaqoLcKoiOmkjQSAD+tuOMY4z8ka/N84Isa92GYaCoz1baKy+dbdRX2nqPNo6GSP8AHIclC4QBSc4Hc98c8DXoDwuAqejaBnqql5EUxvvfPY8e3xjXmbpi59XVduq3+prpqByPrWjp2CsqnOGO3AAPtr0D4K3PESUz1yPDPGZVRwQ+fnn25/vqbOqTKDvp/VOdWaFiNtapUZp6ZPNeQKgPLSPgf31j6dBe2JNOoM0jFpCcHJzr9QMlzaSqmVXiSRkhUjgAHGfz4/vogiog2ogVfgDGt/DR8H2/NaxpG4g8a6CshkxsYH/MB6fzzn/bOuDJVMCjkvk8EMoAH34yT+mhFY95PWUQiaeOijiQBPX5U27fuO5UIDA4J3dtqYIDMNDLVB1o9dcYkuDs0M0aJJVw7I2XfKxK5BBHMYPGSijkMeKclLvTJe6CoqraIYamo3RqfQsm3zTjA3H3x3x7++ujpi1S0doWCrkmy8KIYDLuWLaMej/L37e2O576B23/ABqtbaRKJDRb0WpMu3cQWl3FuS+ANvJ45Ue2T33uHrA9YW6SlmxaWqWysTfgXysDzeOxb1e/fHtyv9Ohk7y2vCu942XLTKVqxtWLcoHdi6EH79iQf01xMc6yHCuzHsx5X9STjHfjGdKHTUPXMsD+bW+XMGhDfVh+MNNu4ZMYyY84yWUcMDjWi2f4wV7P57VH0oMC1QcIZD6jvLHJbGMA5+3xks7sVy9MPUysLTJLAuJ42V4iOCGByNeeL/0d1XaOtqm5UNvp4KOSplME0Ap2CoWJC7WRsHGODr0vhWADqrDvgjOl7rCkgWKOXZiKpmSGoAPsxwG/MEg/ofnQEiGTvStxpfp1FfMpkTIDY/mlQLrG2tcLfFTyWB6OZZGaaeno2mao4AUkABAfyGOeNdVsszUPQdRRxU6SwS54lo9koBPPpxwP/wCzq3UdZFQWKEzCVgu1Nq5ZmZjwPvrFV3W11NRCsiTSF53pwAvZxtOTznGGH6Z+NUDtoxOQEvbr9qjPY3ejMXsSOVQO1WGSgknqIrYxiICMUiGVx/pyDrRajAvUCiImPEE/ofepJ8l/Y8HVnnS21drqpqUSxGKHe24ncAU3A4JPt7/tnUdtzyyXVTHWxTxfTT5GAW/7L+5APxrWw/ahx2EnuuWynfmDWTP2cMDiYQGvdht1HWkrrCsuNP1/WmmkhAnjpwFMyhmHkx/0nuDgj9BrLT/x2pvEUc0ci75t7UrylkVT/SDgDAOPfg8+2uPih0Vfb51XBW2q0RzxPQU5kMka5kIQZIYf09hzz39sayVPTXW1JaYoKm0CGAJ5YU1RUFeTtwDjGcHH215hOzVZA4XiK9UcWEcqTwNOdq64vHTtM1m/xBFSwjeJoRKJlJOc5JPqH37nRDp3qa6Us9vkhq3mo6eZWjKx4UJvyw9J5H66kvTNrprZcqaXqChijp0mQlYypkkAIJ25OP3+e2r70hZ+h+puoKu4W+03yGOjijZ4pKtVimkZ9kaHaM+rOTgjhTqWbs4bjQVTFjNNDrXoHpbK0lRCRzHUyY/IsSP7Y0XOs1vp3iQvKyGR1XcETaoIGONatakClYwp2rPka7E0Nu9wqqGaFY6OnkjmYIsktX5Q3nsuNp5PtoRP1BXypfKZ4aOmktdOXlEVRI0kb4ypGUClT+euPiFJVVMVFQUVpulVNHWQVQkghDRlUbLAtkYOPY6EXGC9w2jrO5T2daVLkrzFqiqXfHEkeFUIm7LZz3IHOs/EyyZmUE2126He3O1UxItgTa/n1HXlTfaZq+o6UoquBY6islpkkBnYqsjEZOSBx+eNYKi8Xyg6gs1rrqC2/wDyMjjME0jFFRck+pQNCEsUJ8K5p7fRzS3Oss8Zx5juzuFDKFUnAOe2ANfelYKeKmoJaboGvW4wRKGqqoJAok24ZgzsW5Oey6PvJbovDQHc767cbfNDlTxHjqen1ov0nUzz9R9S0TVM0sNJVxpCjvuEYKkkDPPfW+kvVDVVkVPEZsTmQU8rJiOYxnD7Tn2+4GccZ0rdM11Tbbl4gXKSmE89LUrL5MOSGZYidoOM/HtoXRV0NknhmhutFLT3OFXpq9WVktjyOrSqyEkJGxPBPOQAToExRiRR1N/LMbf100vpRNDnY+nx+fzvVMkkjiUGR1QFgoLHHJ4GgnWcgShplI3A1COw+yHef7KdGlMFREkiMk0Rw8b8MD8MD2/XWS8UP1tPhSm5A2FdAwbIwR+2R+ur5wzRkDWp4yAwvU3sF0uB6ZttVNSxVM0kcUkhlkCENsB3D2yCePf9dbYXkqNlQ1gAbbt2CSI9iMDt7bVx7ftrJPBBDXJCtJIsUcQaNvM2qmHICMScnay8Z9iDok1W9phQ11Oyq8mGkCjCsxAAJJ4yTjWYsMrLmC3FWl0BtfWs889PFQSLLRihjlxC2MMSpDDgD454++ka4dM2yk864UNfSTGKmnJSONkZf5bAZDAHPPtpqiv9muNVGElmaNKgIwNM+NwOCpb8Pv7HPOvtxo7Hcujbvd7ZJ5c0FLIlRBEzMsblCcEsAcFWU5++tHATCOGWMmxIOm9rGs7HYfvZYpLXAI+RUtpbtcKPriyUAu8cFvn8pqpXI3IkcAwMnsm4gEdznTD4h9R0lJ0oLjTm03RzIq7acDuc4J3HIxg+3xpT62oVa5wVFFUTrUxJTRT09PIpWSMQElpAexDBBnjg/liZ+JM/0UlOskMUcVQBNG75BQ5wQpHZgRyPg6bhXdo0C7gUydVDEnY1aelbZUPU0szWmFTVwJOXjjRlbcoYKOB86s9qSGrmobekMVP5MnnzKvvtDBQD74yT+2vN3TfiPWdB2m2G50UN+kqaCOSlVKhI1pQWPoYqC3A2jGByffVd8I/ECp6xtkt5rbdS0FVTVsQ8iAkj6eUEK/JyfUpBPA0mXOIw54X9+dGuXNlHGrL3OsdsuVPcGrFgEgakqGppg64w4AJx8jBHOtTuqI0jH0qpYkAnjv7an81zoqa9xS2O93M0d2rZZrg0NKWFOfL4dSYSeSoXB+dFLL3ZHKgRM16fKypjpIRLJHPIpYLiGB5WyfsoJ/XQyqrbZeYLjY5frEZqJmnjemkicRPldw3D7HH5aC9RXC33Cy01BS32tjqIamNvPqKOpVpwhy6sY0U4YHBIwNcunZ6CluzkinElZGKfdBQ1pdjk7Qzy5AUZPxye+gaUs2UWt50QSwvreiC9VWKC1o1EZpY0oHqqeMQPGJIIlG4qzKAcDGt81/tNPDSvV1iUz1VOKiKORSXKEA5wAc4yM40gXymprPRXO3Q1FbcBYen3p6l5ZIovIgqFPMSBcyONmeWA/pySdMf8Eq7TerHX9M2yllpIKCaCZJKj6Zi0nlESH0sSSE54znQJLLre2ltvQ/XfausifNFLBNbVv96paGKYTzGG4TzMRtkEqYXA7jAQ8Ef+daGq7JTPX0cbUCzQx+bU0y7ELZBI3DsSce/yM9xoT0y1b/1G6jkrkhEgoLfkQligP844ycE8e+B+Whlf0jcDSRrNVW2SG2zVtZDLLTmWSfzgx2yKcAEbj6gTkqpwMaLM4Twjc/P4fTrXLKW1PL4o9F1ZZXgoJDO0f1tOsyIwUGNWUFQ/PpJBGPY67+mr/RX5Z5KKOdUh8psyqF3LJGHUgZyODyD76SPo0puhOmeoKytqIkgt1uiWFVAdZC67SkhYCPfuCOzAjYP00W8I6Cnt1JeKaMMktPVx0lQu4OoeKBAWVxw4bO7sMZwRka5HLKXUNw+1dZECkigHjLSVNJaKiWiWN3jmFQqN2KekOB8t2IHvk45xpOuHiPLerdc6e72eplo6qk3SAjO1cA4UFQO/v34xon4219bXiOkpVLN5zVOd20KImCxk/I3eYcfb7aldHbep7e9NKlOGamlmnQK5wfOz3+QDqjBPGEYE7m3lQzK5YWFO9u6nU9MV9tiBU22SSdnjj9DoAu1VOeBkHtof4bTCn6XnSGZ44rjb2iaDLbQ3IwSSckhCee3tpfpbxGaSuN7iNMko+inkiUghnxuC8YGGR+O3qOuXhlcoK+to6BYZKY0SzQhDMXJJjL7XwAMj1ft9tZuNUfqiU2U/BquBj3Xi5/UUc8R/Cvp26X2suv1lZQ3WpNIm+B8byx8rjGCMKB7+2pp4g9PJYauo6YuVd1FfKc04qYKhIN/0rhymQDlj9yDjjGNULxG67ktvWN2ga3WrAnihhnmrRAzqI0Yk8+raX5HsNvzpYtfV0dJ1pPPcRDanjpogFqagurr5m7IkGcKwJ4OhwbyWUX0tzpk6JlJ3oB19eLD1ZYrKlrvdHDcaKlhpRTyx/TyS7F2929ycn+2myyXW6dAdUwVFJ9RXWqK2fSN9RDtDJGQzIWVclSXOxjnHydZumKK0S2LqaSdrNcZaqLdTukySMpG88A4IJLDGOeDoUtmqYpYK27NdPJho5YVeaeTblnkK9yQTt25B44GqZJxpGdRrp50pIr3fc17D6PuLVFK8cksrCKNGzIANoKhscD2Df20wpOZM7JmbBwcMfjP++lDw5r6autdLUwMrLWUEEqOvZh5YVv1BVv20So6n+G170lQVWI8ocEceolvj2A4Pb4xjRwS5UAPC5H81PIl2NH/Mk/zv+518LP7s3766TJG4w2Crf5hwdDrnd7XZY0jklXzpsiGFTudyFJA+QOMZPA1S8qoLsdKUFJNgK53+jtv0k12rLZS1U9FA0kUj06u67RuABIJ74wPnW+mqYqunSeCVJUcZ3IwIzxkce/Optc+pKy4XajE9vaWmeVY4hEZFIJ7sOwYg44Ofc9tfVq5un676+Cnu9PTmTy5fPph9OEL5IQDkscABsZ1nJ2ijOSo0/NapOFYAX41Sgqq7OFUM2NzActjtk++vysj7kBVscMO+PsdDrXdrVe40allEhKCTypUKuoPyp9+PbtrbHE0QVI2RIV7IF7D4zn++tFXDarqKmItoeNfahadqcwVEcTQyDyzG6Aowx+Eg8YwPy0D6jq4rRZkW3wrHT+VK6R0qKuQsbPhRjAJx8e/vr9X1P8VrEo6VsxBvUQpbP4SGwPzI5+/fONBPGGsjo+nKiVpNv01DUSE524JiMa88Yy0i6nmkJU26fNMRbEXrzjfbvfOoL7LXVNNcaW4AMsdAtNJ5McaY2RB8ZPpLnPGWOffQSpu/VH8QqiKyan8yaHCGQjZj8K8j9/nWK2p1DHT11xtF6qqeNADHturB2BYLlRuBIzwSf00ZqaTqJrfV3CHrW8zwQTQpKiXAl95zvGWfBKfbIOe/BwUTJh7nc/n580tgXtrVC6QtFoprKT1VWtXztBNXuiLxG02UjUnjnaXbHww0j+HdZZ/+oVXBbJqqFWjaby5FG1zHG4wMdshm5P20xUM1LD0re/4vW1zSyR0fpkXADNGxy2AcEjv8Y0n9IWzyvESi2zQHyIKqT0NwUKMAo9z+LvryQxbS4mWVmPCw5cPz3r0owwSBUAqu9QVHT/UVnvXSlRZ4qq7PSCOBpqdQDI0akEO3uMr6s/Y6j146V8RJpLotpsAFVSsKQmKeHcTGcEYYbZOWBOAO+c8HVHNfZJusTa623/XV8ssP08YnMRBMS4bcDkdh7Yxzop0xf4oJKmmu1O6ozNH5jyeYyfiGPhhzjI7634EUwqG1FhpU6YUu5ubeXGvOMVV1j0pcfJvloamh2xvUUdbQoRON5VmQAAkKBwynjvnnTLV9ZWKaztTx9KS0EVSJ/pmWucSQ7D39WVdTuPBBI2nk6u1x6Oj6j6cqLfeqyGthY+Zb62GLM1LIp3h0B/8AqMjscdtRKWl6OtdUbVPaqueroamRY3rq1kiLFvUymPCjdweSPb401Y0JDBbE+QpOKgaAlQ1xsacPB/xPhsNJS2W8zSJBGTJS1uBtpmIUlCATmJsqc5yCwPudXi79Y2uS0rWz01TKqoG30tSoBBHcdwRydeaRSWejqlkqbJa4o4V8tKSEqcLhff1E/hXk/no5W+IFFSWZ6RLA8NMkJCwU7DaUyoIAwMcMT+n30GKwuJjsYATfjwNSRSRNpIeHnVy6V8S+n71MlsjqJKV1h/7jyI0Xp4A3KThiOw9+dOFLFbqhGqY4IZWKkPKYhyvvlmGca8w+HMS002JivkxyMsbAgMT7Z+Rjt+uvQ3Td2hFtKr5cz7PSjKzKx9g20HjOposUXfK9HNAFF1oq9Jb3gFQn0pSoOFeOZfWQccNn2PH21hgt1tjr5WglqFqImEkojrdxBGQCwLY9iOeOPtroaleWjKzCVHlimjqPIpZWU+ZIsjSAso9W5T7Acj45zXlKutlqZZ6dgkkkYCxU8ys0KSbzExx6QeSSO5+2nPbiBSVvwvWWo6V6PjRXqPqY49p2lqmYrgjBwQxABHx7ax9SeJHTPS6RWlqusrw9NhJIp0MaryuC7NksPg/bWPqavqIrTDT1E09ROqYklaJlLn9R+mpL1I8NTF5cSoYp5I1kMhDNkZ3Ef6fn9NR/qTESEUCq1h7wXYk1c7P1laktRukFHWKpX0tU1KkAAd8D0jgDnUS8X/ER+oKlbNb1eSLektU7cJUOOUjBB4QZOMn1MSTjjGOz9aP1Ps6PtnSr3efzWg+nEylZlzy3bAUDHJPGM50z2TwMutIsk1dcaO3LJUrMaVw0jqi87Q52q27OM4P76vwceIkBM+luHD6VJO0YNot/OljwwtVB1V0v1XcLhVVFDS2mILTmDb69u6QK24E44HAI75541pp6P+J9MQVdDajIJIw8kXlKUbNQylgB/TgLj75+Tp4qPCi52bpivsdj6nt1DR3Ak1NO8ARGAwCQ5LMWPA+MDt3Opx1OttsPSZo2tNdHeaSZ6ck1MslKI1AYOAoAkyWzjgA/IGi7YcPNeFLLy0+9PwHcLgss1zLfjtl109+m1WC/VtEnRdPHLDC0ktMsshlGAx24JDYI+eP+dTS0S0lZ1MkgZGqEgk3bX3YAjbHONOHUd1kofDzZQwSVLQpGEijchgMDkhTkgZ7fGlHp15jcafz2UytE+/bkDJRs8Ek6wWZXQm2tq08jJvpeknrea+T9cXKOy29EqFpYo0nWHe0i+UmSDjKsCV9Q4UDJ4zrZa7H1n0vTvU3fp6qmFDEpqnp3WeOZCRtZXBIDAHnb25J7ckLxZ6ek8RK2WpaeKpamiV4mk3LKylY3AXGQCYzkZP4Tjvpm61vdZ07eKeCgkmhMsQmTy24Q55XJzywzwcDt3xrYUjuUvyHxRYPs95T3mex1tyo50Leqy7dDyVVho1gupkaMW2eTIbBCFgQwZTgls8aSajpO59RVldRpbJPLotq1H1ciqtMxXkMx5JJyQBzg6Jz9S001886mi+mrrvR+SpSQ7pp9uCyAe47gDJyNa78eq7HVGpuIaL6jyo5DJIr+a8aYBKgAqVwBkkk9/tr5g1tBwpeKWzASPdt+FLEHht1RQWuNZ4pJ6cMPpJ4oi5Kc7kPOSAeV9xyO2MAa/py51MrUlHQzVUx9DxQRt5qj7oQGAJA57ffVftHiFeKinKC4UTqV/qxxk4BGTxknH665sJuquj6ynppDS1dRcIoqipggaOTyEJdlRvckgDk45yfbVuHxMy6bAb1lywxMb7mpVHX37pQW65QS0bOwdYpZYQ5ypw0bqcMCp4II+Mex1Q+jPHmaSthp+oLe1FFwGqaKTfEPuYyNwHbOCcZ7aSetK2+i5XCG42mmt8zTFo4ZKfMyJI2Sck4PCgbl+OD31rttV031OyWutojR18CspuLkKQxI5cZUPz7dx7HUS4yB/DMmuuo09ark7OlHiibTkdf5r0LH1VZeorZKtO8lxo5wVL0M4kH5kJllOfYga4NfrNYLRGGE9HS0y58yul8pQc5LEN6iSTn0qc/GvNlx8J7nR+ZW2ydatJVVUnpWy2QxJOBgk/YE+2jHQEHS1nmgj6khq6udixjr4qlklhJPPpPOV+OTydEcqnMrX621txqVYmPhIt6071vigepXq4unyjxIWRaq5hkgc47rEuC/ORtZx7ZHONdEXQVrNyat6qrp66vkVi7SSCEOqqrfy6aJsbVBwUOCPYEHS/11d4QiNYqdrxa44D5daYx5jEg/iVRnK5/qXn30I6Z8QqujrxLS/wATqaeSeMGnkp28ulySDJlRhmxgEMcYA9xqZZi7EAae596okw+RQb1W+mrRaum7hU3a00C01UQyTRPAsRZX5JJABBIAyCeCDxxo2vXdrINPPbqhdxKtlEfdjjAJx/fOotbLlU1FfWUwhltVNFtZavzXf+YO5LYwwwThVGAGxgEZ101l6o5LwfpOrYJERQZDNAURmz+EDORkZ5J4OqsM8xByH3t9aW0cZALD5+lG/EvqwPdUlqJeGhB2Mgk2pvACY43E5APznWujE98uFRS00skcTRj6qCeoYLSKqqFUL/8Ak5wcYx2PfSB1H9FcurobhTpPcaSGn9YgkMfAfIAGeScLu/f7F9sd1/hfhe10rI6G0XKVpJppKioUy1G5hht4GSCAo28EYAwBrGaS2Yg5nJ186rdSltLDali7v1h0/TXKgroqWtgp1iFBJPE0E9a7D/txqPTkdyc8jGASdJ/QfV9VXeIVvtFda/4bM4nUowy25Yn9LDgo3B75GMaqNN13Sx9PVV8r57RK9MFqIKeCRpakIw/GuOFbHByePng6F9NW9OpetLb1RB/BplqKeRoEhTNVG3lhMs55IJlAKkcca7GrlWDxkaH0Px1oTLcjxfeqJ/6hOhpZbkt7tv8ALllcvC44HnEDdE32faGX/UCP6tSm99Q3h6SO33uOKOpQ7hHIrJJwNuCAAMdxyc69l3KhpLlQTUNdTpUU0y7ZI3GQw1BPFHwLmudTLWW6srJN6MhdG3SFSMASLkb8cYdSG+QdejxGDaGQsv7Drztz9PLh5Ujs/tYxpkPEfzUo6M6vprXLT3KyXair6lmKtTfTFvJ7jfkjGD+HKnjcBnnTT1/1zUX7pcNUWXM4dXE8DblBXsMk+4yPf89Tip8I+urVTeRSUokrkkZRNBVhR5RH+V9rqfb30PouiPFi3MyrYLgwznzaW4pBIPvw+0/qNLXFIAUzC3mKRIXmfvXFmqn+GNzs1VU/T1FrlE8pBIWiLMSO2cDVpngpLVZUlElNTsjkgTShe+OSO36fbXmGg6f8UCMPcupaLjBWeSnc/luSQZ13w9G9XtUCouU09c6spUTTptOPkGTjXExEK3Fx71xo3axp88W1Xq64W6goL5SQ3CBjO9VOpwYyNojTGCcnk44G0dznSP1T0f1NbaekeaO21lPK5Amp5GRmYYJxuHBwc9z3766et+kusb1eYq5K6NmWAQlmniRQoJOAvIyMnnH6nTV4bC49CWmpWpimvFXUEAgVUToqDPpAJAByftqdxhncGQj0OtVxTTRrZL/StvgjB1TbrhUQ19vFusgUyP52GYHIA2Eeo84zkfGMnjX3xbqLZTvIs1hapqKkBH81AqHjCtIB8dwAdwwe3bTlaeoJK/plaipudutNxd93088ql1Ull2ZQ4XCgNkE43awSUXTt0kgHUF9tPmFxJNUwVRIlKrhVZWPtyOPn9dUgYaABl1HnU0kk05N9D5VOula9gkn0tgpmpEkwJBA6r5XGD6+STyBkAD7nWjz66O7bzcDTLTCSOeEFFLkAZwqnAJ4I4zx376eOprhBX0MtDQ3KmgpkXZHFDNHDER3ztViHbJ/q4wO2pwtjkm6iDVSI4VHZ61quPy5CwAKmMk59+O35agm7Te57uwHpTlwV7XN6eJ/41S3CJ6hKI0/lhfL2qzBjj49zx++sNZbxW0cwrrHR1iMdoET+XJj5LDtzj8hn30TR2ljZ/raCKZF8uKNZoxCVG4jIBwpJxk402NUWGqttOKmpt31UkINVFFUK0e8Y4z7+/tgaDD9otc97YgU6fDBbd2TeovfntPhlZ6W49ICtFwqonlyQ86xQF9jt5Z5bLbsMeABnHOk2poeo+pup3vEdfYL1a5SqmsqAsUsI2+uPbIARk54weRxjVh8cui4etbJDQ2e600VXGnkxSpPtQRlgzJJjnacHkA4JOQQcib9F+FfVs3UcVObVFQ2yKAx8zxszupwpULuIBHqzjn7E6ukbDhWeNgCb8ifka8qjVpWYBwTw/D0rHK9Ta7FcqK5213pawClikhXKO6neQrDuGRDxnAxj316B/wDTH4YXHpumN26imEtxmEbNEp/l0qqMxwL7EgncxA5IUc40X8OPBKzWi4095u3n3OtpjupGq1ASmJHJjjHAb/U3I9gNWOCGOCJYolCovYafgsE8h7x72Nib724abczz60nF4tbZEHDl14/blX//2Q==" class="hero-icon" alt="">
+  <div class="hero-eyebrow">PARIS · NORMANDIE</div>
+  <h1 class="hero-title">은정이와 세원이의 여행</h1>
+  <div class="hero-sub">June 10 – 17, 2026</div>
+  <div class="hero-ornament"><span>✦</span></div>
+</div>
+
+<div class="content">
+
+<!-- ════════════ 홈 ════════════ -->
+<div class="page active" id="page-home">
+
+  <div class="countdown">
+    <div class="countdown-label">DÉPART · 파리까지</div>
+    <div><span class="countdown-num" id="days-left">--</span><span class="countdown-unit">days</span></div>
+    <div class="countdown-sub" id="countdown-sub">à bientôt, Paris ✦</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-mini">
+      <div class="info-mini-label">DURATION</div>
+      <div class="info-mini-value">8일 / 7박</div>
+    </div>
+    <div class="info-mini">
+      <div class="info-mini-label">HOTELS</div>
+      <div class="info-mini-value">4곳 · 7박</div>
+    </div>
+    <div class="info-mini">
+      <div class="info-mini-label">MICHELIN</div>
+      <div class="info-mini-value">★ 7 곳</div>
+    </div>
+    <div class="info-mini">
+      <div class="info-mini-label">ROAD TRIP</div>
+      <div class="info-mini-value">Normandie 2박</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-eyebrow">QUICK ACCESS</div>
+    <h2 class="section-title">바로 가기</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <div class="quick-grid">
+    <div class="quick-card" onclick="switchTab('itinerary')">
+      <span class="quick-icon">📅</span>
+      <div class="quick-label">일정</div>
+      <div class="quick-sub">8 days</div>
+    </div>
+    <div class="quick-card" onclick="switchTab('resto')">
+      <span class="quick-icon">🍷</span>
+      <div class="quick-label">레스토랑</div>
+      <div class="quick-sub">예약 현황</div>
+    </div>
+    <div class="quick-card" onclick="switchTab('normandy')">
+      <span class="quick-icon">🌊</span>
+      <div class="quick-label">노르망디</div>
+      <div class="quick-sub">드라이브 루트</div>
+    </div>
+    <div class="quick-card" onclick="switchTab('info')">
+      <span class="quick-icon">📋</span>
+      <div class="quick-label">정보</div>
+      <div class="quick-sub">항공·호텔·체크리스트</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-eyebrow">DEADLINE WATCH</div>
+    <h2 class="section-title">예약 재확인 알림</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <div id="deadline-watch"></div>
+
+</div>
+
+<!-- ════════════ 일정 ════════════ -->
+<div class="page" id="page-itinerary">
+  <div class="section-head">
+    <div class="section-eyebrow">8 DAYS IN FRANCE</div>
+    <h2 class="section-title">전체 일정</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <!-- 6/10 수 -->
+  <div class="day-card">
+    <div class="day-head">
+      <div>
+        <div class="day-num">DAY 01 · 06.10 MER</div>
+        <div class="day-date">파리 도착</div>
+      </div>
+      <div class="day-tag">PARIS</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">PM</div>
+        <div class="event-body">
+          <div class="event-title">파리 도착 → 호텔 체크인</div>
+          <div class="event-meta">
+            <strong>Pullman Paris Tour Eiffel</strong><br>
+            18 Av. de Suffren, 75015 Paris<br>
+            <span class="event-tag tag-hotel">4 NIGHTS</span>
+            <span class="event-tag tag-confirmed">QHQLBMHZ</span>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">EVE</div>
+        <div class="event-body">
+          <div class="event-title">컨디션 조절 · 시차 적응</div>
+          <div class="event-meta">은정과는 6/11 합류</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/11 목 -->
+  <div class="day-card">
+    <div class="day-head">
+      <div>
+        <div class="day-num">DAY 02 · 06.11 JEU</div>
+        <div class="day-date">에이전시 미팅 · 은정 합류</div>
+      </div>
+      <div class="day-tag">PARIS</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">AM</div>
+        <div class="event-body">
+          <div class="event-title">에이전시 미팅 (8구)</div>
+          <div class="event-meta">IMG · Elite · Metropolitan 등 순회</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">PM</div>
+        <div class="event-body">
+          <div class="event-title">은정 파리 합류</div>
+          <div class="event-meta">호텔 합류 후 저녁 같이</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/12 금 -->
+  <div class="day-card">
+    <div class="day-head">
+      <div>
+        <div class="day-num">DAY 03 · 06.12 VEN</div>
+        <div class="day-date">미슐랭 더블 데이</div>
+      </div>
+      <div class="day-tag">PARIS</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">AM/PM</div>
+        <div class="event-body">
+          <div class="event-title">에이전시 미팅 마무리</div>
+          <div class="event-meta">8구 / 캐스팅 정리</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">19:30</div>
+        <div class="event-body">
+          <div class="event-title">Le Cinq <span style="color:var(--gold-deep)">★★★</span></div>
+          <div class="event-meta">
+            <strong>Four Seasons George V</strong> · 디너 2명<br>
+            <span class="event-tag tag-michelin">MICHELIN ★★★</span>
+            <span class="event-tag tag-confirmed">#17002</span><br>
+            <span style="color:var(--terracotta); font-size:10.5px;">⚠️ Kei 확정 시 캔슬</span>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">20:00</div>
+        <div class="event-body">
+          <div class="event-title">L'Ambroisie <span style="color:var(--gold-deep)">★★★</span></div>
+          <div class="event-meta">
+            Place des Vosges · 디너 2명<br>
+            <span class="event-tag tag-michelin">MICHELIN ★★★</span>
+            <span class="event-tag tag-confirmed">CONFIRMED</span><br>
+            <span style="color:var(--terracotta); font-size:10.5px;">⚠️ Kei 확정 시 캔슬 — 6/11 20:00까지 무료</span>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">대기</div>
+        <div class="event-body">
+          <div class="event-title">Kei <span style="color:var(--gold-deep)">★★★</span></div>
+          <div class="event-meta">
+            <span class="event-tag tag-waiting">대기 5번째</span><br>
+            확정 시 Le Cinq + L'Ambroisie 캔슬
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/13 토 -->
+  <div class="day-card">
+    <div class="day-head">
+      <div>
+        <div class="day-num">DAY 04 · 06.13 SAM</div>
+        <div class="day-date">미팅 마무리 · 압착 오리</div>
+      </div>
+      <div class="day-tag">PARIS</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">AM/PM</div>
+        <div class="event-body">
+          <div class="event-title">자유 일정</div>
+          <div class="event-meta">관광 · 쇼핑</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">19:00</div>
+        <div class="event-body">
+          <div class="event-title">La Tour d'Argent <span style="color:var(--gold-deep)">★</span></div>
+          <div class="event-meta">
+            노트르담 뷰 · 디너 2명<br>
+            <span class="event-tag tag-michelin">MICHELIN ★</span>
+            <span class="event-tag tag-confirmed">CONFIRMED</span><br>
+            <strong style="color:var(--terracotta);">🦆 압착 오리 주문 예정</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/14 일 -->
+  <div class="day-card">
+    <div class="day-head normandy">
+      <div>
+        <div class="day-num">DAY 05 · 06.14 DIM</div>
+        <div class="day-date">노르망디 로드트립 시작</div>
+      </div>
+      <div class="day-tag">NORMANDIE</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">AM</div>
+        <div class="event-body">
+          <div class="event-title">미니쿠퍼 컨버터블 픽업</div>
+          <div class="event-meta">파리 → 지베르니 (1시간 15분)</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">MID</div>
+        <div class="event-body">
+          <div class="event-title">지베르니 · 모네의 정원</div>
+          <div class="event-meta">Fondation Claude Monet · 수련 연못</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">PM</div>
+        <div class="event-body">
+          <div class="event-title">에트르타 · 알라바스트 절벽</div>
+          <div class="event-meta">
+            <strong>Les Tilleuls Étretat</strong> 체크인<br>
+            <span class="event-tag tag-hotel">1 NIGHT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/15 월 -->
+  <div class="day-card">
+    <div class="day-head normandy">
+      <div>
+        <div class="day-num">DAY 06 · 06.15 LUN</div>
+        <div class="day-date">에트르타 → 캉칼 → 몽생미셸</div>
+      </div>
+      <div class="day-tag">NORMANDIE</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">AM</div>
+        <div class="event-body">
+          <div class="event-title">에트르타 산책 후 출발</div>
+          <div class="event-meta">에트르타 → 캉칼 (약 3시간)</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">16:00</div>
+        <div class="event-body">
+          <div class="event-title">캉칼 · Château Richeux 체크인</div>
+          <div class="event-meta">
+            <strong>📍 Le Buot</strong>, Saint-Méloir-des-Ondes<br>
+            D11 towards Mont-Saint-Michel<br>
+            <span class="event-tag tag-hotel">1 NIGHT</span>
+            <span class="event-tag tag-confirmed">N° 19138</span>
+            <span class="event-tag tag-michelin">€458.80</span>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">EVE</div>
+        <div class="event-body">
+          <div class="event-title">몽생미셸 · 만조 감상</div>
+          <div class="event-meta">캉칼 → 몽생미셸 (40분)</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">DINNER</div>
+        <div class="event-body">
+          <div class="event-title">Le Bistrot de Cancale (저녁 옵션)</div>
+          <div class="event-meta">
+            5 Rue Eugène et Auguste Feyen, Port Mer<br>
+            테라스 (4~9월, 날씨 양호 시) — 예약 시 명시 필요<br>
+            <span class="event-tag tag-waiting">미예약</span><br>
+            <strong style="color:var(--gold-deep); font-size:10.5px;">캔슬 매우 관대 (전날까지 무료, 이후 €50/인)</strong><br>
+            → 도착 후 컨디션 보고 결정 가능
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/16 화 -->
+  <div class="day-card">
+    <div class="day-head">
+      <div>
+        <div class="day-num">DAY 07 · 06.16 MAR</div>
+        <div class="day-date">Le Coquillage 런치 · 파리 · ESMOD</div>
+      </div>
+      <div class="day-tag">PARIS</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">12:00</div>
+        <div class="event-body">
+          <div class="event-title">Le Coquillage <span style="color:var(--gold-deep)">★</span></div>
+          <div class="event-meta">
+            Château Richeux 부속 · Olivier Roellinger<br>
+            해산물·해초·향신료 테이스팅<br>
+            <span class="event-tag tag-michelin">MICHELIN ★</span>
+            <span class="event-tag tag-confirmed">CONFIRMED</span>
+          </div>
+        </div>
+      </div>
+      <div class="event" style="background: rgba(217,83,79,0.06); border-left: 3px solid #D9534F; padding-left: 10px; margin-left: -10px; border-radius: 0 6px 6px 0;">
+        <div class="event-time" style="color: #B33A35;">⚠️</div>
+        <div class="event-body">
+          <div class="event-title" style="color: #B33A35;">타이밍 매우 빠듯</div>
+          <div class="event-meta">
+            <strong>12:00 런치 → 15:00 파리 ESMOD</strong><br>
+            캉칼→파리 약 3시간 30분 + 런치 1.5~2시간<br>
+            <strong style="color:#B33A35;">→ Coquillage 런치 짧게 (1h 30m 이내)</strong><br>
+            <strong style="color:#B33A35;">또는 ESMOD 시간 조정 검토</strong>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">PM</div>
+        <div class="event-body">
+          <div class="event-title">캉칼 → 파리 (약 3시간 30분)</div>
+          <div class="event-meta">렌트카 반납 후 ESMOD 직행</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">15:00</div>
+        <div class="event-body">
+          <div class="event-title">ESMOD 견학</div>
+          <div class="event-meta">9구 · École de mode</div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">PM</div>
+        <div class="event-body">
+          <div class="event-title">Ritz Paris 체크인</div>
+          <div class="event-meta">
+            15 Place Vendôme · <span class="event-tag tag-hotel">1 NIGHT</span>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">19:00</div>
+        <div class="event-body">
+          <div class="event-title">Le Bon Georges</div>
+          <div class="event-meta">
+            테라스 8명 · 비스트로<br>
+            <span class="event-tag tag-confirmed">CONFIRMED</span>
+            <span style="color:var(--terracotta); font-size:10.5px;">무료취소 6/16 11:00까지</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6/17 수 -->
+  <div class="day-card">
+    <div class="day-head">
+      <div>
+        <div class="day-num">DAY 08 · 06.17 MER</div>
+        <div class="day-date">Le Gabriel 런치 · 귀국</div>
+      </div>
+      <div class="day-tag">DÉPART</div>
+    </div>
+    <div class="day-body">
+      <div class="event">
+        <div class="event-time">13:00</div>
+        <div class="event-body">
+          <div class="event-title">Le Gabriel <span style="color:var(--gold-deep)">★★</span></div>
+          <div class="event-meta">
+            <strong>La Réserve Paris</strong> · 42 Ave Gabriel, 75008<br>
+            런치 2명<br>
+            <span class="event-tag tag-michelin">MICHELIN ★★</span>
+            <span class="event-tag tag-confirmed">#9H7J5Z4K6HGF</span><br>
+            <strong style="color:var(--terracotta);">⚠️ 48시간 전 재확인 필수</strong>
+          </div>
+        </div>
+      </div>
+      <div class="event">
+        <div class="event-time">EVE</div>
+        <div class="event-body">
+          <div class="event-title">귀국편 KE902</div>
+          <div class="event-meta">
+            CDG → ICN<br>
+            <span class="event-tag tag-flight">PNR: FW7IJ4</span>
+            <span style="color:var(--terracotta); font-size:10.5px;">⏳ 6/17~20 대기, 미확정</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 레스토랑 ════════════ -->
+<div class="page" id="page-resto">
+  <div class="section-head">
+    <div class="section-eyebrow">RÉSERVATIONS</div>
+    <h2 class="section-title">레스토랑 예약 현황</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <div id="resto-list"></div>
+</div>
+
+<!-- ════════════ 노르망디 드라이브 ════════════ -->
+<div class="page" id="page-normandy">
+  <div class="section-head">
+    <div class="section-eyebrow">ROAD TRIP</div>
+    <h2 class="section-title">노르망디 드라이브</h2>
+    <div class="section-ornament"><span>6/14 → 6/16 · MINI Convertible</span></div>
+  </div>
+
+  <a class="btn primary" style="width:100%; justify-content:center; padding:11px; margin-bottom:14px; font-size:13px;" 
+     href="https://www.google.com/maps/dir/Paris,+France/Giverny,+France/%C3%89tretat,+France/Cancale,+France/Mont-Saint-Michel,+France/Paris,+France/data=!4m2!4m1!3e0" target="_blank">
+    🗺️ 구글맵에서 전체 루트 열기
+  </a>
+
+  <!-- Leg 1 -->
+  <div class="drive-leg">
+    <div class="drive-marker">
+      <div class="step">1</div>
+      <div class="of">START</div>
+    </div>
+    <div class="drive-body">
+      <div class="drive-place">파리</div>
+      <div class="drive-place-fr">Paris · 16e arrondissement</div>
+      <div class="drive-info">
+        🕐 6/14 (일) 오전 출발<br>
+        🚗 SIXT 픽업 → 미니쿠퍼 컨버터블
+      </div>
+    </div>
+  </div>
+
+  <!-- Leg 2 -->
+  <div class="drive-leg">
+    <div class="drive-marker">
+      <div class="step">2</div>
+      <div class="of">75 km</div>
+    </div>
+    <div class="drive-body">
+      <div class="drive-place">지베르니</div>
+      <div class="drive-place-fr">Giverny · 모네의 정원</div>
+      <div class="drive-info">
+        ⏱️ 약 1시간 15분<br>
+        🌸 Fondation Claude Monet · 수련 연못 · 일본식 다리
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://maps.google.com/?q=Fondation+Claude+Monet+Giverny" target="_blank">📍 지도</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leg 3 -->
+  <div class="drive-leg">
+    <div class="drive-marker">
+      <div class="step">3</div>
+      <div class="of">160 km</div>
+    </div>
+    <div class="drive-body">
+      <div class="drive-place">에트르타</div>
+      <div class="drive-place-fr">Étretat · 알라바스트 절벽</div>
+      <div class="drive-info">
+        ⏱️ 지베르니에서 약 2시간 30분<br>
+        🏨 <strong>Les Tilleuls Étretat</strong> 1박<br>
+        💎 Falaise d'Aval · 코끼리 바위 · 해질녘 산책
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://maps.google.com/?q=Falaise+d'Aval+Etretat" target="_blank">📍 절벽</a>
+        <a class="btn" href="https://maps.google.com/?q=Les+Tilleuls+Etretat" target="_blank">🏨 호텔</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leg 4 -->
+  <div class="drive-leg">
+    <div class="drive-marker">
+      <div class="step">4</div>
+      <div class="of">285 km</div>
+    </div>
+    <div class="drive-body">
+      <div class="drive-place">캉칼</div>
+      <div class="drive-place-fr">Cancale · 굴의 수도</div>
+      <div class="drive-info">
+        ⏱️ 에트르타에서 약 3시간<br>
+        🏨 <strong>Château Richeux</strong> 1박 (Le Coquillage 부속)<br>
+        🦪 캉칼 굴 시장 · Pointe du Grouin
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://maps.google.com/?q=Chateau+Richeux+Cancale" target="_blank">🏨 호텔</a>
+        <a class="btn" href="https://maps.google.com/?q=Marche+aux+huitres+Cancale" target="_blank">🦪 굴 시장</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leg 5 -->
+  <div class="drive-leg">
+    <div class="drive-marker">
+      <div class="step">5</div>
+      <div class="of">45 km</div>
+    </div>
+    <div class="drive-body">
+      <div class="drive-place">몽생미셸</div>
+      <div class="drive-place-fr">Mont-Saint-Michel</div>
+      <div class="drive-info">
+        ⏱️ 캉칼에서 약 40분<br>
+        🌊 만조 시간 확인 후 방문 추천<br>
+        🌅 일몰 또는 야경 베스트
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://maps.google.com/?q=Mont+Saint+Michel" target="_blank">📍 지도</a>
+        <a class="btn" href="https://www.horaire-maree.fr/maree-mont-saint-michel-port_75500" target="_blank">🌊 조수</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leg 6 -->
+  <div class="drive-leg">
+    <div class="drive-marker">
+      <div class="step">6</div>
+      <div class="of">375 km</div>
+    </div>
+    <div class="drive-body">
+      <div class="drive-place">파리 복귀</div>
+      <div class="drive-place-fr">Retour à Paris · Ritz</div>
+      <div class="drive-info">
+        ⏱️ 6/16 (화) 오전 출발 · 약 3시간 30분<br>
+        🚗 SIXT 반납 → Ritz Paris 체크인<br>
+        🎓 15:00 ESMOD 견학 (9구)
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://maps.google.com/?q=Ritz+Paris" target="_blank">🏨 Ritz</a>
+        <a class="btn" href="https://maps.google.com/?q=ESMOD+Paris" target="_blank">🎓 ESMOD</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-stripe"></div>
+    <div style="font-family:'Italiana',serif; font-size:11px; letter-spacing:0.2em; color:var(--gold-deep); margin-bottom:6px;">TOTAL DISTANCE</div>
+    <div style="font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:18px; color:var(--navy);">약 940 km · 3일</div>
+    <div style="font-family:'Inter',sans-serif; font-size:11.5px; color:var(--text-soft); margin-top:4px;">컨버터블 오픈 추천 구간: 캉칼 해안도로 · 에트르타 절벽길</div>
+  </div>
+</div>
+
+<!-- ════════════ 정보 ════════════ -->
+<div class="page" id="page-info">
+  <div class="section-head">
+    <div class="section-eyebrow">ESSENTIALS</div>
+    <h2 class="section-title">여행 정보</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <!-- 항공 -->
+  <div class="info-block">
+    <div class="info-label">FLIGHTS · 항공</div>
+    <div class="info-value">🛫 OU476 · 6/10 DBV → CDG</div>
+    <div class="info-detail">
+      두브로브니크 → 파리 비즈니스<br>
+      <strong>PNR: YFFBXW</strong> · 크로아티아 여행 직후 연결
+    </div>
+    <hr style="border:none; border-top:1px dashed var(--line); margin:10px 0;">
+    <div class="info-value">🛬 KE902 · 6/17 CDG → ICN</div>
+    <div class="info-detail">
+      파리 → 인천<br>
+      <strong>PNR: FW7IJ4</strong> · ⏳ 6/17~20 대기, 미확정
+    </div>
+  </div>
+
+  <!-- 호텔 -->
+  <div class="section-head">
+    <div class="section-eyebrow">HOTELS & CANCELLATION</div>
+    <h2 class="section-title">숙소 & 취소 정책</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <div id="hotel-list"></div>
+
+  <!-- 렌트카 -->
+  <div class="info-block">
+    <div class="info-label">RENTAL CAR · 렌트카</div>
+    <div class="info-value">🚗 MINI Cooper Convertible</div>
+    <div class="info-detail">
+      픽업: 6/14 (일) 파리<br>
+      반납: 6/16 (화) 파리<br>
+      2일 · 노르망디 로드트립용
+    </div>
+  </div>
+
+  <!-- 동행 -->
+  <div class="info-block">
+    <div class="info-label">COMPANY · 동행</div>
+    <div class="info-value">👯 은정 (6/11~17)</div>
+    <div class="info-detail">6/11 파리 합류 → 6/17 같이 귀국</div>
+  </div>
+
+  <!-- 체크리스트 -->
+  <div class="section-head">
+    <div class="section-eyebrow">CHECKLIST</div>
+    <h2 class="section-title">출발 전 체크리스트</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <div id="checklist"></div>
+
+  <!-- 메모 -->
+  <div class="section-head">
+    <div class="section-eyebrow">NOTES</div>
+    <h2 class="section-title">자유 메모</h2>
+    <div class="section-ornament"><span>✦</span></div>
+  </div>
+
+  <textarea class="memo-area" id="memo" placeholder="기억해둘 것들… (자동 동기화)"></textarea>
+  <div style="text-align:right;">
+    <button class="memo-save" onclick="saveMemo()">저장</button>
+    <span id="memo-status" style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:11px; color:var(--text-soft); margin-left:8px;"></span>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-ornament">✦ ✦ ✦</div>
+  Bon voyage, mes chères<br>
+  Paris · Normandie · 2026
+</div>
+
+<!-- ── 탭 네비 ── -->
+<nav class="tabnav">
+  <button class="tab active" data-tab="home"><span class="ticon">⚜</span>HOME</button>
+  <button class="tab" data-tab="itinerary"><span class="ticon">📅</span>ITINÉRAIRE</button>
+  <button class="tab" data-tab="resto"><span class="ticon">🍷</span>RESTOS</button>
+  <button class="tab" data-tab="normandy"><span class="ticon">🌊</span>NORMANDIE</button>
+  <button class="tab" data-tab="info"><span class="ticon">📋</span>INFO</button>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBV_s9OvKGbnPo0lGEQkb99Kh9FZIgC53c",
+  authDomain: "anna-2026-trip.firebaseapp.com",
+  databaseURL: "https://anna-2026-trip-default-rtdb.firebaseio.com",
+  projectId: "anna-2026-trip",
+  storageBucket: "anna-2026-trip.firebasestorage.app",
+  messagingSenderId: "583684484336",
+  appId: "1:583684484336:web:e0095634a75d0c68396635"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+window._db = db; window._ref = ref; window._set = set; window._onValue = onValue;
+
+function showSync(text) {
+  const el = document.getElementById('sync-indicator');
+  if (el) {
+    el.textContent = text || '동기화됨';
+    el.style.opacity = '1';
+    setTimeout(() => el.style.opacity = '0', 1200);
+  }
+}
+window.showSync = showSync;
+
+// ── 체크리스트 동기화 (paris_checklist 네임스페이스) ──
+const CHECKLIST_KEY = 'paris_checklist';
+const MEMO_KEY = 'paris_memo';
+
+onValue(ref(db, CHECKLIST_KEY), snap => {
+  const data = snap.val() || {};
+  window._checklistState = data;
+  renderChecklist();
+  renderDeadlines();
+});
+
+onValue(ref(db, MEMO_KEY), snap => {
+  const text = snap.val() || '';
+  const el = document.getElementById('memo');
+  if (el && document.activeElement !== el) {
+    el.value = text;
+  }
+});
+
+window.toggleCheck = function(id) {
+  const state = window._checklistState || {};
+  state[id] = !state[id];
+  set(ref(db, CHECKLIST_KEY + '/' + id), state[id]);
+  showSync();
+};
+
+window.saveMemo = function() {
+  const text = document.getElementById('memo').value;
+  set(ref(db, MEMO_KEY), text);
+  const s = document.getElementById('memo-status');
+  s.textContent = '✓ 저장됨';
+  setTimeout(() => s.textContent = '', 2000);
+  showSync();
+};
+</script>
+
+<script>
+// ── 탭 전환 ──
+function switchTab(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelector(`.tab[data-tab="${name}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => switchTab(t.dataset.tab));
+});
+
+// ── 카운트다운 ──
+function updateCountdown() {
+  const target = new Date('2026-06-10T00:00:00+09:00');
+  const now = new Date();
+  const diff = target - now;
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  const el = document.getElementById('days-left');
+  const sub = document.getElementById('countdown-sub');
+  if (days > 0) {
+    el.textContent = days;
+    sub.textContent = 'à bientôt, Paris ✦';
+  } else if (days === 0) {
+    el.textContent = '0';
+    sub.textContent = 'Aujourd\'hui ! 오늘 출발 ✦';
+  } else {
+    const total = 8;
+    const dayInTrip = total + days;
+    if (dayInTrip >= 1 && dayInTrip <= total) {
+      el.textContent = 'DAY';
+      el.style.fontSize = '36px';
+      sub.innerHTML = `<span style="font-size:28px; color:var(--gold); font-family:'Italiana',serif;">${dayInTrip}</span> / ${total} · en voyage`;
+    } else {
+      el.textContent = '✦';
+      sub.textContent = 'Bon retour ✦ 무사 귀국';
+    }
+  }
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// ── 호텔 데이터 (캔슬 데드라인 포함) ──
+const hotels = [
+  {
+    name: "Pullman Paris Tour Eiffel",
+    nameFr: "18 Av. de Suffren, 75015 · 에펠탑 뷰",
+    bookingNo: "QHQLBMHZ",
+    checkin: "6/10 (수)",
+    checkout: "6/14 (일)",
+    nights: 4,
+    room: "디럭스룸 · 고층 · 트윈 + 소파베드 · 발코니 · 에펠탑 전망",
+    total: "€2,930.10",
+    info: "<strong>예약번호:</strong> QHQLBMHZ<br><strong>객실:</strong> 디럭스 트윈 · 에펠탑 뷰<br><strong>약관:</strong> 도착 1일 전까지 무료 취소",
+    deadline: "2026-06-09T18:00:00+02:00",
+    deadlineLabel: "무료 취소 (도착 1일 전)"
+  },
+  {
+    name: "Les Tilleuls Étretat",
+    nameFr: "Rue Isabey 45, 76790 Étretat",
+    bookingNo: "#6505",
+    checkin: "6/14 (일)",
+    checkout: "6/15 (월)",
+    nights: 1,
+    room: "La Lipa Rose · 2인 · 주차 포함",
+    total: "€325.00 (+ €1.76 세금)",
+    info: "<strong>예약번호:</strong> #6505<br><strong>약관:</strong> 14일 전까지 무료 / 14~7일 전 50% / 7일 미만 100%<br><strong>주의:</strong> 결제 발생 시 환불·일정변경 불가",
+    deadline: "2026-05-31T16:00:00+02:00",
+    deadlineLabel: "무료 취소 마감 (14일 전)"
+  },
+  {
+    name: "Château Richeux",
+    nameFr: "Maisons de Bricourt · Saint-Méloir-des-Ondes",
+    bookingNo: "N° 19138",
+    checkin: "6/15 (월) 16:00~",
+    checkout: "6/16 (화) ~12:00",
+    nights: 1,
+    room: "Superior Room with Ocean View · 30㎡ · King 또는 Twin",
+    total: "€458.80 (보증금 €450 결제 완료 + 숙박세 €8.80)",
+    info: "<strong>예약번호:</strong> N° 19138<br><strong>📍</strong> Le Buot, D11 towards Mont-Saint-Michel<br><strong>✉️</strong> info@roellinger-bricourt.com<br><strong>📞</strong> +33 2 99 89 64 76<br><strong>약관 (6월/주말/공휴일):</strong> 8일 전까지 무료 취소<br>8일 미만/no-show 시 보증금 €450 회수<br><strong>🍽️ Le Coquillage 런치 6/16 12:00 (2명) ✅ Confirmed</strong><br>조식 €32/인 별도",
+    deadline: "2026-06-07T16:00:00+02:00",
+    deadlineLabel: "무료 취소 (도착 8일 전)"
+  },
+  {
+    name: "Ritz Paris",
+    nameFr: "15 Place Vendôme, 75001 · Executive Room",
+    bookingNo: "—",
+    checkin: "6/16 (화)",
+    checkout: "6/17 (수)",
+    nights: 1,
+    room: "Executive Room · 2인 (Mr Heo + Mrs Shin)",
+    total: "—",
+    info: "<strong>담당자:</strong> Justine / Lisa Paje-Rius<br><strong>약관:</strong> 5/11 호텔에 캔슬 데드라인 문의 발송<br>답변 받는대로 업데이트 필요",
+    deadline: null,
+    deadlineLabel: "Justine 답변 대기 중"
+  }
+];
+
+// ── 레스토랑 데이터 ──
+const restos = [
+  {
+    name: "L'Ambroisie", nameFr: "Place des Vosges · 19:30",
+    michelin: "★★★", date: "6/12 (금) 20:00", party: "2명",
+    info: "<strong>Status:</strong> Confirmed<br><strong>Note:</strong> Kei 확정 시 캔슬",
+    deadline: "2026-06-11T20:00:00+02:00",
+    deadlineLabel: "무료 취소"
+  },
+  {
+    name: "Le Cinq", nameFr: "Four Seasons George V · 31 Av. George V, 75008",
+    michelin: "★★★", date: "6/12 (금) 19:30", party: "2명",
+    info: "<strong>Confirmation:</strong> #17002<br><strong>Status:</strong> Confirmed<br><strong>📞</strong> +33 1 49 52 71 54<br><strong>📋 캔슬 정책 (추정 — 업계 표준):</strong><br>· 신용카드 보증 예약<br>· <strong>2일 전 재확인 요청</strong> (Paris 고급 레스토랑 관행)<br>· 노쇼/직전 캔슬 시 €100~200/인 차지 가능<br><span style='color:var(--terracotta); font-size:10.5px;'>⚠️ anna@assetseoul.com 예약 메일 또는 직접 문의로 정확한 조건 확인 권장</span>",
+    deadline: "2026-06-10T19:30:00+02:00",
+    deadlineLabel: "2일 전 재확인 (관행)"
+  },
+  {
+    name: "Kei", nameFr: "Sushi-French fusion · 1구",
+    michelin: "★★★", date: "6/12 (금)", party: "2명",
+    info: "<strong>Status:</strong> ⏳ 대기 5번째<br>확정 시 L'Ambroisie + Le Cinq 캔슬",
+    deadline: null, isWaiting: true
+  },
+  {
+    name: "La Tour d'Argent", nameFr: "15 Quai de la Tournelle · 노트르담 뷰",
+    michelin: "★", date: "6/13 (토) 19:00", party: "2명",
+    info: "<strong>Status:</strong> Confirmed<br><strong>주문 예정:</strong> 압착 오리 🦆<br><strong>📞</strong> +33 1 43 54 23 31<br><strong>👔 드레스 코드:</strong> 남성 재킷 필수 (런치/디너)<br><strong>📋 캔슬 정책 (추정 — 업계 표준):</strong><br>· 신용카드 보증 예약 (예약 시 카드 등록 확인)<br>· <strong>48시간 전 무료 취소</strong>가 일반적<br>· 노쇼 시 €100~200/인 차지 가능<br><span style='color:var(--terracotta); font-size:10.5px;'>⚠️ anna@assetseoul.com 예약 메일 또는 직접 문의로 정확한 조건 확인 권장</span>",
+    deadline: "2026-06-11T19:00:00+02:00",
+    deadlineLabel: "48시간 전 (추정 관행)"
+  },
+  {
+    name: "Le Bon Georges", nameFr: "9e arrondissement · 비스트로",
+    michelin: "", date: "6/16 (화) 19:00", party: "8명 · 테라스",
+    info: "<strong>Status:</strong> Confirmed",
+    deadline: "2026-06-16T11:00:00+02:00",
+    deadlineLabel: "무료 취소"
+  },
+  {
+    name: "Le Coquillage", nameFr: "Château Richeux · Olivier Roellinger",
+    michelin: "★", date: "6/16 (화) 12:00", party: "2명 · 런치",
+    info: "<strong>Status:</strong> ✅ Confirmed (Audrey · 5/12)<br>해산물·해초·향신료 테이스팅 메뉴 (육류 없음)<br>알러지 사전 고지 필요<br>드레스 코드: appropriate attire<br>no-show 시 €200/인 차지<br>마감 시간: midnight",
+    deadline: "2026-06-14T12:00:00+02:00",
+    deadlineLabel: "무료 취소 (48시간 전)"
+  },
+  {
+    name: "Le Gabriel", nameFr: "La Réserve Paris · 42 Ave Gabriel, 75008",
+    michelin: "★★", date: "6/17 (수) 13:00", party: "2명 · 런치",
+    info: "<strong>Confirmation:</strong> #9H7J5Z4K6HGF<br><strong>Status:</strong> Confirmed",
+    deadline: "2026-06-15T13:00:00+02:00",
+    deadlineLabel: "48시간 전 재확인 필수"
+  }
+];
+
+function renderResto() {
+  const wrap = document.getElementById('resto-list');
+  if (!wrap) return;
+  const now = new Date();
+  wrap.innerHTML = restos.map(r => {
+    let deadlineHtml = '';
+    if (r.deadline) {
+      const dl = new Date(r.deadline);
+      const diff = dl - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      let cls = 'ok', txt = '', icon = '⏰';
+      if (diff < 0) {
+        cls = 'passed'; icon = '✓'; txt = `${r.deadlineLabel} 마감됨`;
+      } else if (hours < 48) {
+        cls = 'urgent'; icon = '🚨'; 
+        txt = `${r.deadlineLabel}까지 <strong>${hours}시간</strong> 남음`;
+      } else if (days < 7) {
+        cls = ''; icon = '⏰';
+        txt = `${r.deadlineLabel}: ${dl.toLocaleDateString('ko-KR', {month:'numeric', day:'numeric'})} ${dl.toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'})} (${days}일 ${hours%24}시간 남음)`;
+      } else {
+        cls = 'ok'; icon = '📅';
+        txt = `${r.deadlineLabel}: ${dl.toLocaleDateString('ko-KR', {month:'numeric', day:'numeric'})} ${dl.toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'})} (${days}일 남음)`;
+      }
+      deadlineHtml = `<div class="deadline ${cls}">${icon} ${txt}</div>`;
+    }
+    return `
+      <div class="resto-card">
+        ${r.michelin ? `<div class="resto-michelin">MICHELIN ${r.michelin}</div>` : ''}
+        <div class="resto-name">${r.name}</div>
+        <div class="resto-name-fr">${r.nameFr}</div>
+        <div class="resto-info">
+          <strong>${r.date}</strong> · ${r.party}<br>
+          ${r.info}
+        </div>
+        ${deadlineHtml}
+      </div>
+    `;
+  }).join('');
+}
+renderResto();
+
+// ── 호텔 렌더링 ──
+function renderHotels() {
+  const wrap = document.getElementById('hotel-list');
+  if (!wrap) return;
+  const now = new Date();
+  wrap.innerHTML = hotels.map(h => {
+    let deadlineHtml = '';
+    if (h.deadline) {
+      const dl = new Date(h.deadline);
+      const diff = dl - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      let cls = 'ok', txt = '', icon = '🏨';
+      if (diff < 0) {
+        cls = 'passed'; icon = '✓'; txt = `${h.deadlineLabel} 마감됨`;
+      } else if (hours < 48) {
+        cls = 'urgent'; icon = '🚨';
+        txt = `${h.deadlineLabel}까지 <strong>${hours}시간</strong> 남음`;
+      } else if (days < 7) {
+        cls = ''; icon = '⏰';
+        txt = `${h.deadlineLabel}: ${dl.toLocaleDateString('ko-KR', {month:'numeric', day:'numeric'})} (${days}일 ${hours%24}시간 남음)`;
+      } else {
+        cls = 'ok'; icon = '📅';
+        txt = `${h.deadlineLabel}: ${dl.toLocaleDateString('ko-KR', {month:'numeric', day:'numeric'})} (${days}일 남음)`;
+      }
+      deadlineHtml = `<div class="deadline ${cls}">${icon} ${txt}</div>`;
+    } else {
+      deadlineHtml = `<div class="deadline" style="background:rgba(45,62,80,0.06); border-left-color:var(--text-soft); color:var(--text-soft);">⚠️ ${h.deadlineLabel}</div>`;
+    }
+    return `
+      <div class="resto-card">
+        <div style="position:absolute; top:12px; right:12px; font-family:'Italiana',serif; font-size:10px; letter-spacing:0.15em; color:var(--blue-deep);">${h.nights} NIGHT${h.nights > 1 ? 'S' : ''}</div>
+        <div class="resto-name">🏨 ${h.name}</div>
+        <div class="resto-name-fr">${h.nameFr}</div>
+        <div class="resto-info">
+          <strong>${h.checkin}</strong> → <strong>${h.checkout}</strong><br>
+          ${h.room}<br>
+          ${h.total !== '—' ? `<span style="color:var(--gold-deep); font-weight:600;">💰 ${h.total}</span><br>` : ''}
+          ${h.info}
+        </div>
+        ${deadlineHtml}
+      </div>
+    `;
+  }).join('');
+}
+renderHotels();
+
+// ── 데드라인 워치 (홈 화면) — 레스토랑 + 호텔 통합 ──
+function renderDeadlines() {
+  const wrap = document.getElementById('deadline-watch');
+  if (!wrap) return;
+  const now = new Date();
+  
+  // 호텔과 레스토랑을 통합해서 데드라인이 있는 것만 추림
+  const allDeadlines = [
+    ...restos.filter(r => r.deadline).map(r => ({
+      name: r.name,
+      type: 'resto',
+      icon: '🍷',
+      deadlineLabel: r.deadlineLabel,
+      dl: new Date(r.deadline)
+    })),
+    ...hotels.filter(h => h.deadline).map(h => ({
+      name: h.name,
+      type: 'hotel',
+      icon: '🏨',
+      deadlineLabel: h.deadlineLabel,
+      dl: new Date(h.deadline)
+    }))
+  ];
+  
+  const upcoming = allDeadlines
+    .filter(d => d.dl > now)
+    .sort((a, b) => a.dl - b.dl)
+    .slice(0, 4);
+
+  if (upcoming.length === 0) {
+    wrap.innerHTML = `<div class="card"><div class="card-stripe"></div>
+      <div style="font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--text-soft); text-align:center; padding:8px;">
+        예정된 데드라인이 없어요 ✦
+      </div></div>`;
+    return;
+  }
+
+  wrap.innerHTML = upcoming.map(d => {
+    const diff = d.dl - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    let cls = 'ok', txt = '', icon = '⏰';
+    if (hours < 48) {
+      cls = 'urgent'; icon = '🚨';
+      txt = `<strong>${hours}시간</strong> 남음`;
+    } else if (days < 7) {
+      cls = ''; icon = '⏰';
+      txt = `<strong>${days}일</strong> 남음`;
+    } else {
+      cls = 'ok'; icon = '📅';
+      txt = `<strong>${days}일</strong> 남음`;
+    }
+    return `
+      <div class="card">
+        <div class="card-stripe" style="background: linear-gradient(180deg, ${d.type === 'hotel' ? 'var(--blue) 0%, var(--blue-deep)' : 'var(--gold) 0%, var(--gold-deep)'} 100%);"></div>
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <div style="flex:1; min-width:0;">
+            <div style="font-family:'Nanum Myeongjo',serif; font-weight:700; font-size:14px; color:var(--navy);">${d.icon} ${d.name}</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px; color:var(--gold-deep); margin-bottom:4px;">${d.deadlineLabel}</div>
+            <div style="font-family:'Inter',sans-serif; font-size:11px; color:var(--text-soft);">
+              ${d.dl.toLocaleDateString('ko-KR', {month:'long', day:'numeric'})} · ${d.dl.toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'})}
+            </div>
+          </div>
+          <div class="deadline ${cls}" style="margin-top:0; flex-shrink:0; max-width:140px;">${icon} ${txt}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+renderDeadlines();
+setInterval(renderDeadlines, 60000);
+
+// ── 체크리스트 데이터 ──
+const checklistData = [
+  { id: 'tilleuls_cancel', title: 'Les Tilleuls 캔슬 데드라인', meta: '5/31까지 무료 취소 (이후 50% 차지)' },
+  { id: 'coquillage_timing', title: 'Le Coquillage 런치 시간 단축 결정', meta: '6/16 12:00 → 1시간 30분 이내 / ESMOD 15:00 타이밍 빠듯' },
+  { id: 'cinq_policy', title: 'Le Cinq 정확한 캔슬 정책 확인', meta: 'anna@assetseoul.com 예약 메일 확인 또는 호텔 문의' },
+  { id: 'tour_argent_policy', title: 'La Tour d\'Argent 정확한 캔슬 정책 확인', meta: '신용카드 보증 — 정확한 조건 확인 필요' },
+  { id: 'bistrot_cancale', title: 'Bistrot de Cancale 6/15 저녁 예약 여부', meta: '미예약 — 전날까지 무료 캔슬 가능하니 천천히' },
+  { id: 'ritz_deadline', title: 'Ritz Paris 캔슬 데드라인 답변 확인', meta: '5/11 Justine에게 문의함 — 답변 대기' },
+  { id: 'pullman_cancel', title: 'Pullman Paris 최종 확정 (6/9까지)', meta: '도착 1일 전까지 무료 취소 가능' },
+  { id: 'richeux_cancel', title: 'Château Richeux 최종 확정 (6/7까지)', meta: '8일 전 마감, 이후 €450 보증금 회수' },
+  { id: 'kei_check', title: 'Kei 대기 상태 확인', meta: '확정 시 L\'Ambroisie + Le Cinq 캔슬 필요' },
+  { id: 'ambroisie_confirm', title: 'L\'Ambroisie 6/11 20:00 전 결정', meta: '무료 취소 마감' },
+  { id: 'gabriel_reconfirm', title: 'Le Gabriel 48h 전 재확인', meta: '6/15 13:00까지 — 필수' },
+  { id: 'bon_georges_check', title: 'Le Bon Georges 8명 확정', meta: '6/16 11:00 무료 취소 마감' },
+  { id: 'flight_back', title: 'KE902 귀국편 확정', meta: '6/17~20 대기 중 (PNR: FW7IJ4)' },
+  { id: 'sixt_confirm', title: 'SIXT 미니쿠퍼 컨버터블 픽업 확인', meta: '6/14 파리' },
+  { id: 'tides', title: '몽생미셸 만조 시간 확인', meta: '6/15 저녁 일정용' },
+  { id: 'esmod_appt', title: 'ESMOD 견학 확정', meta: '6/16 15:00 (9구) — 타이밍 빠듯 주의' },
+  { id: 'celtic_baths', title: 'Château Richeux 켈틱 바스 예약 검토', meta: '€100/시간 (1~2인) · 도착일 예약' },
+  { id: 'allergy_note', title: 'Le Coquillage 알러지 사전 고지', meta: '해초·식초·아황산염·시트러스 제외 불가' },
+  { id: 'cidre_normandie', title: '시드르 노르망디 한 병 사오기', meta: '캉칼 / 에트르타에서' },
+  { id: 'cheese', title: '치즈 면세 한도 체크', meta: 'Camembert · Pont-l\'Évêque · Livarot' },
+  { id: 'duck_press', title: 'La Tour d\'Argent 압착 오리 번호', meta: '주문 시 번호 받기' },
+  { id: 'metro_pass', title: 'Paris Visite 또는 Navigo 발급', meta: '도착 직후 CDG에서' },
+];
+
+function renderChecklist() {
+  const wrap = document.getElementById('checklist');
+  if (!wrap) return;
+  const state = window._checklistState || {};
+  wrap.innerHTML = checklistData.map(c => `
+    <div class="checklist-item ${state[c.id] ? 'done' : ''}" onclick="toggleCheck('${c.id}')">
+      <div class="checkbox"></div>
+      <div class="cl-body">
+        <div class="cl-title">${c.title}</div>
+        <div class="cl-meta">${c.meta}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderChecklist();
+
+// 메모 자동 저장 (1초 디바운스)
+let memoTimer;
+document.getElementById('memo').addEventListener('input', () => {
+  clearTimeout(memoTimer);
+  const s = document.getElementById('memo-status');
+  s.textContent = '입력중…';
+  memoTimer = setTimeout(() => {
+    window.saveMemo();
+  }, 1000);
+});
+</script>
+
+</body>
+</html>
