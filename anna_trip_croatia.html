@@ -222,6 +222,223 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
    BUDGET TAB
 ══════════════════════════════════ */
 #budget-panel { display: none; }
+#info-panel { display: none; }
+
+/* ── INFO TAB ── */
+.info-intro {
+  padding: 20px 14px 16px;
+  background: linear-gradient(135deg, var(--deep) 0%, #1a2937 100%);
+  color: white;
+  text-align: center;
+}
+.info-intro-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.info-intro-sub {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.info-common-section {
+  background: white;
+  margin: 12px 14px;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid var(--bl);
+  box-shadow: 0 1px 3px rgba(15,25,35,0.04);
+}
+.info-common-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  color: var(--deep);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.info-common-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.info-common-card {
+  background: var(--bg);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--bl);
+}
+.info-common-label {
+  font-size: 10px;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.info-common-value {
+  font-size: 13px;
+  color: var(--deep);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* country jump nav */
+.country-jump-nav {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px;
+  margin-bottom: 12px;
+}
+.cjump-item {
+  flex: 1;
+  background: white;
+  border: 1px solid var(--bl);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--deep);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.cjump-item:active { transform: scale(0.97); background: var(--gold-light); }
+.cjump-flag { font-size: 24px; }
+.cjump-name {
+  font-family: 'Fraunces', serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* country card */
+.country-card {
+  background: white;
+  margin: 0 14px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--bl);
+  overflow: hidden;
+  scroll-margin-top: 90px;
+  box-shadow: 0 1px 3px rgba(15,25,35,0.04);
+}
+.country-header {
+  padding: 14px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.country-header.cro { background: linear-gradient(135deg, #C0392B 0%, #8B2418 100%); }
+.country-header.mne { background: linear-gradient(135deg, #2C5282 0%, #1A365D 100%); }
+.country-flag {
+  font-size: 32px;
+  line-height: 1;
+}
+.country-name {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.country-name-en {
+  font-size: 10px;
+  opacity: 0.7;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+
+.greet-row {
+  background: var(--gold-light);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--bl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.greet-item {
+  font-size: 12px;
+  color: var(--deep);
+}
+.greet-ko {
+  color: var(--stone);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 3px;
+}
+
+.info-section {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--bl);
+}
+.info-section:last-child { border-bottom: none; }
+.info-section-title {
+  font-size: 10px;
+  color: var(--stone);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.info-section-body {
+  font-size: 12px;
+  color: var(--deep);
+  line-height: 1.6;
+}
+.info-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.info-row-label {
+  flex-shrink: 0;
+  min-width: 60px;
+  color: var(--stone);
+  font-size: 11px;
+}
+.info-row-value {
+  flex: 1;
+  font-size: 12px;
+}
+.info-tip-item {
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--bl);
+  display: flex;
+  gap: 8px;
+}
+.info-tip-item:last-child { border-bottom: none; }
+.info-tip-dot {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.info-warn-box {
+  background: var(--warn-bg);
+  border-left: 3px solid var(--warn);
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #742a2a;
+  line-height: 1.5;
+}
+.info-ok-box {
+  background: var(--ok-bg);
+  border-left: 3px solid var(--ok);
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #22543d;
+  line-height: 1.5;
+}
 
 .budget-header {
   background: var(--deep);
@@ -417,6 +634,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 <div class="tabs">
   <div class="tab active" onclick="switchTab('schedule')">📅 스케쥴</div>
   <div class="tab" onclick="switchTab('budget')">💰 예산/정산</div>
+  <div class="tab" onclick="switchTab('info')">🌍 정보</div>
 </div>
 
 <!-- ══════════════════════════════
@@ -927,6 +1145,248 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 </div><!-- end budget-panel -->
 
+<!-- ══════════════════════════════
+     INFO PANEL
+══════════════════════════════ -->
+<div id="info-panel">
+
+  <div class="info-intro">
+    <div class="info-intro-title">🌍 Adriatic Travel Guide</div>
+    <div class="info-intro-sub">Croatia · Montenegro</div>
+  </div>
+
+  <!-- 공통 사항 -->
+  <div class="info-common-section">
+    <div class="info-common-title">📌 두 나라 공통</div>
+    <div class="info-common-grid">
+      <div class="info-common-card">
+        <div class="info-common-label">통화</div>
+        <div class="info-common-value">EUR (€)<br><span style="font-size:10px;color:var(--stone);">1€ ≈ ₩1,720</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">전압 / 콘센트</div>
+        <div class="info-common-value">230V / C·F형<br><span style="font-size:10px;color:var(--stone);">한국 가전 사용 가능</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">시차</div>
+        <div class="info-common-value">한국 -7시간<br><span style="font-size:10px;color:var(--stone);">서머타임 적용</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">비자</div>
+        <div class="info-common-value">90일 무비자<br><span style="font-size:10px;color:var(--stone);">한국 여권</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">신용카드</div>
+        <div class="info-common-value">대부분 사용 가능<br><span style="font-size:10px;color:var(--stone);">시장·소규모 가게는 현금</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">팁 문화</div>
+        <div class="info-common-value">10% 권장<br><span style="font-size:10px;color:var(--stone);">서비스료 미포함 시</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">물</div>
+        <div class="info-common-value">수돗물 음용 가능<br><span style="font-size:10px;color:var(--stone);">생수 €1~2</span></div>
+      </div>
+      <div class="info-common-card">
+        <div class="info-common-label">긴급번호</div>
+        <div class="info-common-value">112 (통합)<br><span style="font-size:10px;color:var(--stone);">한국대사관: +385 1 4821 282</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 국가 점프 nav -->
+  <div class="country-jump-nav">
+    <a class="cjump-item" href="#country-cro" onclick="window.scrollTo({top: document.getElementById('country-cro').offsetTop - 80, behavior: 'smooth'}); return false;">
+      <span class="cjump-flag">🇭🇷</span>
+      <span class="cjump-name">크로아티아</span>
+    </a>
+    <a class="cjump-item" href="#country-mne" onclick="window.scrollTo({top: document.getElementById('country-mne').offsetTop - 80, behavior: 'smooth'}); return false;">
+      <span class="cjump-flag">🇲🇪</span>
+      <span class="cjump-name">몬테네그로</span>
+    </a>
+  </div>
+
+  <!-- ══ 크로아티아 ══ -->
+  <div class="country-card" id="country-cro">
+    <div class="country-header cro">
+      <span class="country-flag">🇭🇷</span>
+      <div>
+        <div class="country-name">크로아티아</div>
+        <div class="country-name-en">Croatia · Hrvatska</div>
+      </div>
+    </div>
+
+    <div class="greet-row">
+      <span class="greet-item"><span class="greet-ko">안녕</span>Bok / Dobar dan</span>
+      <span class="greet-item"><span class="greet-ko">감사</span>Hvala</span>
+      <span class="greet-item"><span class="greet-ko">건배</span>Živjeli! [지블리]</span>
+      <span class="greet-item"><span class="greet-ko">실례</span>Oprostite</span>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">💶 화폐·물가</div>
+      <div class="info-section-body">
+        <div class="info-row"><span class="info-row-label">통화</span><span class="info-row-value">유로 (€) — 2023년부터</span></div>
+        <div class="info-row"><span class="info-row-label">커피</span><span class="info-row-value">€2~3 (카페에서)</span></div>
+        <div class="info-row"><span class="info-row-label">식사</span><span class="info-row-value">캐주얼 €15~25 / 파인다이닝 €40~80</span></div>
+        <div class="info-row"><span class="info-row-label">와인 글라스</span><span class="info-row-value">€4~8</span></div>
+        <div class="info-row"><span class="info-row-label">택시</span><span class="info-row-value">두브로브니크 공항→시내 €40~50</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">🌤 5월 말~6월 초 날씨</div>
+      <div class="info-section-body">
+        <div class="info-row"><span class="info-row-label">기온</span><span class="info-row-value">평균 18~26°C, 맑음 위주</span></div>
+        <div class="info-row"><span class="info-row-label">바다</span><span class="info-row-value">수온 20°C — 수영 가능</span></div>
+        <div class="info-row"><span class="info-row-label">옷차림</span><span class="info-row-value">반팔+가디건, 저녁용 얇은 자켓</span></div>
+        <div class="info-row"><span class="info-row-label">필수</span><span class="info-row-value">선글라스·자외선차단제·편한 신발 (구시가지 돌바닥)</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">🍷 꼭 먹어볼 것</div>
+      <div class="info-section-body">
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Crni rižot</b> (먹물 리조토) — 달마티아 해안 명물</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Peka</b> (페카) — 종 모양 뚜껑으로 천천히 구운 고기·해산물. 예약 필수</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Oysters from Ston</b> — 스톤 굴 (두브로브니크 근처). 5월이 제철</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Pag cheese</b> (Paški sir) — 파그섬 양젖 치즈</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Plavac Mali</b> — 흘바르·펠리예샤츠 반도 레드와인</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Rakija</b> (라키야) — 식전 식후 과일 브랜디 (50도 ⚠️)</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">💡 알아두면 좋은 팁</div>
+      <div class="info-section-body">
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>크로아티아인은 시간 약속 잘 지킴 — 5분 일찍 도착이 매너</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>식당에서 물 주문 시 "still" (탄산 X) / "sparkling" (탄산) 명시</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>두브로브니크 성벽 입장 €35 — 오전 8시 또는 오후 6시 추천 (덜 더움)</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>흘바르·코르출라 등 섬은 페리 사전 예약 (Jadrolinija)</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>운전: 우측 통행, 자동 단속 카메라 많음 — 속도 엄수</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>주차: 시내 ZONE 표시 확인 (Z1·Z2·Z3별 요금 다름)</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">⚠️ 주의사항</div>
+      <div class="info-section-body">
+        <div class="info-warn-box">
+          • <b>관광객 바가지</b>: 두브로브니크 구시가 메뉴판에 가격 없으면 패스<br>
+          • <b>유엔 보호유적</b>: 구시가는 음주 후 시끄럽게 다니면 벌금 €150<br>
+          • <b>아드리아 해변</b>: 자갈·바위 — 아쿠아슈즈 필수<br>
+          • <b>해파리</b>: 6월 초부터 가끔 출현 — 따끔하지만 위험하지 않음
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">📱 유용한 앱</div>
+      <div class="info-section-body">
+        <div class="info-row"><span class="info-row-label">택시</span><span class="info-row-value">Bolt (가장 보편), Uber (대도시만)</span></div>
+        <div class="info-row"><span class="info-row-label">페리</span><span class="info-row-value">Jadrolinija, Krilo</span></div>
+        <div class="info-row"><span class="info-row-label">주차</span><span class="info-row-value">AquaParking, ePark</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 몬테네그로 ══ -->
+  <div class="country-card" id="country-mne">
+    <div class="country-header mne">
+      <span class="country-flag">🇲🇪</span>
+      <div>
+        <div class="country-name">몬테네그로</div>
+        <div class="country-name-en">Montenegro · Crna Gora</div>
+      </div>
+    </div>
+
+    <div class="greet-row">
+      <span class="greet-item"><span class="greet-ko">안녕</span>Zdravo / Dobar dan</span>
+      <span class="greet-item"><span class="greet-ko">감사</span>Hvala</span>
+      <span class="greet-item"><span class="greet-ko">건배</span>Živjeli! [지블리]</span>
+      <span class="greet-item"><span class="greet-ko">실례</span>Izvinite</span>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">💶 화폐·물가</div>
+      <div class="info-section-body">
+        <div class="info-row"><span class="info-row-label">통화</span><span class="info-row-value">유로 (€) — EU 비회원이지만 €사용</span></div>
+        <div class="info-row"><span class="info-row-label">커피</span><span class="info-row-value">€1.5~2.5</span></div>
+        <div class="info-row"><span class="info-row-label">식사</span><span class="info-row-value">캐주얼 €10~20 / 파인다이닝 €30~60 (크로아티아보다 저렴)</span></div>
+        <div class="info-row"><span class="info-row-label">와인 글라스</span><span class="info-row-value">€3~6 (현지 Vranac 추천)</span></div>
+        <div class="info-row"><span class="info-row-label">택시</span><span class="info-row-value">티바트 공항→코토르 €25~35</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">🌤 6월 초 날씨</div>
+      <div class="info-section-body">
+        <div class="info-row"><span class="info-row-label">기온</span><span class="info-row-value">평균 20~28°C — 크로아티아보다 약간 따뜻</span></div>
+        <div class="info-row"><span class="info-row-label">바다</span><span class="info-row-value">코토르만 수온 21~23°C — 수영 OK</span></div>
+        <div class="info-row"><span class="info-row-label">산악지대</span><span class="info-row-value">로브첸·두르미토르는 15°C 내외, 자켓 필요</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">🍖 꼭 먹어볼 것</div>
+      <div class="info-section-body">
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Njeguški pršut</b> (네구쉬 프르슈트) — 로브첸 산악마을 훈제 햄</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Kačamak</b> (카차막) — 옥수수+감자+치즈, 깊은 풍미</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Buzara</b> (부자라) — 화이트와인+마늘+허브 조개·새우 요리</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Skadar lake carp</b> — 스카다르 호수 잉어. 현지인이 사랑</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Vranac</b> — 몬테네그로 대표 레드와인 (Plantaže 와이너리)</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span><b>Krempita</b> (크렘피타) — 커스터드 크림 페이스트리, 디저트</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">💡 알아두면 좋은 팁</div>
+      <div class="info-section-body">
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>EU 비회원국 — 크로아티아에서 입국 시 여권 확인 (도장 안 찍을 수도)</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>로밍·SIM: EU 무제한 SIM은 안 통하는 곳도. 한국 통신사 데이터로밍 권장</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>"polako" (천천히) — 몬테네그로 라이프스타일. 식사는 1.5~2시간이 보통</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>코토르 구시가는 차량 진입 금지 — 외부 주차장에서 도보</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>운전: 산악도로 굽이굽이 많음. 멀미약 챙기기. Lovćen·Skadar 드라이브 추천</span></div>
+        <div class="info-tip-item"><span class="info-tip-dot">●</span><span>스베티 스테판 (Sveti Stefan) — 외부 사진 OK, 내부는 호텔 투숙객만</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">⚠️ 주의사항</div>
+      <div class="info-section-body">
+        <div class="info-warn-box">
+          • <b>국경 통과</b>: 차량으로 입·출국 시 차량 등록증·렌탈 서류 필수. 여름 성수기엔 1~2시간 대기 가능<br>
+          • <b>현금 ATM</b>: 도시 외곽은 ATM 드뭄. 코토르·부드바·티바트에서 미리 인출<br>
+          • <b>음식점 가격</b>: 영어 메뉴판에 가격이 더 비싼 경우 있음 — 현지 메뉴판 요청<br>
+          • <b>해변 일광욕</b>: 누드 비치 일부 있음 — 표지판 확인
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">📱 유용한 앱</div>
+      <div class="info-section-body">
+        <div class="info-row"><span class="info-row-label">택시</span><span class="info-row-value">CarGo (현지 차량호출 앱)</span></div>
+        <div class="info-row"><span class="info-row-label">지도</span><span class="info-row-value">Google Maps 정확함. Maps.me는 오프라인용</span></div>
+        <div class="info-row"><span class="info-row-label">번역</span><span class="info-row-value">Google Translate (크로아티아어와 거의 호환)</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section-title">✅ 우리 여행 체크</div>
+      <div class="info-section-body">
+        <div class="info-ok-box">
+          • 코토르 구시가: <b>이른 아침</b>이 베스트. 크루즈선 도착 전 (보통 9시)<br>
+          • 스베티 스테판: <b>해질녘</b> 외부 뷰포인트가 인생샷<br>
+          • Mövenpick·Palmon Bay: 부드바 인근 — 비치 클럽 사전 예약 가능<br>
+          • Villa Dubrovnik 가는 길: 두브로브니크 입국 후 차로 5분
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end info-panel -->
+
 <!-- ══ 지출 입력 모달 ══ -->
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal">
@@ -1051,10 +1511,12 @@ function showSync() {
 // ── TAB SWITCH ──
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach((t,i) => {
-    t.classList.toggle('active', (i===0 && tab==='schedule') || (i===1 && tab==='budget'));
+    t.classList.toggle('active', (i===0 && tab==='schedule') || (i===1 && tab==='budget') || (i===2 && tab==='info'));
   });
   document.getElementById('schedule-panel').style.display = tab==='schedule' ? 'block' : 'none';
   document.getElementById('budget-panel').style.display = tab==='budget' ? 'block' : 'none';
+  document.getElementById('info-panel').style.display = tab==='info' ? 'block' : 'none';
+  if (tab === 'info') window.scrollTo(0, 0);
 }
 
 // ── SEARCH ──
