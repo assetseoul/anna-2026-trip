@@ -427,6 +427,76 @@ body {
   font-weight: 500;
 }
 
+/* ─── 점심 미팅 블록 ─── */
+.lunch-block {
+  background: linear-gradient(135deg, #FFF8E8 0%, #FAF0DA 100%);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 9px 10px;
+  margin-top: 8px;
+}
+.lunch-label {
+  font-size: 10px;
+  color: var(--red);
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.lunch-venue {
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 3px;
+  letter-spacing: -0.1px;
+}
+.lunch-addr {
+  font-size: 10px;
+  color: var(--stone);
+  margin-bottom: 3px;
+}
+.lunch-note {
+  font-size: 10px;
+  color: var(--navy);
+  font-style: italic;
+  opacity: 0.75;
+  margin-bottom: 5px;
+}
+.lunch-btns {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+.btn-map, .btn-tel-sm, .btn-wa-sm {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn-map {
+  background: var(--red);
+  color: white;
+}
+.btn-map:active { background: var(--red-dark); transform: scale(0.97); }
+.btn-tel-sm {
+  background: white;
+  color: var(--navy);
+  border: 1px solid var(--bl);
+}
+.btn-tel-sm:active { background: var(--ivory); transform: scale(0.97); }
+.btn-wa-sm {
+  background: var(--wa);
+  color: white;
+}
+.btn-wa-sm:active { background: var(--wa-dark); transform: scale(0.97); }
+
 .note-card {
   background: var(--ivory-deep);
   border: 1px dashed var(--gold);
@@ -476,6 +546,340 @@ body {
 .bo { background: var(--ok-bg); color: var(--ok); }
 .bw { background: var(--warn-bg); color: var(--warn); }
 
+/* ─── TAB TOGGLE ─── */
+.tab-toggle {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+  background: rgba(0,0,0,0.25);
+  padding: 4px;
+  border-radius: 10px;
+}
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: rgba(249,240,229,0.5);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
+}
+.tab-btn.active {
+  background: var(--red);
+  color: white;
+  box-shadow: 0 2px 8px rgba(231,53,23,0.35);
+}
+.tab-btn:active { transform: scale(0.97); }
+
+.tab-pane {
+  display: none;
+}
+.tab-pane.active {
+  display: block;
+}
+
+/* ─── INFO TAB ─── */
+.info-intro {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--ivory);
+  padding: 20px 16px;
+  text-align: center;
+  border-bottom: 3px solid var(--red);
+}
+.info-intro-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.info-intro-sub {
+  font-size: 11px;
+  color: rgba(249,240,229,0.65);
+  margin-top: 5px;
+  letter-spacing: 0.3px;
+}
+
+/* 공통 사항 */
+.common-section {
+  background: var(--ivory-deep);
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--bl);
+}
+.common-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 10px;
+  letter-spacing: -0.1px;
+}
+.common-grid {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.info-common-card {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--gold);
+}
+.info-common-title {
+  font-size: 11px;
+  color: var(--red);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.info-common-content {
+  font-size: 12px;
+  color: var(--navy);
+  line-height: 1.5;
+}
+.info-korea {
+  font-size: 11px;
+  color: var(--ok);
+  background: var(--ok-bg);
+  padding: 5px 8px;
+  border-radius: 5px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+.info-details {
+  font-size: 11px;
+  color: var(--stone);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.info-tip {
+  font-size: 11px;
+  color: var(--navy);
+  background: linear-gradient(135deg, #FFF8E8 0%, #FAF0DA 100%);
+  padding: 6px 9px;
+  border-radius: 5px;
+  margin-top: 6px;
+  font-style: italic;
+  border-left: 2px solid var(--gold);
+}
+
+/* 국가 점프 nav */
+.country-jump-nav {
+  position: sticky;
+  top: var(--topbar-h, 100px);
+  z-index: 90;
+  background: var(--navy-light);
+  padding: 8px 12px;
+  display: flex; gap: 6px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(231,53,23,0.3);
+  scrollbar-width: none;
+}
+.country-jump-nav::-webkit-scrollbar { display: none; }
+.cjump-item {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 10px;
+  background: rgba(249,240,229,0.08);
+  border: 1px solid rgba(249,240,229,0.15);
+  border-radius: 14px;
+  color: var(--ivory);
+  font-size: 11px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.cjump-item:active { background: var(--red); border-color: var(--red); }
+.cjump-flag { font-size: 13px; }
+
+/* 국가 카드 */
+.countries-wrap {
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.country-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--bl);
+  overflow: hidden;
+  scroll-margin-top: calc(var(--topbar-h, 100px) + 50px);
+}
+.country-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--ivory);
+  padding: 14px;
+  display: flex; align-items: center; gap: 12px;
+  border-left: 4px solid var(--red);
+}
+.country-flag {
+  font-size: 32px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.country-info { flex: 1; }
+.country-name {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.country-en {
+  color: var(--gold);
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 400;
+}
+.country-cities {
+  font-size: 11px;
+  color: rgba(249,240,229,0.7);
+  margin-top: 3px;
+  letter-spacing: 0.3px;
+}
+
+/* 정보 섹션 */
+.info-section {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--bl);
+}
+.info-section:last-child { border-bottom: none; }
+.info-section-warn {
+  background: #FFF8F5;
+}
+.info-section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  margin-bottom: 6px;
+  letter-spacing: -0.1px;
+}
+.info-row {
+  font-size: 12px;
+  color: var(--navy);
+  margin-bottom: 3px;
+  line-height: 1.5;
+}
+.info-row.info-rate {
+  font-family: 'DM Sans', monospace;
+  color: var(--stone);
+  font-size: 11px;
+}
+.info-row.info-subtle {
+  color: var(--stone);
+  font-size: 11px;
+}
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.info-list li {
+  font-size: 11.5px;
+  color: var(--navy);
+  padding: 4px 0;
+  line-height: 1.5;
+}
+.weather-temp {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.temp-high { color: var(--red); }
+.temp-low { color: var(--tel); }
+.temp-divider { color: var(--stone); font-size: 14px; }
+
+.greet-block {
+  display: flex; flex-direction: column; gap: 5px;
+  margin-top: 8px;
+  background: var(--bg);
+  padding: 8px;
+  border-radius: 7px;
+}
+.greet-row {
+  display: grid;
+  grid-template-columns: 75px 1fr 75px;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.greet-ko {
+  color: var(--stone);
+  font-weight: 500;
+}
+.greet-native {
+  color: var(--navy);
+  font-weight: 600;
+}
+.greet-rom {
+  color: var(--red);
+  font-style: italic;
+  text-align: right;
+  font-size: 10.5px;
+}
+.tip-rule {
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--ivory);
+  padding: 5px 8px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 3px;
+}
+
+/* ─── 위치 감지 토스트 ─── */
+.location-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy);
+  color: var(--ivory);
+  padding: 12px 18px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  border-left: 3px solid var(--red);
+  max-width: 90%;
+}
+.location-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast-icon { font-size: 15px; }
+.toast-label {
+  color: rgba(249,240,229,0.6);
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+.toast-country {
+  color: var(--gold);
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ─── 국가 카드 하이라이트 (자동 스크롤 시) ─── */
+.country-card-highlight {
+  animation: countryFlash 2.8s ease-out;
+}
+@keyframes countryFlash {
+  0% { box-shadow: 0 0 0 0 rgba(231,53,23,0); }
+  15% { box-shadow: 0 0 0 4px rgba(231,53,23,0.35); }
+  100% { box-shadow: 0 0 0 0 rgba(231,53,23,0); }
+}
+
 /* ─── NO RESULT ─── */
 .no-results {
   text-align: center; padding: 60px 20px;
@@ -511,19 +915,24 @@ body {
       <div class="topbar-sub">Scouting Trip · 5/16 — 5/29</div>
     </div>
   </div>
+  <div class="tab-toggle">
+    <button class="tab-btn active" data-tab="schedule" onclick="switchTab('schedule')">📅 일정</button>
+    <button class="tab-btn" data-tab="info" onclick="switchTab('info')">🌍 정보</button>
+  </div>
 </div>
 
-<nav class="jump-nav">
-  <a class="jump-item" href="#" onclick="jumpTo('tbilisi');return false;"><span class="jump-num">1</span><span class="jump-name">트빌리시</span></a><a class="jump-item" href="#" onclick="jumpTo('yerevan');return false;"><span class="jump-num">2</span><span class="jump-name">예레반</span></a><a class="jump-item" href="#" onclick="jumpTo('sofia');return false;"><span class="jump-num">3</span><span class="jump-name">소피아</span></a><a class="jump-item" href="#" onclick="jumpTo('bucharest');return false;"><span class="jump-num">4</span><span class="jump-name">부쿠레슈티</span></a><a class="jump-item" href="#" onclick="jumpTo('belgrade');return false;"><span class="jump-num">5</span><span class="jump-name">베오그라드</span></a><a class="jump-item" href="#" onclick="jumpTo('zagreb');return false;"><span class="jump-num">6</span><span class="jump-name">자그레브</span></a><a class="jump-item" href="#" onclick="jumpTo('rijeka');return false;"><span class="jump-num">7</span><span class="jump-name">리예카</span></a>
-</nav>
+<div id="tab-schedule" class="tab-pane active">
+  <nav class="jump-nav">
+    <a class="jump-item" href="#" onclick="jumpTo('tbilisi');return false;"><span class="jump-num">1</span><span class="jump-name">트빌리시</span></a><a class="jump-item" href="#" onclick="jumpTo('yerevan');return false;"><span class="jump-num">2</span><span class="jump-name">예레반</span></a><a class="jump-item" href="#" onclick="jumpTo('sofia');return false;"><span class="jump-num">3</span><span class="jump-name">소피아</span></a><a class="jump-item" href="#" onclick="jumpTo('bucharest');return false;"><span class="jump-num">4</span><span class="jump-name">부쿠레슈티</span></a><a class="jump-item" href="#" onclick="jumpTo('belgrade');return false;"><span class="jump-num">5</span><span class="jump-name">베오그라드</span></a><a class="jump-item" href="#" onclick="jumpTo('zagreb');return false;"><span class="jump-num">6</span><span class="jump-name">자그레브</span></a><a class="jump-item" href="#" onclick="jumpTo('rijeka');return false;"><span class="jump-num">7</span><span class="jump-name">리예카</span></a>
+  </nav>
 
-<div class="search-wrap">
-  <span class="search-icon">🔍</span>
-  <input class="search-input" type="search" placeholder="도시·에이전시·담당자 검색..." oninput="doSearch(this.value)">
-</div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="search" placeholder="도시·에이전시·담당자 검색..." oninput="doSearch(this.value)">
+  </div>
 
-<div id="content">
-  
+  <div id="content">
+    
     <section class="chapter" data-city="tbilisi" data-searchable="트빌리시 Tbilisi 🇬🇪 Georgia">
       <div class="ch-header">
         <div class="ch-num">CH 1</div>
@@ -647,6 +1056,7 @@ body {
             <div class="contact-name">👤 Nino</div>
             <div class="phone-display">+995 577 46 7050</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995577467050" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995577467050"><span class="btn-icon">📞</span>전화</a></div>
             
+            
           </div>
         </div>
 
@@ -660,6 +1070,7 @@ body {
             <div class="contact-name">👤 Nino</div>
             <div class="phone-display">+995 599 85 8404</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995599858404" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995599858404"><span class="btn-icon">📞</span>전화</a></div>
             
+            
           </div>
         </div>
 
@@ -667,11 +1078,12 @@ body {
           <div class="card-icon">🤝</div>
           <div class="card-body">
             <div class="ma-header">
-              <div class="ma-time">16:00</div>
+              <div class="ma-time">15:00</div>
               <div class="ma-agency">IC Mgmt</div>
             </div>
             <div class="contact-name">👤 Iya Kay</div>
             <div class="phone-display">+995 577 55 8675</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995577558675" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995577558675"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -697,6 +1109,7 @@ body {
             </div>
             <div class="contact-name">👤 Ika</div>
             <div class="phone-display">+995 577 21 0361</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995577210361" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995577210361"><span class="btn-icon">📞</span>전화</a></div>
+            
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
         </div>
@@ -710,6 +1123,7 @@ body {
             </div>
             <div class="contact-name">👤 Nini</div>
             <div class="phone-display">+995 555 36 1313</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995555361313" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995555361313"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -787,6 +1201,7 @@ body {
             </div>
             <div class="contact-name">👤 Nina</div>
             <div class="phone-display">+374 43 70 8356</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37443708356" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37443708356"><span class="btn-icon">📞</span>전화</a></div>
+            
             <div class="ma-note">📌 호텔미팅 (에이전트)</div>
           </div>
         </div>
@@ -801,6 +1216,7 @@ body {
             <div class="contact-name">👤 Lidia</div>
             <div class="phone-display">+374 93 23 1113</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37493231113" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37493231113"><span class="btn-icon">📞</span>전화</a></div>
             
+            
           </div>
         </div>
 
@@ -813,6 +1229,7 @@ body {
             </div>
             <div class="contact-name">👤 Eric</div>
             <div class="phone-display">+374 33 31 0033</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37433310033" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37433310033"><span class="btn-icon">📞</span>전화</a></div>
+            
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
         </div>
@@ -826,6 +1243,7 @@ body {
             </div>
             <div class="contact-name">👤 Gor</div>
             <div class="phone-display">+374 77 40 3304</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37477403304" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37477403304"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -843,7 +1261,7 @@ body {
         </div>
       </div>
       
-    <div class="day-block" data-date="5/21" data-searchable="evn → ath → sof junó hotel sofia 80544579 velishe velishe inter models radostina">
+    <div class="day-block" data-date="5/21" data-searchable="evn → ath → sof junó hotel sofia 80544579 velishe lina inter models radostina">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/21</span>
@@ -901,8 +1319,9 @@ body {
               <div class="ma-time">12:30</div>
               <div class="ma-agency">Velishe</div>
             </div>
-            <div class="contact-name">👤 Velishe</div>
+            <div class="contact-name">👤 Lina</div>
             <div class="phone-display">+359 88 583 5499</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359885835499" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359885835499"><span class="btn-icon">📞</span>전화</a></div>
+            
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
         </div>
@@ -917,12 +1336,13 @@ body {
             <div class="contact-name">👤 Radostina</div>
             <div class="phone-display">+359 88 865 6016</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359888656016" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359888656016"><span class="btn-icon">📞</span>전화</a></div>
             
+            
           </div>
         </div>
       </div>
     </div>
 
-    <div class="day-block" data-date="5/22" data-searchable="amodel scouting angel alia models kirilka ebru ivet fashion models dian">
+    <div class="day-block" data-date="5/22" data-searchable="alia models kirilka ebru ivet fashion models dian amodel scouting angel">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/22</span>
@@ -936,24 +1356,12 @@ body {
           <div class="card-icon">🤝</div>
           <div class="card-body">
             <div class="ma-header">
-              <div class="ma-time">11:00</div>
-              <div class="ma-agency">Amodel Scouting</div>
-            </div>
-            <div class="contact-name">👤 Angel</div>
-            <div class="phone-display">+359 89 235 6400</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359892356400" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359892356400"><span class="btn-icon">📞</span>전화</a></div>
-            <div class="ma-note">📌 호텔 캐스팅 (오후 5시 변경)</div>
-          </div>
-        </div>
-
-        <div class="card card-ma">
-          <div class="card-icon">🤝</div>
-          <div class="card-body">
-            <div class="ma-header">
               <div class="ma-time">12:00</div>
               <div class="ma-agency">Alia Models</div>
             </div>
             <div class="contact-name">👤 Kirilka Ebru</div>
             <div class="phone-display">+359 88 944 5137</div><div class="phone-display phone-alt">+359 88 208 1193</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359889445137" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359889445137"><span class="btn-icon">📞</span>전화</a></div><div class="contact-row contact-row-alt"><a class="btn-wa btn-sm" href="https://wa.me/359882081193" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WA (보조)</a><a class="btn-tel btn-sm" href="tel:+359882081193"><span class="btn-icon">📞</span>전화 (보조)</a></div>
+            
             
           </div>
         </div>
@@ -968,6 +1376,21 @@ body {
             <div class="contact-name">👤 Dian</div>
             <div class="phone-display">+359 88 560 3622</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359885603622" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359885603622"><span class="btn-icon">📞</span>전화</a></div>
             
+            
+          </div>
+        </div>
+
+        <div class="card card-ma">
+          <div class="card-icon">🤝</div>
+          <div class="card-body">
+            <div class="ma-header">
+              <div class="ma-time">16:00</div>
+              <div class="ma-agency">Amodel Scouting</div>
+            </div>
+            <div class="contact-name">👤 Angel</div>
+            <div class="phone-display">+359 89 235 6400</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359892356400" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359892356400"><span class="btn-icon">📞</span>전화</a></div>
+            
+            <div class="ma-note">📌 호텔 캐스팅</div>
           </div>
         </div>
       </div>
@@ -1123,7 +1546,8 @@ body {
               <div class="ma-agency">MRA</div>
             </div>
             <div class="contact-name">👤 Liviu</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+40 722 241 141</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40722241141" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40722241141"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1136,7 +1560,8 @@ body {
               <div class="ma-agency">One Models</div>
             </div>
             <div class="contact-name">👤 Toni</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+40 723 238 181</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40723238181" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40723238181"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1149,7 +1574,8 @@ body {
               <div class="ma-agency">Meka Models</div>
             </div>
             <div class="contact-name">👤 Matteo</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+40 799 975 895</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40799975895" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40799975895"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1175,7 +1601,8 @@ body {
               <div class="ma-agency">Madarina Models</div>
             </div>
             <div class="contact-name">👤 Bogdan</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+40 722 221 212</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40722221212" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40722221212"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1188,7 +1615,8 @@ body {
               <div class="ma-agency">New Models Romania</div>
             </div>
             <div class="contact-name">👤 Mari</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+40 744 765 968</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40744765968" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40744765968"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1286,7 +1714,7 @@ body {
       </div>
     </div>
 
-    <div class="day-block" data-date="5/27" data-searchable="sigma model sasa ino fox model marko demons models 친한 모델한테 구걸 중">
+    <div class="day-block" data-date="5/27" data-searchable="sigma model sasa ino arkan fox model marko demons models 친한 모델한테 구걸 중">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/27</span>
@@ -1304,7 +1732,8 @@ body {
               <div class="ma-agency">Sigma Model</div>
             </div>
             <div class="contact-name">👤 Sasa</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+381 66 5566456</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/381665566456" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+381665566456"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1316,8 +1745,9 @@ body {
               <div class="ma-time">13:00</div>
               <div class="ma-agency">INO</div>
             </div>
+            <div class="contact-name">👤 Arkan</div>
+            <div class="phone-display">+381 63 1215903</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/381631215903" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+381631215903"><span class="btn-icon">📞</span>전화</a></div>
             
-            <div class="no-contact">📵 연락처 미확보</div>
             
           </div>
         </div>
@@ -1330,7 +1760,8 @@ body {
               <div class="ma-agency">Fox Model</div>
             </div>
             <div class="contact-name">👤 Marko</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+381 64 6107290</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/381646107290" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+381646107290"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1344,6 +1775,7 @@ body {
             </div>
             <div class="contact-name">👤 친한 모델한테 구걸 중</div>
             <div class="no-contact">📵 연락처 미확보</div>
+            
             <div class="ma-note">📌 확정 전</div>
           </div>
         </div>
@@ -1361,7 +1793,7 @@ body {
         </div>
       </div>
       
-    <div class="day-block" data-date="5/28" data-searchable="beg → zag doubletree by hilton zagreb 3467452644 talia model models by danijela">
+    <div class="day-block" data-date="5/28" data-searchable="beg → zag doubletree by hilton zagreb 3467452644 talia model models by danijela danijela midkenn robert im studio ivan">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/28</span>
@@ -1422,6 +1854,7 @@ body {
             
             <div class="no-contact">📵 연락처 미확보</div>
             
+            
           </div>
         </div>
 
@@ -1432,9 +1865,38 @@ body {
               <div class="ma-time">13:00</div>
               <div class="ma-agency">Models by Danijela</div>
             </div>
+            <div class="contact-name">👤 Danijela</div>
+            <div class="phone-display">+385 95 396 5701</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385953965701" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385953965701"><span class="btn-icon">📞</span>전화</a></div>
             
+            <div class="ma-note">📌 호텔캐스팅</div>
+          </div>
+        </div>
+
+        <div class="card card-ma">
+          <div class="card-icon">🤝</div>
+          <div class="card-body">
+            <div class="ma-header">
+              <div class="ma-time">14:00</div>
+              <div class="ma-agency">Midkenn</div>
+            </div>
+            <div class="contact-name">👤 Robert</div>
             <div class="no-contact">📵 연락처 미확보</div>
             
+            
+          </div>
+        </div>
+
+        <div class="card card-ma">
+          <div class="card-icon">🤝</div>
+          <div class="card-body">
+            <div class="ma-header">
+              <div class="ma-time">15:00</div>
+              <div class="ma-agency">IM Studio</div>
+            </div>
+            <div class="contact-name">👤 Ivan</div>
+            <div class="phone-display">+385 95 5501 652</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385955501652" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385955501652"><span class="btn-icon">📞</span>전화</a></div>
+            
+            <div class="ma-note">📌 호텔캐스팅</div>
           </div>
         </div>
       </div>
@@ -1493,7 +1955,8 @@ body {
               <div class="ma-agency">N Models</div>
             </div>
             <div class="contact-name">👤 Belizar</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+385 91 571 3569</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385915713569" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385915713569"><span class="btn-icon">📞</span>전화</a></div>
+            
             
           </div>
         </div>
@@ -1508,6 +1971,7 @@ body {
             <div class="contact-name">👤 Marko</div>
             <div class="no-contact">📵 연락처 미확보</div>
             
+            
           </div>
         </div>
 
@@ -1521,6 +1985,7 @@ body {
             
             <div class="no-contact">📵 연락처 미확보</div>
             
+            
           </div>
         </div>
 
@@ -1528,11 +1993,19 @@ body {
           <div class="card-icon">🤝</div>
           <div class="card-body">
             <div class="ma-header">
-              <div class="ma-time">시간 미정</div>
+              <div class="ma-time">12:00</div>
               <div class="ma-agency">Bonbon (Casting Director)</div>
             </div>
             <div class="contact-name">👤 Bonbon</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+385 91 614 8056</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385916148056" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385916148056"><span class="btn-icon">📞</span>전화</a></div>
+            
+            <div class="lunch-block">
+              <div class="lunch-label">🍽 점심 미팅</div>
+              <div class="lunch-venue">Konoba "Ribarnica" Volosko</div>
+              <div class="lunch-addr">📍 51410, Opatija, Croatia</div>
+              <div class="lunch-note">해산물 전문 · 리예카에서 차로 15~20분</div>
+              <div class="lunch-btns"><a class="btn-map" href="https://maps.app.goo.gl/YhHfYLd4nDYeLjkN9" target="_blank" rel="noopener"><span class="btn-icon">📍</span>지도</a><a class="btn-tel-sm" href="tel:+38551701483"><span class="btn-icon">📞</span>식당</a><a class="btn-wa-sm" href="https://wa.me/38551701483" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WA</a></div>
+            </div>
             
           </div>
         </div>
@@ -1567,13 +2040,525 @@ body {
       </div>
     </div>
     </section>
+  </div>
+
+  <div class="no-results" id="no-results" style="display:none;">검색 결과가 없습니다</div>
+
+  <div class="footer">
+    <span class="footer-mark">A.SSET</span> · LET'S GO 2026<br>
+    Tbilisi · Yerevan · Sofia · Bucharest · Belgrade · Zagreb · Rijeka
+  </div>
 </div>
 
-<div class="no-results" id="no-results" style="display:none;">검색 결과가 없습니다</div>
-
-<div class="footer">
-  <span class="footer-mark">A.SSET</span> · LET'S GO 2026<br>
-  Tbilisi · Yerevan · Sofia · Bucharest · Belgrade · Zagreb · Rijeka
+<div id="tab-info" class="tab-pane">
+  
+    <div class="info-intro">
+      <div class="info-intro-title">🌍 6개국 여행 가이드</div>
+      <div class="info-intro-sub">조지아 · 아르메니아 · 불가리아 · 루마니아 · 세르비아 · 크로아티아</div>
+    </div>
+    
+    <div class="common-section">
+      <div class="common-title">📌 6개국 공통 사항</div>
+      <div class="common-grid">
+    <div class="info-common-card" data-info-key="voltage">
+      <div class="info-common-title">🔌 전압·플러그</div>
+      <div class="info-common-content">6개국 전부 동일 — <b>230V · 50Hz · C/F형 플러그</b></div>
+      <div class="info-korea">🇰🇷 한국(220V·C형) 전기제품 그대로 사용 가능. 어댑터 불필요!</div><div class="info-tip">💡 다만 한국 멀티탭(돼지코) 챙겨가면 객실에서 여러 기기 동시 충전 편함</div>
+    </div>
+    <div class="info-common-card" data-info-key="visa">
+      <div class="info-common-title">🛂 비자</div>
+      <div class="info-common-content"><b>전 6개국 한국 여권 90일 무비자</b></div>
+      <div class="info-korea">여권 유효기간 입국일 기준 6개월 이상 남았는지 체크 필수</div><div class="info-tip">💡 셰브론 도장이 여러 개 찍힐 예정 — 여권 비자 페이지 충분한지 확인</div>
+    </div>
+    <div class="info-common-card" data-info-key="time_diff">
+      <div class="info-common-title">🕐 시차 (한국 기준)</div>
+      <div class="info-common-content"><b>5월(서머타임) 기준 모두 한국보다 -5시간 또는 -6시간</b></div>
+      <div class="info-details">조지아·아르메니아: -5시간 (서머타임 없음)<br>나머지 4개국: -6시간 (CEST · 서머타임 적용 중)</div><div class="info-tip">💡 트빌리시 12:00 = 서울 17:00 / 부쿠레슈티 12:00 = 서울 18:00</div>
+    </div>
+    <div class="info-common-card" data-info-key="tap_water">
+      <div class="info-common-title">🚰 수돗물</div>
+      <div class="info-common-content"><b>대부분 음용 가능</b>하지만 호텔/카페 생수 권장</div>
+      <div class="info-tip">💡 양치는 수돗물 OK · 마시는 물은 생수 (€0.5–1.5/병)</div>
+    </div></div>
+    </div>
+    
+    <div class="country-jump-nav"><a class="cjump-item" href="#" onclick="jumpToCountry('georgia');return false;"><span class="cjump-flag">🇬🇪</span><span class="cjump-name">조지아</span></a><a class="cjump-item" href="#" onclick="jumpToCountry('armenia');return false;"><span class="cjump-flag">🇦🇲</span><span class="cjump-name">아르메니아</span></a><a class="cjump-item" href="#" onclick="jumpToCountry('bulgaria');return false;"><span class="cjump-flag">🇧🇬</span><span class="cjump-name">불가리아</span></a><a class="cjump-item" href="#" onclick="jumpToCountry('romania');return false;"><span class="cjump-flag">🇷🇴</span><span class="cjump-name">루마니아</span></a><a class="cjump-item" href="#" onclick="jumpToCountry('serbia');return false;"><span class="cjump-flag">🇷🇸</span><span class="cjump-name">세르비아</span></a><a class="cjump-item" href="#" onclick="jumpToCountry('croatia');return false;"><span class="cjump-flag">🇭🇷</span><span class="cjump-name">크로아티아</span></a></div>
+    
+    <div class="countries-wrap">
+      
+    <section class="country-card" data-country="georgia">
+      <div class="country-header">
+        <div class="country-flag">🇬🇪</div>
+        <div class="country-info">
+          <div class="country-name">조지아 <span class="country-en">Georgia</span></div>
+          <div class="country-cities">트빌리시</div>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💰 통화</div>
+        <div class="info-row"><b>라리 (Lari)</b> (GEL, ₾)</div>
+        <div class="info-row info-rate">₾1 ≈ ₩530 · 1만원 ≈ ₾19</div>
+        <div class="info-tip">💡 ATM 출금 추천 (BoG·TBC 은행). 카드 결제도 잘 됨</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🌤 5월 날씨</div>
+        <div class="info-row weather-temp">
+          <span class="temp-high">☀ 23°C</span>
+          <span class="temp-divider">/</span>
+          <span class="temp-low">🌙 12°C</span>
+        </div>
+        <div class="info-row">낮 따뜻함 · 아침저녁 쌀쌀</div>
+        <div class="info-row info-subtle">🌧 5월 중후반 소나기 가능</div>
+        <div class="info-tip">👕 긴팔 + 가벼운 자켓 + 우산</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🗣 언어</div>
+        <div class="info-row"><b>공식:</b> 조지아어 (Georgian)</div>
+        <div class="info-row info-subtle">🇬🇧 영어: 젊은 층/관광지는 영어 OK · 택시는 어려움</div>
+        <div class="greet-block">
+        <div class="greet-row">
+          <div class="greet-ko">안녕하세요</div>
+          <div class="greet-native">გამარჯობა</div>
+          <div class="greet-rom">감아르조바</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">감사합니다</div>
+          <div class="greet-native">მადლობა</div>
+          <div class="greet-rom">마들로바</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">얼마예요?</div>
+          <div class="greet-native">რა ღირს?</div>
+          <div class="greet-rom">라 기르스?</div>
+        </div></div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💸 팁 문화</div>
+        <div class="info-row tip-rule">팁 문화 약함 · 일부 가게는 거절할 수도</div>
+        <div class="info-row info-subtle">🍽 식당: 서비스 차지 보통 포함됨. 별도 팁 불필요</div>
+        <div class="info-row info-subtle">🚕 택시: 미터기 가격대로</div>
+        <div class="info-tip">💡 조지아는 전통적으로 팁이 모욕으로 여겨졌었지만 최근 관광지는 받음</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🍽 현지 음식</div>
+        <ul class="info-list"><li>🥟 힌칼리 (Khinkali) — 조지아식 만두, 손으로 들고 먹기</li><li>🍞 하차푸리 (Khachapuri) — 치즈빵, 아자르식이 유명 (계란 띄움)</li><li>🍷 조지아 와인 (Saperavi, Rkatsiteli) — 와인 발상지!</li><li>🥒 무카로미 또는 츠츠가루리 — 김치 비슷한 절임</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🚖 교통</div>
+        <div class="info-row">Bolt 앱 활용 (Uber 없음) · 가격 저렴</div>
+      </div>
+      
+      <div class="info-section info-section-warn">
+        <div class="info-section-title">⚠ 주의사항</div>
+        <ul class="info-list"><li>환전소(Murtskhlebi 등) 다양 · 공항 환율 나쁨</li><li>트빌리시 구시가 자갈길 많음 — 캐리어 굴리기 힘듦, 운동화 권장</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🛡 안전도</div>
+        <div class="info-row">전반적 안전 · 밤늦은 시간 외곽 지역만 주의</div>
+      </div>
+    </section>
+    <section class="country-card" data-country="armenia">
+      <div class="country-header">
+        <div class="country-flag">🇦🇲</div>
+        <div class="country-info">
+          <div class="country-name">아르메니아 <span class="country-en">Armenia</span></div>
+          <div class="country-cities">예레반</div>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💰 통화</div>
+        <div class="info-row"><b>드람 (Dram)</b> (AMD, ֏)</div>
+        <div class="info-row info-rate">֏100 ≈ ₩365 · 1만원 ≈ ֏2,700</div>
+        <div class="info-tip">💡 ATM 출금 OK · 환전 미국달러나 유로 환영</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🌤 5월 날씨</div>
+        <div class="info-row weather-temp">
+          <span class="temp-high">☀ 23°C</span>
+          <span class="temp-divider">/</span>
+          <span class="temp-low">🌙 11°C</span>
+        </div>
+        <div class="info-row">건조 · 햇볕 강함</div>
+        <div class="info-row info-subtle">🌧 5월 강수일 적음 (~12일)</div>
+        <div class="info-tip">👕 선글라스 · 자외선차단제 · 가벼운 긴팔</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🗣 언어</div>
+        <div class="info-row"><b>공식:</b> 아르메니아어 (Armenian)</div>
+        <div class="info-row info-subtle">🇬🇧 영어: 관광지·호텔은 OK · 시장은 러시아어가 더 통함</div>
+        <div class="greet-block">
+        <div class="greet-row">
+          <div class="greet-ko">안녕하세요</div>
+          <div class="greet-native">Բարև Ձեզ</div>
+          <div class="greet-rom">바레브 제즈</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">감사합니다</div>
+          <div class="greet-native">Շնորհակալություն</div>
+          <div class="greet-rom">쇼노라칼루튠</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">얼마예요?</div>
+          <div class="greet-native">Ինչ արժե?</div>
+          <div class="greet-rom">인치 아르제?</div>
+        </div></div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💸 팁 문화</div>
+        <div class="info-row tip-rule">팁 문화 가벼움 · 10% 환영</div>
+        <div class="info-row info-subtle">🍽 식당: 서비스 차지 미포함 시 10% 정도</div>
+        <div class="info-row info-subtle">🚕 택시: 미터기 또는 흥정 · 팁 불필요</div>
+        <div class="info-tip">💡 GG 앱 (현지 우버) 추천</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🍽 현지 음식</div>
+        <ul class="info-list"><li>🥖 라바시 (Lavash) — UNESCO 등재 얇은 빵, 모든 식사에 함께</li><li>🍢 호로바츠 (Khorovats) — 아르메니아식 케밥</li><li>🌿 돌마 (Dolma) — 포도잎 쌈밥</li><li>🍑 아르메니아 살구 — 5월 끝~6월 초가 제철</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🚖 교통</div>
+        <div class="info-row">GG 앱 (현지 라이드 헤일링) · Yandex Go도 가능</div>
+      </div>
+      
+      <div class="info-section info-section-warn">
+        <div class="info-section-title">⚠ 주의사항</div>
+        <ul class="info-list"><li>아제르바이잔 도장 여권 있으면 입국 곤란 — 사전 확인</li><li>아라라트산 등정 시 정치적 민감 (터키 영토)</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🛡 안전도</div>
+        <div class="info-row">매우 안전 · 여성 단독 여행도 무난</div>
+      </div>
+    </section>
+    <section class="country-card" data-country="bulgaria">
+      <div class="country-header">
+        <div class="country-flag">🇧🇬</div>
+        <div class="country-info">
+          <div class="country-name">불가리아 <span class="country-en">Bulgaria</span></div>
+          <div class="country-cities">소피아</div>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💰 통화</div>
+        <div class="info-row"><b>유로 (2026년 1월 1일부터)</b> (EUR, €)</div>
+        <div class="info-row info-rate">€1 ≈ ₩1,580 · 1만원 ≈ €6.3</div>
+        <div class="info-tip">💡 <b>⚠ 2026년 1월부터 유로 전환!</b> 옛 레프(BGN) 표시 가격은 환산해서 봐야 함</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🌤 5월 날씨</div>
+        <div class="info-row weather-temp">
+          <span class="temp-high">☀ 22°C</span>
+          <span class="temp-divider">/</span>
+          <span class="temp-low">🌙 11°C</span>
+        </div>
+        <div class="info-row">쾌적 · 5월 후반부터 빠르게 더워짐</div>
+        <div class="info-row info-subtle">🌧 5월 강수량 많은 편 (월 70mm) · 천둥번개 가능</div>
+        <div class="info-tip">👕 겹쳐 입기 · 휴대용 우산 필수</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🗣 언어</div>
+        <div class="info-row"><b>공식:</b> 불가리아어 (Bulgarian, 키릴 문자)</div>
+        <div class="info-row info-subtle">🇬🇧 영어: 젊은 층·관광지 OK · 키릴 문자 표지판 많음</div>
+        <div class="greet-block">
+        <div class="greet-row">
+          <div class="greet-ko">안녕하세요</div>
+          <div class="greet-native">Здравейте</div>
+          <div class="greet-rom">즈드라베이테</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">감사합니다</div>
+          <div class="greet-native">Благодаря</div>
+          <div class="greet-rom">블라고다랴</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">얼마예요?</div>
+          <div class="greet-native">Колко струва?</div>
+          <div class="greet-rom">콜코 스트루바?</div>
+        </div></div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💸 팁 문화</div>
+        <div class="info-row tip-rule"><b>팁 기대됨 · 10%</b></div>
+        <div class="info-row info-subtle">🍽 식당: 10% 표준 · 서비스 차지 미포함 보통</div>
+        <div class="info-row info-subtle">🚕 택시: 라운드업 또는 10%</div>
+        <div class="info-tip">💡 현금 팁 선호</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🍽 현지 음식</div>
+        <ul class="info-list"><li>🥗 쇼프스카 살라타 (Shopska) — 토마토·오이·시레네 치즈 샐러드 (국민음식)</li><li>🍶 아이란 (Ayran) — 짭짤한 요거트 음료</li><li>🌶 류테니차 (Lyutenitsa) — 파프리카·토마토 페이스트</li><li>🥩 케밥체타 (Kebapche) — 그릴 미트롤</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🚖 교통</div>
+        <div class="info-row">지하철·트램 발달 · TaxiMe 앱 (가짜 택시 주의!)</div>
+      </div>
+      
+      <div class="info-section info-section-warn">
+        <div class="info-section-title">⚠ 주의사항</div>
+        <ul class="info-list"><li><b>택시 사기 흔함</b> — 공항/기차역 호객 거부, OK Supertrans (노란색)이나 앱 호출 사용</li><li>끄덕끄덕 = NO, 좌우로 흔들기 = YES (반대!) — 헷갈리지 말기</li><li>유로 전환 직후라 일부 가게 가격 표시 혼선 가능</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🛡 안전도</div>
+        <div class="info-row">도시 안전 · 소매치기는 관광지 주의</div>
+      </div>
+    </section>
+    <section class="country-card" data-country="romania">
+      <div class="country-header">
+        <div class="country-flag">🇷🇴</div>
+        <div class="country-info">
+          <div class="country-name">루마니아 <span class="country-en">Romania</span></div>
+          <div class="country-cities">부쿠레슈티</div>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💰 통화</div>
+        <div class="info-row"><b>레이 (Leu)</b> (RON, lei)</div>
+        <div class="info-row info-rate">1 lei ≈ ₩310 · 1만원 ≈ 32 lei</div>
+        <div class="info-tip">💡 유로 아님 · 카드 결제 잘 됨, ATM 출금 추천</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🌤 5월 날씨</div>
+        <div class="info-row weather-temp">
+          <span class="temp-high">☀ 23°C</span>
+          <span class="temp-divider">/</span>
+          <span class="temp-low">🌙 11°C</span>
+        </div>
+        <div class="info-row">온화 · 5월 후반 더워짐</div>
+        <div class="info-row info-subtle">🌧 5월 후반 천둥번개 잦음</div>
+        <div class="info-tip">👕 긴팔 + 자켓 + 우산</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🗣 언어</div>
+        <div class="info-row"><b>공식:</b> 루마니아어 (Romanian, 로망스어 계열)</div>
+        <div class="info-row info-subtle">🇬🇧 영어: 젊은 층·도심은 OK</div>
+        <div class="greet-block">
+        <div class="greet-row">
+          <div class="greet-ko">안녕하세요</div>
+          <div class="greet-native">Bună ziua</div>
+          <div class="greet-rom">부너 지우어</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">감사합니다</div>
+          <div class="greet-native">Mulțumesc</div>
+          <div class="greet-rom">물추메스크</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">얼마예요?</div>
+          <div class="greet-native">Cât costă?</div>
+          <div class="greet-rom">컷 코스터?</div>
+        </div></div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💸 팁 문화</div>
+        <div class="info-row tip-rule"><b>5–10% 권장</b> · 동전 팁은 무례</div>
+        <div class="info-row info-subtle">🍽 식당: 10% 표준 · 지폐로 주기</div>
+        <div class="info-row info-subtle">🚕 택시: 10% 정도</div>
+        <div class="info-tip">💡 동전 던지듯 주는 행동은 금기</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🍽 현지 음식</div>
+        <ul class="info-list"><li>🥘 사르말레 (Sarmale) — 양배추 쌈 (한국 김치만두 비슷)</li><li>🌽 마말리가 (Mămăligă) — 옥수수 폴렌타</li><li>🥣 치오르버 (Ciorbă) — 시큼한 수프</li><li>🥧 코졸낙 (Cozonac) — 달콤한 브리오슈빵</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🚖 교통</div>
+        <div class="info-row">Bolt 앱 추천 · 부쿠레슈티 지하철도 잘 됨</div>
+      </div>
+      
+      <div class="info-section info-section-warn">
+        <div class="info-section-title">⚠ 주의사항</div>
+        <ul class="info-list"><li><b>공항·기차역 택시 사기 주의</b> — 반드시 앱 호출</li><li>환전소 'No Commission' 광고에 작은 글씨 환율 나쁨</li><li>야간 외곽 ATM 사용 자제</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🛡 안전도</div>
+        <div class="info-row">대도시 안전 · 집시 동냥꾼 주의 (관광지)</div>
+      </div>
+    </section>
+    <section class="country-card" data-country="serbia">
+      <div class="country-header">
+        <div class="country-flag">🇷🇸</div>
+        <div class="country-info">
+          <div class="country-name">세르비아 <span class="country-en">Serbia</span></div>
+          <div class="country-cities">베오그라드</div>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💰 통화</div>
+        <div class="info-row"><b>디나르 (Dinar)</b> (RSD, дин)</div>
+        <div class="info-row info-rate">100 RSD ≈ ₩1,350 · 1만원 ≈ 740 RSD</div>
+        <div class="info-tip">💡 유로 받는 가게 종종 있지만 환율 손해 · RSD 출금 추천</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🌤 5월 날씨</div>
+        <div class="info-row weather-temp">
+          <span class="temp-high">☀ 23°C</span>
+          <span class="temp-divider">/</span>
+          <span class="temp-low">🌙 12°C</span>
+        </div>
+        <div class="info-row">쾌적 · 5월 강수 최다 (오후 천둥번개)</div>
+        <div class="info-row info-subtle">🌧 5월 한 달 비 가장 많음 (월 70–90mm)</div>
+        <div class="info-tip">👕 방수 자켓 또는 우산 필수</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🗣 언어</div>
+        <div class="info-row"><b>공식:</b> 세르비아어 (키릴 + 라틴 병기)</div>
+        <div class="info-row info-subtle">🇬🇧 영어: 베오그라드 도심 OK</div>
+        <div class="greet-block">
+        <div class="greet-row">
+          <div class="greet-ko">안녕하세요</div>
+          <div class="greet-native">Здраво / Zdravo</div>
+          <div class="greet-rom">즈드라보</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">감사합니다</div>
+          <div class="greet-native">Хвала / Hvala</div>
+          <div class="greet-rom">흐발라</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">얼마예요?</div>
+          <div class="greet-native">Колико? / Koliko?</div>
+          <div class="greet-rom">콜리코?</div>
+        </div></div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💸 팁 문화</div>
+        <div class="info-row tip-rule"><b>10–15% 일반화 (특히 베오그라드)</b></div>
+        <div class="info-row info-subtle">🍽 식당: 10–15% 표준 · 현금 선호</div>
+        <div class="info-row info-subtle">🚕 택시: 라운드업</div>
+        <div class="info-tip">💡 공중화장실 어텐던트에게도 20디나르 정도</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🍽 현지 음식</div>
+        <ul class="info-list"><li>🍖 체바피 (Ćevapi) — 그릴 미트롤 (5–10개씩)</li><li>🥟 부렉 (Burek) — 페이스트리 (치즈·고기)</li><li>🌶 아이바르 (Ajvar) — 빨간 파프리카 페이스트</li><li>🍺 라키야 (Rakija) — 과실 증류주, 매우 독함</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🚖 교통</div>
+        <div class="info-row">CarGo 또는 Yandex Go · 일반 택시는 'Pink Taxi', 'Naxi' 추천</div>
+      </div>
+      
+      <div class="info-section info-section-warn">
+        <div class="info-section-title">⚠ 주의사항</div>
+        <ul class="info-list"><li>공항 택시 정찰제 (구간별 가격표 확인 · ~2,200 RSD)</li><li>베오그라드는 흡연자 많음 — 카페·바 실내 흡연 가능 구역 존재</li><li>코소보 도장 있는 여권 입국 문제될 수 있음</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🛡 안전도</div>
+        <div class="info-row">도시 안전 · 한국인 친화적</div>
+      </div>
+    </section>
+    <section class="country-card" data-country="croatia">
+      <div class="country-header">
+        <div class="country-flag">🇭🇷</div>
+        <div class="country-info">
+          <div class="country-name">크로아티아 <span class="country-en">Croatia</span></div>
+          <div class="country-cities">자그레브 · 리예카</div>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💰 통화</div>
+        <div class="info-row"><b>유로 (2023년부터)</b> (EUR, €)</div>
+        <div class="info-row info-rate">€1 ≈ ₩1,580 · 1만원 ≈ €6.3</div>
+        <div class="info-tip">💡 EU 회원국 · 카드 결제 잘 됨</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🌤 5월 날씨</div>
+        <div class="info-row weather-temp">
+          <span class="temp-high">☀ 21°C</span>
+          <span class="temp-divider">/</span>
+          <span class="temp-low">🌙 11°C</span>
+        </div>
+        <div class="info-row">쾌적 · 자그레브 내륙은 비 많음, 리예카(아드리아 연안)는 온화</div>
+        <div class="info-row info-subtle">🌧 5월 비 자주 옴 · 리예카는 적도성 강수</div>
+        <div class="info-tip">👕 방수 자켓 · 운동화 (자그레브 구시가 자갈길)</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🗣 언어</div>
+        <div class="info-row"><b>공식:</b> 크로아티아어 (Croatian)</div>
+        <div class="info-row info-subtle">🇬🇧 영어: 관광지·도심 매우 OK</div>
+        <div class="greet-block">
+        <div class="greet-row">
+          <div class="greet-ko">안녕하세요</div>
+          <div class="greet-native">Bok / Dobar dan</div>
+          <div class="greet-rom">복 / 도바르 단</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">감사합니다</div>
+          <div class="greet-native">Hvala</div>
+          <div class="greet-rom">흐발라</div>
+        </div>
+        <div class="greet-row">
+          <div class="greet-ko">얼마예요?</div>
+          <div class="greet-native">Koliko košta?</div>
+          <div class="greet-rom">콜리코 코슈타?</div>
+        </div></div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">💸 팁 문화</div>
+        <div class="info-row tip-rule"><b>10% 일반 · 좋은 서비스는 15%</b></div>
+        <div class="info-row info-subtle">🍽 식당: 10% 표준 · 카드 결제 시 미리 팁 추가 요청</div>
+        <div class="info-row info-subtle">🚕 택시: 라운드업</div>
+        <div class="info-tip">💡 팁은 현금이 가장 좋음 (카드 팁은 직원에게 안 갈 수도)</div>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🍽 현지 음식</div>
+        <ul class="info-list"><li>🦑 검은 리조토 (Crni rižot) — 오징어먹물 리조토 (아드리아)</li><li>🍝 슈트루클리 (Štrukli) — 자그레브식 치즈 페이스트리</li><li>🐟 부즈라 (Buzara) — 해산물 화이트와인 스튜</li><li>🍷 말바지야·플라바츠말리 — 현지 와인</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🚖 교통</div>
+        <div class="info-row">Bolt 또는 Uber · 자그레브 트램 발달 · 리예카는 도보 OK</div>
+      </div>
+      
+      <div class="info-section info-section-warn">
+        <div class="info-section-title">⚠ 주의사항</div>
+        <ul class="info-list"><li>리예카 → 스플리트 4.5시간 운전 (D8 또는 A1 고속도로) · 휴게소 자주</li><li>크로아티아 운전 — 라운드어바웃 많음, 좌측 차량 우선</li><li>여름 성수기 아니지만 5월말 두브로브니크는 이미 붐빔</li></ul>
+      </div>
+      
+      <div class="info-section">
+        <div class="info-section-title">🛡 안전도</div>
+        <div class="info-row">매우 안전 · EU 표준</div>
+      </div>
+    </section>
+    </div>
+  <div class="footer">
+    <span class="footer-mark">A.SSET</span> · TRAVEL GUIDE<br>
+    Information current as of 2026
+  </div>
 </div>
 
 <script>
@@ -1661,6 +2646,154 @@ window.addEventListener('load', () => {
   scrollToClosestDay();
 });
 window.addEventListener('resize', measureStickyHeights);
+
+// ── 탭 전환 ──
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tabName));
+  // 탭 전환 시 스크롤 위로
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  // 헤더 높이 재측정 (탭 따라 sticky 요소가 달라짐)
+  setTimeout(measureStickyHeights, 50);
+  
+  // 정보 탭으로 전환 시 위치 기반 자동 스크롤 (세션당 1회)
+  if (tabName === 'info' && !window._infoScrolled) {
+    window._infoScrolled = true;
+    setTimeout(autoScrollToCurrentCountry, 350);
+  }
+}
+
+// ── 국가별 점프 (정보 탭 내부) ──
+function jumpToCountry(countryId) {
+  const el = document.querySelector(`[data-country="${countryId}"]`);
+  if (el) {
+    const topbar = document.querySelector('.topbar');
+    const cnav = document.querySelector('.country-jump-nav');
+    const offset = (topbar?.offsetHeight || 100) + (cnav?.offsetHeight || 42) + 12;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
+// ── 6개국 대략 경계 박스 (GPS 좌표 → 국가 매칭용) ──
+const COUNTRY_BBOX = {
+  georgia:  { name: '조지아',     lat: [41.0, 43.6], lng: [40.0, 46.7] },
+  armenia:  { name: '아르메니아', lat: [38.8, 41.3], lng: [43.4, 46.6] },
+  bulgaria: { name: '불가리아',   lat: [41.2, 44.2], lng: [22.3, 28.6] },
+  romania:  { name: '루마니아',   lat: [43.6, 48.3], lng: [20.2, 29.7] },
+  serbia:   { name: '세르비아',   lat: [42.2, 46.2], lng: [18.8, 23.0] },
+  croatia:  { name: '크로아티아', lat: [42.4, 46.6], lng: [13.5, 19.5] },
+};
+
+// ── 일정 기반 도시→국가 매핑 (GPS 폴백용) ──
+const CITY_TO_COUNTRY = {
+  tbilisi: 'georgia',
+  yerevan: 'armenia',
+  sofia: 'bulgaria',
+  bucharest: 'romania',
+  belgrade: 'serbia',
+  zagreb: 'croatia',
+  rijeka: 'croatia',
+};
+
+function detectByGPS() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) { resolve(null); return; }
+    
+    const timeout = setTimeout(() => resolve(null), 5000);
+    
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        clearTimeout(timeout);
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        for (const [id, box] of Object.entries(COUNTRY_BBOX)) {
+          if (lat >= box.lat[0] && lat <= box.lat[1] && lng >= box.lng[0] && lng <= box.lng[1]) {
+            resolve({ countryId: id, method: 'gps' });
+            return;
+          }
+        }
+        resolve(null); // 6개국 범위 밖
+      },
+      () => { clearTimeout(timeout); resolve(null); },
+      { timeout: 5000, maximumAge: 300000, enableHighAccuracy: false }
+    );
+  });
+}
+
+function detectBySchedule() {
+  const today = new Date();
+  const kstNow = new Date(today.getTime() + (today.getTimezoneOffset() + 540) * 60000);
+  const todayNum = (kstNow.getMonth() + 1) * 100 + kstNow.getDate();
+  
+  // chapter (city) 별 날짜 범위 계산
+  const chapters = document.querySelectorAll('#tab-schedule .chapter');
+  for (const ch of chapters) {
+    const days = ch.querySelectorAll('.day-block');
+    if (!days.length) continue;
+    const parseDate = (s) => {
+      const [m, d] = s.split('/').map(Number);
+      return m * 100 + d;
+    };
+    const start = parseDate(days[0].dataset.date);
+    const end = parseDate(days[days.length - 1].dataset.date);
+    if (todayNum >= start && todayNum <= end) {
+      const cityId = ch.dataset.city;
+      const countryId = CITY_TO_COUNTRY[cityId];
+      if (countryId) return { countryId: countryId, method: 'schedule' };
+    }
+  }
+  return null;
+}
+
+async function autoScrollToCurrentCountry() {
+  // 1. GPS 우선 시도
+  let result = await detectByGPS();
+  
+  // 2. GPS 실패 시 일정 기반 폴백
+  if (!result) result = detectBySchedule();
+  
+  // 3. 둘 다 실패 → 그대로 (맨 위)
+  if (!result) return;
+  
+  const el = document.querySelector(`[data-country="${result.countryId}"]`);
+  if (!el) return;
+  
+  // 시각적 신호: 자동 감지 표시
+  showLocationIndicator(result);
+  
+  // 스크롤
+  setTimeout(() => {
+    const topbar = document.querySelector('.topbar');
+    const cnav = document.querySelector('.country-jump-nav');
+    const offset = (topbar?.offsetHeight || 100) + (cnav?.offsetHeight || 42) + 12;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+    
+    // 하이라이트 애니메이션
+    el.classList.add('country-card-highlight');
+    setTimeout(() => el.classList.remove('country-card-highlight'), 2800);
+  }, 400);
+}
+
+function showLocationIndicator(result) {
+  const countryName = COUNTRY_BBOX[result.countryId]?.name || '';
+  const icon = result.method === 'gps' ? '📍' : '📅';
+  const label = result.method === 'gps' ? '현재 위치' : '오늘 일정';
+  
+  // 기존 인디케이터 제거
+  document.querySelectorAll('.location-toast').forEach(t => t.remove());
+  
+  const toast = document.createElement('div');
+  toast.className = 'location-toast';
+  toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-label">${label}</span><span class="toast-country">${countryName}</span>`;
+  document.body.appendChild(toast);
+  
+  // 등장 → 잠시 후 사라짐
+  setTimeout(() => toast.classList.add('visible'), 50);
+  setTimeout(() => toast.classList.remove('visible'), 3500);
+  setTimeout(() => toast.remove(), 4000);
+}
 
 function doSearch(q) {
   q = q.toLowerCase().trim();
