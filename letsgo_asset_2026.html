@@ -1254,7 +1254,7 @@ body {
         <div class="ch-num">CH 1</div>
         <div class="ch-info">
           <div class="ch-title">🇬🇪 Georgia 트빌리시 <span class="ch-en">Tbilisi</span></div>
-          <div class="ch-sub">5/16 — 5/19 · 3박</div>
+          <div class="ch-sub">5/16 — 5/20 · 4박</div>
           <div class="ch-people"><span class="b ba">안나</span><span class="b be">엠마</span></div>
         </div>
       </div>
@@ -1299,7 +1299,7 @@ body {
       </div>
     </div>
 
-    <div class="day-block" data-date="5/17" data-searchable="ist → tbs swissôtel tbilisi qhshcshk">
+    <div class="day-block" data-date="5/17" data-searchable="ist → tbs tbilisi marriott hotel ✅ 실제 체크인 84925512 swissôtel tbilisi ⚠ 이중 예약 qhshcshk">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/17</span>
@@ -1326,26 +1326,53 @@ body {
         <div class="card card-hotel">
           <div class="card-icon">🏨</div>
           <div class="card-body">
-            <div class="hotel-name">Swissôtel Tbilisi</div>
-            
+            <div class="hotel-name">Tbilisi Marriott Hotel ✅ 실제 체크인</div>
+            <div class="room-line">🛏 디럭스 트윈룸 (게스트 룸, 더블베드 2개)</div>
             <div class="ci-co-grid">
               <div class="ci-co-item">
                 <div class="ci-co-label">체크인</div>
                 <div class="ci-co-std">기준 15:00~</div>
-                <div class="ci-co-our">체크인</div>
+                <div class="ci-co-our">5/16 체크인 완료</div>
               </div>
               <div class="ci-co-item">
                 <div class="ci-co-label">체크아웃</div>
                 <div class="ci-co-std">기준 ~12:00</div>
-                <div class="ci-co-our">5/20 체크아웃</div>
+                <div class="ci-co-our">5/20 체크아웃 (4박)</div>
+              </div>
+            </div>
+            <div class="hotel-ref">#84925512</div>
+            <div class="price-line">💶 $750 USD · Mastercard 비즈니스 ****0165</div>
+            <div class="note-line">📝 Marriott Bonvoy 직예약</div>
+            <div class="bgs">
+              <span class="b ba">안나</span><span class="b be">엠마</span>
+              <span class="b bo">✓ 예약완료</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-hotel">
+          <div class="card-icon">🏨</div>
+          <div class="card-body">
+            <div class="hotel-name">Swissôtel Tbilisi ⚠ 이중 예약</div>
+            <div class="room-line">🛏 ALL Accor 포인트 결제</div>
+            <div class="ci-co-grid">
+              <div class="ci-co-item">
+                <div class="ci-co-label">체크인</div>
+                <div class="ci-co-std">기준 15:00~</div>
+                <div class="ci-co-our">체크인 안 함</div>
+              </div>
+              <div class="ci-co-item">
+                <div class="ci-co-label">체크아웃</div>
+                <div class="ci-co-std">기준 ~12:00</div>
+                <div class="ci-co-our">5/20 체크아웃 (4박)</div>
               </div>
             </div>
             <div class="hotel-ref">#QHSHCSHK</div>
             
-            
+            <div class="note-line">📝 환불·포인트 반환 요청 이메일 발송 (5/16). 답신 대기 중</div>
             <div class="bgs">
               <span class="b ba">안나</span><span class="b be">엠마</span>
-              <span class="b bo">✓ 예약완료</span>
+              <span class="b bw">⚠ 미발권</span>
             </div>
           </div>
         </div>
@@ -3633,83 +3660,118 @@ let rateSource = 'fallback'; // 'live' or 'fallback'
 let rateUpdated = null;
 
 async function fetchLiveRates() {
-  // Primary: ExchangeRate-API (KRW 기준)
-  // Fallback: Frankfurter (EUR 기준 → KRW 환산)
+  // Primary: ExchangeRate-API (USD 기준 → 더 안정적)
+  // Fallback: Frankfurter (EUR 기준)
+  // 둘 다 USD/EUR 기준이 KRW 기준보다 응답 안정적이라 변경
   
+  console.log('[Rates] Starting fetch...');
+  
+  // 1) ExchangeRate-API USD 기준
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 6000);
-    const res = await fetch('https://open.er-api.com/v6/latest/KRW', { signal: ctrl.signal });
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch('https://open.er-api.com/v6/latest/USD', { signal: ctrl.signal });
     clearTimeout(t);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    if (data.result !== 'success') throw new Error('API not success');
+    if (!data.rates || !data.rates.KRW) throw new Error('Missing KRW rate');
     
-    // data.rates: KRW 기준 → 1 KRW = N (other)
-    // 우리는 1 (other) = X KRW 를 원함 → 1 / data.rates[code]
+    const usdToKrw = data.rates.KRW;
+    console.log('[Rates] ExchangeRate-API OK. USD→KRW:', usdToKrw);
+    
     for (const c of CURRENCIES_DATA) {
-      const r = data.rates[c.code];
-      if (r && r > 0) {
-        currentRates[c.code] = 1 / r;
+      const usdToTarget = data.rates[c.code];
+      if (usdToTarget && usdToTarget > 0) {
+        // 1 target = X USD = X * usdToKrw KRW
+        // usdToTarget = 1 USD 안의 target 개수 → 1 target = 1/usdToTarget USD
+        // → 1 target = (1/usdToTarget) * usdToKrw KRW
+        currentRates[c.code] = usdToKrw / usdToTarget;
+        console.log(`[Rates] ${c.code}: ${currentRates[c.code].toFixed(2)} KRW`);
+      } else {
+        console.warn(`[Rates] ${c.code} not in response`);
       }
     }
     rateSource = 'live';
     rateUpdated = new Date(data.time_last_update_utc || Date.now());
     return true;
   } catch (e) {
-    console.log('Primary API failed, trying Frankfurter...', e.message);
+    console.warn('[Rates] Primary failed:', e.message);
   }
   
-  // 백업 API: Frankfurter
+  // 2) Frankfurter EUR 기준 (백업)
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 6000);
-    const res = await fetch('https://api.frankfurter.dev/v2/rates?base=KRW', { signal: ctrl.signal });
+    const t = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch('https://api.frankfurter.dev/v2/rates?base=EUR', { signal: ctrl.signal });
     clearTimeout(t);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
+    const eurRates = data.rates;
+    if (!eurRates || !eurRates.KRW) throw new Error('Missing KRW');
+    
+    const eurToKrw = eurRates.KRW;
+    console.log('[Rates] Frankfurter OK. EUR→KRW:', eurToKrw);
     
     for (const c of CURRENCIES_DATA) {
-      const r = data.rates[c.code];
-      if (r && r > 0) {
-        currentRates[c.code] = 1 / r;
+      if (c.code === 'EUR') {
+        currentRates[c.code] = eurToKrw;
+      } else {
+        const eurToTarget = eurRates[c.code];
+        if (eurToTarget && eurToTarget > 0) {
+          currentRates[c.code] = eurToKrw / eurToTarget;
+        }
       }
     }
     rateSource = 'live';
     rateUpdated = new Date(data.date || Date.now());
     return true;
   } catch (e) {
-    console.log('Frankfurter also failed', e.message);
+    console.warn('[Rates] Frankfurter failed:', e.message);
   }
   
   // 둘 다 실패 → fallback 유지
+  console.log('[Rates] Using fallback values');
   rateSource = 'fallback';
   return false;
 }
 
 function updateRateDisplays() {
+  console.log('[Rates] Updating displays. Source:', rateSource);
+  
   CURRENCIES_DATA.forEach(c => {
     const rate = currentRates[c.code];
     const display = document.getElementById('rate-display-' + c.id);
     const meta = document.getElementById('rate-meta-' + c.id);
-    if (!display || !meta) return;
     
-    // 라리, 유로, lei처럼 1단위가 의미 있을 때는 1단위로, 디나르·드람처럼 작은 통화는 100/1000단위로
+    if (!display) {
+      console.warn('[Rates] display element not found for', c.id);
+      return;
+    }
+    if (!rate || rate <= 0) {
+      console.warn('[Rates] invalid rate for', c.code, rate);
+      display.innerHTML = '<span class="rate-loading">환율 정보 없음</span>';
+      if (meta) meta.textContent = '';
+      return;
+    }
+    
+    // 단위 결정: 1 단위 가격이 적당하면 1, 너무 작으면 100/1000
     let baseShow;
     if (rate >= 100) {
-      baseShow = `<span class="rate-from">1 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${rate.toFixed(0)}</span>`;
+      baseShow = `<span class="rate-from">1 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${Math.round(rate).toLocaleString()}</span>`;
     } else if (rate >= 10) {
-      baseShow = `<span class="rate-from">100 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${(rate * 100).toFixed(0)}</span>`;
+      baseShow = `<span class="rate-from">100 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${Math.round(rate * 100).toLocaleString()}</span>`;
     } else {
-      baseShow = `<span class="rate-from">1,000 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${(rate * 1000).toFixed(0)}</span>`;
+      baseShow = `<span class="rate-from">1,000 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${Math.round(rate * 1000).toLocaleString()}</span>`;
     }
     display.innerHTML = baseShow;
     
-    if (rateSource === 'live') {
-      const time = rateUpdated ? rateUpdated.toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) : '오늘';
-      meta.innerHTML = `<span class="rate-live">🟢 실시간</span> · ${time} 업데이트`;
-    } else {
-      meta.innerHTML = `<span class="rate-fallback">🟡 기준값</span> · 인터넷 없음`;
+    if (meta) {
+      if (rateSource === 'live') {
+        const time = rateUpdated ? rateUpdated.toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) : '오늘';
+        meta.innerHTML = `<span class="rate-live">🟢 실시간</span> · ${time} 업데이트`;
+      } else {
+        meta.innerHTML = `<span class="rate-fallback">🟡 기준값</span> · 5/16 기준`;
+      }
     }
   });
   
@@ -3721,7 +3783,7 @@ function updateRateDisplays() {
       statusText.textContent = '실시간 환율 적용 중';
       statusDot.className = 'status-dot status-live';
     } else {
-      statusText.textContent = '기준값 사용 중 (인터넷 연결 시 자동 업데이트)';
+      statusText.textContent = '기준값 사용 중 (5/16 기준 · 새로고침 시 재시도)';
       statusDot.className = 'status-dot status-fallback';
     }
   }
@@ -3808,12 +3870,17 @@ function jumpToCurrency(curId) {
   }
 }
 
-// 페이지 로드 시 환율 미리 한 번 fetch (백그라운드)
+// 페이지 로드 시: 1) 즉시 fallback 표시 → 2) 백그라운드에서 실시간 fetch 시도
 window.addEventListener('load', () => {
+  // 1. 즉시 fallback 값으로 카드 채움 (사용자가 "로딩 중..." 안 보게)
+  updateRateDisplays();
+  
+  // 2. 백그라운드에서 실시간 fetch 시도
   setTimeout(async () => {
-    await fetchLiveRates();
+    const ok = await fetchLiveRates();
     updateRateDisplays();
-  }, 500);
+    if (ok) console.log('[Rates] Live rates loaded');
+  }, 300);
 });
 
 function doSearch(q) {
