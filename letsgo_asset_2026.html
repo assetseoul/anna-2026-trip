@@ -880,6 +880,321 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(231,53,23,0); }
 }
 
+/* ═══════════════════════════════════════════
+   💱 환율 탭 스타일
+   ═══════════════════════════════════════════ */
+.cur-intro {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--ivory);
+  padding: 20px 16px 16px;
+  text-align: center;
+  border-bottom: 3px solid var(--red);
+}
+.cur-intro-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.cur-intro-sub {
+  font-size: 11px;
+  color: rgba(249,240,229,0.65);
+  margin-top: 5px;
+  letter-spacing: 0.3px;
+}
+.cur-status-bar {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: rgba(249,240,229,0.85);
+  background: rgba(0,0,0,0.25);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
+.status-dot.status-live { background: #2BD66B; }
+.status-dot.status-fallback { background: var(--gold); }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* 통화 점프 nav */
+.cur-jump-nav {
+  position: sticky;
+  top: var(--topbar-h, 100px);
+  z-index: 90;
+  background: var(--navy-light);
+  padding: 8px 12px;
+  display: flex; gap: 6px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(231,53,23,0.3);
+  scrollbar-width: none;
+}
+.cur-jump-nav::-webkit-scrollbar { display: none; }
+.cur-jump {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 10px;
+  background: rgba(249,240,229,0.08);
+  border: 1px solid rgba(249,240,229,0.15);
+  border-radius: 14px;
+  color: var(--ivory);
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.4px;
+}
+.cur-jump:active { background: var(--red); border-color: var(--red); }
+.cur-jump-flag { font-size: 13px; }
+
+.cur-cards-wrap {
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+/* 통화 카드 */
+.cur-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--bl);
+  overflow: hidden;
+  scroll-margin-top: calc(var(--topbar-h, 100px) + 50px);
+}
+.cur-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--ivory);
+  padding: 13px 14px;
+  display: flex; justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid var(--red);
+}
+.cur-flag-name {
+  display: flex; align-items: center; gap: 10px;
+}
+.cur-flag { font-size: 28px; line-height: 1; }
+.cur-country {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+.cur-city {
+  font-size: 10.5px;
+  color: rgba(249,240,229,0.65);
+  margin-top: 2px;
+}
+.cur-code-block { text-align: right; }
+.cur-symbol {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+}
+.cur-code {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: rgba(249,240,229,0.5);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* 환율 디스플레이 */
+.cur-rate-display {
+  background: var(--ivory-deep);
+  padding: 14px;
+  border-bottom: 1px solid var(--bl);
+  text-align: center;
+}
+.cur-rate-label {
+  font-size: 10px;
+  color: var(--red);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.cur-rate-main {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  color: var(--navy);
+  margin-top: 4px;
+  font-weight: 500;
+}
+.rate-from { color: var(--navy); }
+.rate-eq { color: var(--stone); margin: 0 4px; }
+.rate-to {
+  color: var(--red);
+  font-weight: 700;
+  font-size: 19px;
+}
+.rate-loading { color: var(--stone); font-style: italic; font-size: 13px; }
+.cur-rate-meta {
+  font-size: 10px;
+  color: var(--stone);
+  margin-top: 4px;
+}
+.rate-live { color: #1FAE54; font-weight: 600; }
+.rate-fallback { color: #B7791F; font-weight: 600; }
+
+/* 변환 입력 */
+.cur-calc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 12px;
+  background: white;
+}
+.cur-calc-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cur-calc-label {
+  font-family: 'Fraunces', serif;
+  font-size: 11px;
+  color: var(--stone);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+.cur-input {
+  width: 100%;
+  padding: 12px 10px;
+  border: 1.5px solid var(--bl);
+  border-radius: 9px;
+  font-family: 'DM Sans', monospace;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  background: var(--bg);
+  color: var(--navy);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -moz-appearance: textfield;
+}
+.cur-input::-webkit-outer-spin-button,
+.cur-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.cur-input:focus {
+  border-color: var(--red);
+  background: white;
+}
+.cur-calc-arrow {
+  font-size: 18px;
+  color: var(--red);
+  font-weight: 600;
+  padding: 0 2px;
+  align-self: center;
+  margin-top: 20px;
+}
+.cur-quick {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+.cur-quick-btn {
+  flex: 1;
+  background: var(--ivory);
+  border: 1px solid var(--bl);
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--navy);
+  padding: 5px 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.cur-quick-btn:active {
+  background: var(--red);
+  color: white;
+  border-color: var(--red);
+  transform: scale(0.95);
+}
+
+/* 카드 인프라 */
+.cur-infra {
+  background: var(--bg);
+  padding: 11px 14px;
+  border-top: 1px solid var(--bl);
+  border-bottom: 1px solid var(--bl);
+}
+.cur-infra-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.cur-infra-label {
+  font-size: 11px;
+  color: var(--navy);
+  font-weight: 600;
+}
+.cur-infra-stars {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+.score-high { filter: hue-rotate(0deg) saturate(1); }
+.score-mid { filter: hue-rotate(-20deg) saturate(0.8); opacity: 0.85; }
+.score-low { filter: grayscale(0.3); opacity: 0.7; }
+.cur-infra-text {
+  font-size: 11.5px;
+  color: var(--navy);
+  line-height: 1.5;
+}
+
+/* 팁 리스트 */
+.cur-tips {
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cur-tip-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--navy);
+}
+.cur-tip-icon {
+  flex-shrink: 0;
+  font-size: 13px;
+  padding-top: 1px;
+}
+.cur-tip-text { flex: 1; }
+.cur-tip-text b { color: var(--red); }
+.highlight-recommended {
+  background: linear-gradient(135deg, #FFF8E8 0%, #FAF0DA 100%);
+  padding: 8px 10px;
+  border-radius: 7px;
+  border-left: 2px solid var(--gold);
+  margin-top: 4px;
+}
+
+/* 통화 카드 하이라이트 (자동 스크롤) */
+.cur-card-highlight {
+  animation: curFlash 2.8s ease-out;
+}
+@keyframes curFlash {
+  0% { box-shadow: 0 0 0 0 rgba(231,53,23,0); }
+  15% { box-shadow: 0 0 0 4px rgba(231,53,23,0.35); }
+  100% { box-shadow: 0 0 0 0 rgba(231,53,23,0); }
+}
+
 /* ─── NO RESULT ─── */
 .no-results {
   text-align: center; padding: 60px 20px;
@@ -918,6 +1233,7 @@ body {
   <div class="tab-toggle">
     <button class="tab-btn active" data-tab="schedule" onclick="switchTab('schedule')">📅 일정</button>
     <button class="tab-btn" data-tab="info" onclick="switchTab('info')">🌍 정보</button>
+    <button class="tab-btn" data-tab="currency" onclick="switchTab('currency')">💱 환율</button>
   </div>
 </div>
 
@@ -2560,6 +2876,508 @@ body {
   </div>
 </div>
 
+<div id="tab-currency" class="tab-pane">
+  
+    <div class="cur-intro">
+      <div class="cur-intro-title">💱 환율 변환 + 카드 가이드</div>
+      <div class="cur-intro-sub">6개 통화 · 실시간 환율 · 카드 인프라 평가</div>
+      <div class="cur-status-bar" id="rate-status">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="rate-status-text">환율 정보 가져오는 중...</span>
+      </div>
+    </div>
+    
+    <div class="cur-jump-nav"><a class="cur-jump" href="#" onclick="jumpToCurrency('gel');return false;"><span class="cur-jump-flag">🇬🇪</span><span class="cur-jump-code">GEL</span></a><a class="cur-jump" href="#" onclick="jumpToCurrency('amd');return false;"><span class="cur-jump-flag">🇦🇲</span><span class="cur-jump-code">AMD</span></a><a class="cur-jump" href="#" onclick="jumpToCurrency('eur_bg');return false;"><span class="cur-jump-flag">🇧🇬</span><span class="cur-jump-code">EUR</span></a><a class="cur-jump" href="#" onclick="jumpToCurrency('ron');return false;"><span class="cur-jump-flag">🇷🇴</span><span class="cur-jump-code">RON</span></a><a class="cur-jump" href="#" onclick="jumpToCurrency('rsd');return false;"><span class="cur-jump-flag">🇷🇸</span><span class="cur-jump-code">RSD</span></a><a class="cur-jump" href="#" onclick="jumpToCurrency('eur_hr');return false;"><span class="cur-jump-flag">🇭🇷</span><span class="cur-jump-code">EUR</span></a></div>
+    
+    <div class="cur-cards-wrap">
+      
+    <section class="cur-card" data-currency="gel" data-country="georgia">
+      <div class="cur-header">
+        <div class="cur-flag-name">
+          <div class="cur-flag">🇬🇪</div>
+          <div class="cur-meta">
+            <div class="cur-country">조지아</div>
+            <div class="cur-city">트빌리시</div>
+          </div>
+        </div>
+        <div class="cur-code-block">
+          <div class="cur-symbol">₾</div>
+          <div class="cur-code">GEL</div>
+        </div>
+      </div>
+      
+      <div class="cur-rate-display">
+        <div class="cur-rate-label">현재 환율</div>
+        <div class="cur-rate-main" id="rate-display-gel">
+          <span class="rate-loading">로딩 중...</span>
+        </div>
+        <div class="cur-rate-meta" id="rate-meta-gel">기준값 사용 중</div>
+      </div>
+      
+      <div class="cur-calc-row">
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">GEL</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-foreign-gel"
+                 placeholder="0"
+                 oninput="convertFromForeign('gel', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setForeign('gel', 10)">10</button>
+            <button class="cur-quick-btn" onclick="setForeign('gel', 50)">50</button>
+            <button class="cur-quick-btn" onclick="setForeign('gel', 100)">100</button>
+          </div>
+        </div>
+        <div class="cur-calc-arrow">⇌</div>
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">KRW</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-krw-gel"
+                 placeholder="0"
+                 oninput="convertFromKRW('gel', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setKRW('gel', 10000)">1만</button>
+            <button class="cur-quick-btn" onclick="setKRW('gel', 50000)">5만</button>
+            <button class="cur-quick-btn" onclick="setKRW('gel', 100000)">10만</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cur-infra">
+        <div class="cur-infra-row">
+          <span class="cur-infra-label">💳 카드 인프라</span>
+          <span class="cur-infra-stars score-high">⭐⭐⭐⭐☆</span>
+        </div>
+        <div class="cur-infra-text"><b>잘 통용됨</b> — 호텔·식당·대형 마트 모두 카드 OK. Visa/Master 표준</div>
+      </div>
+      
+      <div class="cur-tips">
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">💵</span>
+          <span class="cur-tip-text"><b>현금 필요:</b> 택시·재래시장(데세르티르 바자르 등)·소상점용 최소 현금</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🛬</span>
+          <span class="cur-tip-text"><b>공항 환전:</b> 공항 환율 나쁨 — 시내 환전소(Murtskhlebi 등) 추천. 공항에서는 택시비 정도(~₾30) 만 환전</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🏧</span>
+          <span class="cur-tip-text"><b>ATM:</b> BoG, TBC 은행 ATM 추천 (수수료 합리적)</span>
+        </div>
+        <div class="cur-tip-item highlight-recommended">
+          <span class="cur-tip-icon">🎯</span>
+          <span class="cur-tip-text"><b>권장 현금:</b> ₾50-100 (약 ₩30,000-55,000)</span>
+        </div>
+      </div>
+    </section>
+    <section class="cur-card" data-currency="amd" data-country="armenia">
+      <div class="cur-header">
+        <div class="cur-flag-name">
+          <div class="cur-flag">🇦🇲</div>
+          <div class="cur-meta">
+            <div class="cur-country">아르메니아</div>
+            <div class="cur-city">예레반</div>
+          </div>
+        </div>
+        <div class="cur-code-block">
+          <div class="cur-symbol">֏</div>
+          <div class="cur-code">AMD</div>
+        </div>
+      </div>
+      
+      <div class="cur-rate-display">
+        <div class="cur-rate-label">현재 환율</div>
+        <div class="cur-rate-main" id="rate-display-amd">
+          <span class="rate-loading">로딩 중...</span>
+        </div>
+        <div class="cur-rate-meta" id="rate-meta-amd">기준값 사용 중</div>
+      </div>
+      
+      <div class="cur-calc-row">
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">AMD</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-foreign-amd"
+                 placeholder="0"
+                 oninput="convertFromForeign('amd', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setForeign('amd', 10)">10</button>
+            <button class="cur-quick-btn" onclick="setForeign('amd', 50)">50</button>
+            <button class="cur-quick-btn" onclick="setForeign('amd', 100)">100</button>
+          </div>
+        </div>
+        <div class="cur-calc-arrow">⇌</div>
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">KRW</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-krw-amd"
+                 placeholder="0"
+                 oninput="convertFromKRW('amd', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setKRW('amd', 10000)">1만</button>
+            <button class="cur-quick-btn" onclick="setKRW('amd', 50000)">5만</button>
+            <button class="cur-quick-btn" onclick="setKRW('amd', 100000)">10만</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cur-infra">
+        <div class="cur-infra-row">
+          <span class="cur-infra-label">💳 카드 인프라</span>
+          <span class="cur-infra-stars score-mid">⭐⭐⭐☆☆</span>
+        </div>
+        <div class="cur-infra-text"><b>도심 호텔/식당 OK</b> — 호텔·중급 식당·카페 OK. 일부 가게는 현금 선호</div>
+      </div>
+      
+      <div class="cur-tips">
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">💵</span>
+          <span class="cur-tip-text"><b>현금 필요:</b> 시장(Vernissage 등)·소상점·택시 현금 필요</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🛬</span>
+          <span class="cur-tip-text"><b>공항 환전:</b> 공항 환율 적당함 — 약 ֏10,000-20,000 환전 추천</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🏧</span>
+          <span class="cur-tip-text"><b>ATM:</b> Ameriabank, Ardshinbank ATM. USD/EUR 현금 환전도 환영</span>
+        </div>
+        <div class="cur-tip-item highlight-recommended">
+          <span class="cur-tip-icon">🎯</span>
+          <span class="cur-tip-text"><b>권장 현금:</b> ֏20,000-40,000 (약 ₩70,000-150,000)</span>
+        </div>
+      </div>
+    </section>
+    <section class="cur-card" data-currency="eur_bg" data-country="bulgaria">
+      <div class="cur-header">
+        <div class="cur-flag-name">
+          <div class="cur-flag">🇧🇬</div>
+          <div class="cur-meta">
+            <div class="cur-country">불가리아</div>
+            <div class="cur-city">소피아</div>
+          </div>
+        </div>
+        <div class="cur-code-block">
+          <div class="cur-symbol">€</div>
+          <div class="cur-code">EUR</div>
+        </div>
+      </div>
+      
+      <div class="cur-rate-display">
+        <div class="cur-rate-label">현재 환율</div>
+        <div class="cur-rate-main" id="rate-display-eur_bg">
+          <span class="rate-loading">로딩 중...</span>
+        </div>
+        <div class="cur-rate-meta" id="rate-meta-eur_bg">기준값 사용 중</div>
+      </div>
+      
+      <div class="cur-calc-row">
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">EUR</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-foreign-eur_bg"
+                 placeholder="0"
+                 oninput="convertFromForeign('eur_bg', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setForeign('eur_bg', 10)">10</button>
+            <button class="cur-quick-btn" onclick="setForeign('eur_bg', 50)">50</button>
+            <button class="cur-quick-btn" onclick="setForeign('eur_bg', 100)">100</button>
+          </div>
+        </div>
+        <div class="cur-calc-arrow">⇌</div>
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">KRW</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-krw-eur_bg"
+                 placeholder="0"
+                 oninput="convertFromKRW('eur_bg', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setKRW('eur_bg', 10000)">1만</button>
+            <button class="cur-quick-btn" onclick="setKRW('eur_bg', 50000)">5만</button>
+            <button class="cur-quick-btn" onclick="setKRW('eur_bg', 100000)">10만</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cur-infra">
+        <div class="cur-infra-row">
+          <span class="cur-infra-label">💳 카드 인프라</span>
+          <span class="cur-infra-stars score-high">⭐⭐⭐⭐☆</span>
+        </div>
+        <div class="cur-infra-text"><b>잘 통용됨</b> — 2026년 1월부터 유로 전환! 카드 결제 잘 됨</div>
+      </div>
+      
+      <div class="cur-tips">
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">💵</span>
+          <span class="cur-tip-text"><b>현금 필요:</b> 택시·재래시장·일부 카페 현금 (구 BGN 표시 가격 환산 주의)</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🛬</span>
+          <span class="cur-tip-text"><b>공항 환전:</b> 공항 환전 불필요 (직접 유로 가져가거나 ATM 출금)</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🏧</span>
+          <span class="cur-tip-text"><b>ATM:</b> DSK, Unicredit, Postbank ATM 모두 OK</span>
+        </div>
+        <div class="cur-tip-item highlight-recommended">
+          <span class="cur-tip-icon">🎯</span>
+          <span class="cur-tip-text"><b>권장 현금:</b> €50-100</span>
+        </div>
+      </div>
+    </section>
+    <section class="cur-card" data-currency="ron" data-country="romania">
+      <div class="cur-header">
+        <div class="cur-flag-name">
+          <div class="cur-flag">🇷🇴</div>
+          <div class="cur-meta">
+            <div class="cur-country">루마니아</div>
+            <div class="cur-city">부쿠레슈티</div>
+          </div>
+        </div>
+        <div class="cur-code-block">
+          <div class="cur-symbol">lei</div>
+          <div class="cur-code">RON</div>
+        </div>
+      </div>
+      
+      <div class="cur-rate-display">
+        <div class="cur-rate-label">현재 환율</div>
+        <div class="cur-rate-main" id="rate-display-ron">
+          <span class="rate-loading">로딩 중...</span>
+        </div>
+        <div class="cur-rate-meta" id="rate-meta-ron">기준값 사용 중</div>
+      </div>
+      
+      <div class="cur-calc-row">
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">RON</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-foreign-ron"
+                 placeholder="0"
+                 oninput="convertFromForeign('ron', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setForeign('ron', 10)">10</button>
+            <button class="cur-quick-btn" onclick="setForeign('ron', 50)">50</button>
+            <button class="cur-quick-btn" onclick="setForeign('ron', 100)">100</button>
+          </div>
+        </div>
+        <div class="cur-calc-arrow">⇌</div>
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">KRW</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-krw-ron"
+                 placeholder="0"
+                 oninput="convertFromKRW('ron', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setKRW('ron', 10000)">1만</button>
+            <button class="cur-quick-btn" onclick="setKRW('ron', 50000)">5만</button>
+            <button class="cur-quick-btn" onclick="setKRW('ron', 100000)">10만</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cur-infra">
+        <div class="cur-infra-row">
+          <span class="cur-infra-label">💳 카드 인프라</span>
+          <span class="cur-infra-stars score-high">⭐⭐⭐⭐☆</span>
+        </div>
+        <div class="cur-infra-text"><b>잘 통용됨</b> — 유로 아닌 현지 통화! 카드 결제 매우 잘 됨</div>
+      </div>
+      
+      <div class="cur-tips">
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">💵</span>
+          <span class="cur-tip-text"><b>현금 필요:</b> 택시·팁·일부 소상점 (지폐로 팁 — 동전 던지기 금기)</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🛬</span>
+          <span class="cur-tip-text"><b>공항 환전:</b> ⚠ 공항 환전소 'No Commission' 광고는 환율 나쁨 — 시내 환전소 또는 ATM 추천</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🏧</span>
+          <span class="cur-tip-text"><b>ATM:</b> BCR, BRD, Banca Transilvania ATM</span>
+        </div>
+        <div class="cur-tip-item highlight-recommended">
+          <span class="cur-tip-icon">🎯</span>
+          <span class="cur-tip-text"><b>권장 현금:</b> 100-200 lei (약 ₩31,000-62,000)</span>
+        </div>
+      </div>
+    </section>
+    <section class="cur-card" data-currency="rsd" data-country="serbia">
+      <div class="cur-header">
+        <div class="cur-flag-name">
+          <div class="cur-flag">🇷🇸</div>
+          <div class="cur-meta">
+            <div class="cur-country">세르비아</div>
+            <div class="cur-city">베오그라드</div>
+          </div>
+        </div>
+        <div class="cur-code-block">
+          <div class="cur-symbol">дин</div>
+          <div class="cur-code">RSD</div>
+        </div>
+      </div>
+      
+      <div class="cur-rate-display">
+        <div class="cur-rate-label">현재 환율</div>
+        <div class="cur-rate-main" id="rate-display-rsd">
+          <span class="rate-loading">로딩 중...</span>
+        </div>
+        <div class="cur-rate-meta" id="rate-meta-rsd">기준값 사용 중</div>
+      </div>
+      
+      <div class="cur-calc-row">
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">RSD</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-foreign-rsd"
+                 placeholder="0"
+                 oninput="convertFromForeign('rsd', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setForeign('rsd', 10)">10</button>
+            <button class="cur-quick-btn" onclick="setForeign('rsd', 50)">50</button>
+            <button class="cur-quick-btn" onclick="setForeign('rsd', 100)">100</button>
+          </div>
+        </div>
+        <div class="cur-calc-arrow">⇌</div>
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">KRW</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-krw-rsd"
+                 placeholder="0"
+                 oninput="convertFromKRW('rsd', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setKRW('rsd', 10000)">1만</button>
+            <button class="cur-quick-btn" onclick="setKRW('rsd', 50000)">5만</button>
+            <button class="cur-quick-btn" onclick="setKRW('rsd', 100000)">10만</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cur-infra">
+        <div class="cur-infra-row">
+          <span class="cur-infra-label">💳 카드 인프라</span>
+          <span class="cur-infra-stars score-mid">⭐⭐⭐☆☆</span>
+        </div>
+        <div class="cur-infra-text"><b>도심 OK, 외곽 약함</b> — 베오그라드 도심·체인 식당 OK. 카페·바·소상점은 현금 선호</div>
+      </div>
+      
+      <div class="cur-tips">
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">💵</span>
+          <span class="cur-tip-text"><b>현금 필요:</b> 팁 문화 강함(10-15%) — 현금 팁 권장. 공중화장실도 20디나르</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🛬</span>
+          <span class="cur-tip-text"><b>공항 환전:</b> 공항 환율 보통 — 약 €50 정도 환전 추천. 시내 환전소가 더 유리</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🏧</span>
+          <span class="cur-tip-text"><b>ATM:</b> Intesa, Raiffeisen, UniCredit ATM 추천</span>
+        </div>
+        <div class="cur-tip-item highlight-recommended">
+          <span class="cur-tip-icon">🎯</span>
+          <span class="cur-tip-text"><b>권장 현금:</b> 5,000-10,000 RSD (약 ₩70,000-135,000)</span>
+        </div>
+      </div>
+    </section>
+    <section class="cur-card" data-currency="eur_hr" data-country="croatia">
+      <div class="cur-header">
+        <div class="cur-flag-name">
+          <div class="cur-flag">🇭🇷</div>
+          <div class="cur-meta">
+            <div class="cur-country">크로아티아</div>
+            <div class="cur-city">자그레브 · 리예카</div>
+          </div>
+        </div>
+        <div class="cur-code-block">
+          <div class="cur-symbol">€</div>
+          <div class="cur-code">EUR</div>
+        </div>
+      </div>
+      
+      <div class="cur-rate-display">
+        <div class="cur-rate-label">현재 환율</div>
+        <div class="cur-rate-main" id="rate-display-eur_hr">
+          <span class="rate-loading">로딩 중...</span>
+        </div>
+        <div class="cur-rate-meta" id="rate-meta-eur_hr">기준값 사용 중</div>
+      </div>
+      
+      <div class="cur-calc-row">
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">EUR</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-foreign-eur_hr"
+                 placeholder="0"
+                 oninput="convertFromForeign('eur_hr', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setForeign('eur_hr', 10)">10</button>
+            <button class="cur-quick-btn" onclick="setForeign('eur_hr', 50)">50</button>
+            <button class="cur-quick-btn" onclick="setForeign('eur_hr', 100)">100</button>
+          </div>
+        </div>
+        <div class="cur-calc-arrow">⇌</div>
+        <div class="cur-calc-side">
+          <div class="cur-calc-label">KRW</div>
+          <input type="number" inputmode="decimal" 
+                 class="cur-input" 
+                 id="input-krw-eur_hr"
+                 placeholder="0"
+                 oninput="convertFromKRW('eur_hr', this.value)">
+          <div class="cur-quick">
+            <button class="cur-quick-btn" onclick="setKRW('eur_hr', 10000)">1만</button>
+            <button class="cur-quick-btn" onclick="setKRW('eur_hr', 50000)">5만</button>
+            <button class="cur-quick-btn" onclick="setKRW('eur_hr', 100000)">10만</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cur-infra">
+        <div class="cur-infra-row">
+          <span class="cur-infra-label">💳 카드 인프라</span>
+          <span class="cur-infra-stars score-high">⭐⭐⭐⭐⭐</span>
+        </div>
+        <div class="cur-infra-text"><b>거의 모든 곳에서 OK</b> — EU 표준 — 카드 결제 어디서나 가능 (스플리트, 두브로브니크 포함)</div>
+      </div>
+      
+      <div class="cur-tips">
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">💵</span>
+          <span class="cur-tip-text"><b>현금 필요:</b> 팁(현금 선호), 시장(돌라츠), 주차장 동전 정도만</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🛬</span>
+          <span class="cur-tip-text"><b>공항 환전:</b> 공항 환전 불필요 — 카드로 거의 모든 결제 가능</span>
+        </div>
+        <div class="cur-tip-item">
+          <span class="cur-tip-icon">🏧</span>
+          <span class="cur-tip-text"><b>ATM:</b> PBZ, Zagrebačka banka, Erste ATM</span>
+        </div>
+        <div class="cur-tip-item highlight-recommended">
+          <span class="cur-tip-icon">🎯</span>
+          <span class="cur-tip-text"><b>권장 현금:</b> €30-50 (최소한만)</span>
+        </div>
+      </div>
+    </section>
+    </div>
+  <div class="footer">
+    <span class="footer-mark">A.SSET</span> · CURRENCY & CARDS<br>
+    Rates by ExchangeRate-API
+  </div>
+</div>
+
 <script>
 // ── sticky 헤더 실제 높이를 CSS 변수에 반영 ──
 function measureStickyHeights() {
@@ -2659,6 +3477,12 @@ function switchTab(tabName) {
   if (tabName === 'info' && !window._infoScrolled) {
     window._infoScrolled = true;
     setTimeout(autoScrollToCurrentCountry, 350);
+  }
+  
+  // 환율 탭으로 전환 시 환율 fetch 시도 + 자동 통화 선택 (세션당 1회)
+  if (tabName === 'currency' && !window._currencyScrolled) {
+    window._currencyScrolled = true;
+    setTimeout(autoScrollToCurrentCurrency, 350);
   }
 }
 
@@ -2793,6 +3617,204 @@ function showLocationIndicator(result) {
   setTimeout(() => toast.classList.remove('visible'), 3500);
   setTimeout(() => toast.remove(), 4000);
 }
+
+// ══════════════════════════════════════════════
+// 💱 환율 변환 시스템
+// ══════════════════════════════════════════════
+
+const CURRENCIES_DATA = [{"id": "gel", "code": "GEL", "symbol": "₾", "fallback_rate": 530.0, "country_id": "georgia"}, {"id": "amd", "code": "AMD", "symbol": "֏", "fallback_rate": 3.65, "country_id": "armenia"}, {"id": "eur_bg", "code": "EUR", "symbol": "€", "fallback_rate": 1580.0, "country_id": "bulgaria"}, {"id": "ron", "code": "RON", "symbol": "lei", "fallback_rate": 310.0, "country_id": "romania"}, {"id": "rsd", "code": "RSD", "symbol": "дин", "fallback_rate": 13.5, "country_id": "serbia"}, {"id": "eur_hr", "code": "EUR", "symbol": "€", "fallback_rate": 1580.0, "country_id": "croatia"}];
+
+// 현재 환율 저장 (KRW 기준, 즉 1 [통화] = N KRW)
+const currentRates = {};
+// fallback 환율으로 초기화
+CURRENCIES_DATA.forEach(c => { currentRates[c.code] = c.fallback_rate; });
+
+let rateSource = 'fallback'; // 'live' or 'fallback'
+let rateUpdated = null;
+
+async function fetchLiveRates() {
+  // Primary: ExchangeRate-API (KRW 기준)
+  // Fallback: Frankfurter (EUR 기준 → KRW 환산)
+  
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 6000);
+    const res = await fetch('https://open.er-api.com/v6/latest/KRW', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data.result !== 'success') throw new Error('API not success');
+    
+    // data.rates: KRW 기준 → 1 KRW = N (other)
+    // 우리는 1 (other) = X KRW 를 원함 → 1 / data.rates[code]
+    for (const c of CURRENCIES_DATA) {
+      const r = data.rates[c.code];
+      if (r && r > 0) {
+        currentRates[c.code] = 1 / r;
+      }
+    }
+    rateSource = 'live';
+    rateUpdated = new Date(data.time_last_update_utc || Date.now());
+    return true;
+  } catch (e) {
+    console.log('Primary API failed, trying Frankfurter...', e.message);
+  }
+  
+  // 백업 API: Frankfurter
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 6000);
+    const res = await fetch('https://api.frankfurter.dev/v2/rates?base=KRW', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    
+    for (const c of CURRENCIES_DATA) {
+      const r = data.rates[c.code];
+      if (r && r > 0) {
+        currentRates[c.code] = 1 / r;
+      }
+    }
+    rateSource = 'live';
+    rateUpdated = new Date(data.date || Date.now());
+    return true;
+  } catch (e) {
+    console.log('Frankfurter also failed', e.message);
+  }
+  
+  // 둘 다 실패 → fallback 유지
+  rateSource = 'fallback';
+  return false;
+}
+
+function updateRateDisplays() {
+  CURRENCIES_DATA.forEach(c => {
+    const rate = currentRates[c.code];
+    const display = document.getElementById('rate-display-' + c.id);
+    const meta = document.getElementById('rate-meta-' + c.id);
+    if (!display || !meta) return;
+    
+    // 라리, 유로, lei처럼 1단위가 의미 있을 때는 1단위로, 디나르·드람처럼 작은 통화는 100/1000단위로
+    let baseShow;
+    if (rate >= 100) {
+      baseShow = `<span class="rate-from">1 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${rate.toFixed(0)}</span>`;
+    } else if (rate >= 10) {
+      baseShow = `<span class="rate-from">100 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${(rate * 100).toFixed(0)}</span>`;
+    } else {
+      baseShow = `<span class="rate-from">1,000 ${c.code}</span> <span class="rate-eq">=</span> <span class="rate-to">₩${(rate * 1000).toFixed(0)}</span>`;
+    }
+    display.innerHTML = baseShow;
+    
+    if (rateSource === 'live') {
+      const time = rateUpdated ? rateUpdated.toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) : '오늘';
+      meta.innerHTML = `<span class="rate-live">🟢 실시간</span> · ${time} 업데이트`;
+    } else {
+      meta.innerHTML = `<span class="rate-fallback">🟡 기준값</span> · 인터넷 없음`;
+    }
+  });
+  
+  // 상태 바 업데이트
+  const statusText = document.getElementById('rate-status-text');
+  const statusDot = document.getElementById('status-dot');
+  if (statusText && statusDot) {
+    if (rateSource === 'live') {
+      statusText.textContent = '실시간 환율 적용 중';
+      statusDot.className = 'status-dot status-live';
+    } else {
+      statusText.textContent = '기준값 사용 중 (인터넷 연결 시 자동 업데이트)';
+      statusDot.className = 'status-dot status-fallback';
+    }
+  }
+}
+
+function convertFromForeign(curId, value) {
+  const c = CURRENCIES_DATA.find(x => x.id === curId);
+  if (!c) return;
+  const v = parseFloat(value);
+  const krwInput = document.getElementById('input-krw-' + curId);
+  if (isNaN(v) || v === 0) {
+    krwInput.value = '';
+    return;
+  }
+  const krw = v * currentRates[c.code];
+  krwInput.value = Math.round(krw);
+}
+
+function convertFromKRW(curId, value) {
+  const c = CURRENCIES_DATA.find(x => x.id === curId);
+  if (!c) return;
+  const v = parseFloat(value);
+  const foreignInput = document.getElementById('input-foreign-' + curId);
+  if (isNaN(v) || v === 0) {
+    foreignInput.value = '';
+    return;
+  }
+  const foreign = v / currentRates[c.code];
+  // 소수점: 큰 환율(작은 단위)이면 정수, 작은 환율(큰 단위)이면 소수점 2자리
+  foreignInput.value = currentRates[c.code] >= 100 ? foreign.toFixed(2) : Math.round(foreign);
+}
+
+function setForeign(curId, val) {
+  const input = document.getElementById('input-foreign-' + curId);
+  input.value = val;
+  convertFromForeign(curId, val);
+}
+
+function setKRW(curId, val) {
+  const input = document.getElementById('input-krw-' + curId);
+  input.value = val;
+  convertFromKRW(curId, val);
+}
+
+// 환율 탭 진입 시 — 환율 fetch + 자동 통화 스크롤
+async function autoScrollToCurrentCurrency() {
+  // 1. 환율 fetch 시도
+  await fetchLiveRates();
+  updateRateDisplays();
+  
+  // 2. 위치 감지 (GPS 우선 + 일정 폴백 — 정보 탭과 동일 로직 재사용)
+  let result = await detectByGPS();
+  if (!result) result = detectBySchedule();
+  if (!result) return; // 자동 스크롤 안 함
+  
+  // 3. 해당 국가에 매칭되는 통화 찾기
+  const targetCur = CURRENCIES_DATA.find(c => c.country_id === result.countryId);
+  if (!targetCur) return;
+  
+  const el = document.querySelector(`[data-currency="${targetCur.id}"]`);
+  if (!el) return;
+  
+  // 4. 토스트 + 스크롤 + 하이라이트
+  showLocationIndicator(result);
+  setTimeout(() => {
+    const topbar = document.querySelector('.topbar');
+    const cnav = document.querySelector('.cur-jump-nav');
+    const offset = (topbar?.offsetHeight || 100) + (cnav?.offsetHeight || 42) + 12;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+    el.classList.add('cur-card-highlight');
+    setTimeout(() => el.classList.remove('cur-card-highlight'), 2800);
+  }, 400);
+}
+
+function jumpToCurrency(curId) {
+  const el = document.querySelector(`[data-currency="${curId}"]`);
+  if (el) {
+    const topbar = document.querySelector('.topbar');
+    const cnav = document.querySelector('.cur-jump-nav');
+    const offset = (topbar?.offsetHeight || 100) + (cnav?.offsetHeight || 42) + 12;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+}
+
+// 페이지 로드 시 환율 미리 한 번 fetch (백그라운드)
+window.addEventListener('load', () => {
+  setTimeout(async () => {
+    await fetchLiveRates();
+    updateRateDisplays();
+  }, 500);
+});
 
 function doSearch(q) {
   q = q.toLowerCase().trim();
