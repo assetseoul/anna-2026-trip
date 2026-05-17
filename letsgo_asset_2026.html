@@ -248,6 +248,58 @@ body {
 .card-hotel { background: #FAF6EF; border-color: var(--bl); }
 .card-ma { background: white; border-color: var(--red); border-left-width: 3px; }
 .card-transport { background: #F3F0F8; border-color: #DDD5E6; }
+.card-casting { 
+  background: linear-gradient(135deg, #F4E8FA 0%, #EBDDF5 100%);
+  border-color: #B57FCC;
+  border-left-width: 3px;
+  border-left-color: #7B3FA0;
+}
+
+/* ─── 오픈 캐스팅 카드 ─── */
+.cast-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.cast-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #7B3FA0;
+  letter-spacing: 1.2px;
+  background: rgba(123,63,160,0.12);
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+.cast-time {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.2px;
+}
+.cast-venue {
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.cast-addr {
+  font-size: 10.5px;
+  color: var(--stone);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.cast-note {
+  font-size: 10.5px;
+  color: #7B3FA0;
+  font-style: italic;
+  margin-top: 4px;
+  font-weight: 500;
+}
 
 /* card content */
 .card-route {
@@ -1389,6 +1441,19 @@ body {
       </div>
       <div class="day-cards">
         
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">09:30 - 10:30</div>
+            </div>
+            <div class="cast-venue">📍 Marriott Tbilisi Hotel Lobby</div>
+            <div class="cast-addr">13 Shota Rustaveli Ave, Tbilisi 0108</div>
+            <div class="cast-note">오전 오픈 캐스팅 (인스타 공지)</div>
+          </div>
+        </div>
+
         <div class="card card-ma">
           <div class="card-icon">🤝</div>
           <div class="card-body">
@@ -1430,6 +1495,19 @@ body {
             
           </div>
         </div>
+
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">18:00 - 19:00</div>
+            </div>
+            <div class="cast-venue">📍 Marriott Tbilisi Hotel Lobby</div>
+            <div class="cast-addr">13 Shota Rustaveli Ave, Tbilisi 0108</div>
+            <div class="cast-note">저녁 오픈 캐스팅 (인스타 공지)</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1443,6 +1521,19 @@ body {
       </div>
       <div class="day-cards">
         
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">10:00 - 12:00</div>
+            </div>
+            <div class="cast-venue">📍 Marriott Tbilisi Hotel Lobby</div>
+            <div class="cast-addr">13 Shota Rustaveli Ave, Tbilisi 0108</div>
+            <div class="cast-note">오전 오픈 캐스팅 (인스타 공지)</div>
+          </div>
+        </div>
+
         <div class="card card-ma">
           <div class="card-icon">🤝</div>
           <div class="card-body">
@@ -1468,6 +1559,19 @@ body {
             <div class="phone-display">+995 555 36 1313</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995555361313" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995555361313"><span class="btn-icon">📞</span>전화</a></div>
             
             
+          </div>
+        </div>
+
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">18:00 - 19:00</div>
+            </div>
+            <div class="cast-venue">📍 Marriott Tbilisi Hotel Lobby</div>
+            <div class="cast-addr">13 Shota Rustaveli Ave, Tbilisi 0108</div>
+            <div class="cast-note">저녁 오픈 캐스팅 (인스타 공지)</div>
           </div>
         </div>
       </div>
@@ -1590,6 +1694,19 @@ body {
             
           </div>
         </div>
+
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">17:30 - 19:00</div>
+            </div>
+            <div class="cast-venue">📍 Courtyard by Marriott Yerevan Hotel Lobby</div>
+            <div class="cast-addr">5 Teryan Street, Yerevan</div>
+            <div class="cast-note">오픈 캐스팅 (인스타 공지)</div>
+          </div>
+        </div>
       </div>
     </div>
     </section>
@@ -1682,6 +1799,19 @@ body {
             
           </div>
         </div>
+
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">17:30 - 19:00</div>
+            </div>
+            <div class="cast-venue">📍 Junó Hotel Sofia Lobby</div>
+            <div class="cast-addr">ul. Ivan Denkoglu 40, 1000 Sofia</div>
+            <div class="cast-note">오픈 캐스팅 (인스타 공지)</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1734,6 +1864,19 @@ body {
             <div class="phone-display">+359 89 235 6400</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359892356400" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359892356400"><span class="btn-icon">📞</span>전화</a></div>
             
             <div class="ma-note">📌 호텔 캐스팅</div>
+          </div>
+        </div>
+
+        <div class="card card-casting">
+          <div class="card-icon">👾</div>
+          <div class="card-body">
+            <div class="cast-header">
+              <div class="cast-label">OPEN CASTING</div>
+              <div class="cast-time">18:00 - 19:00</div>
+            </div>
+            <div class="cast-venue">📍 Junó Hotel Sofia Lobby</div>
+            <div class="cast-addr">ul. Ivan Denkoglu 40, 1000 Sofia</div>
+            <div class="cast-note">오픈 캐스팅 (인스타 공지)</div>
           </div>
         </div>
       </div>
