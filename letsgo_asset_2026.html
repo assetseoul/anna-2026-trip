@@ -479,6 +479,69 @@ body {
   font-weight: 500;
 }
 
+/* ─── 🎁 선물 뱃지 ─── */
+.ma-gift {
+  font-size: 11.5px;
+  color: var(--navy);
+  background: linear-gradient(135deg, #FCE9E5 0%, #F9D5CE 100%);
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-top: 6px;
+  border-left: 3px solid var(--red);
+  font-weight: 500;
+}
+.ma-gift b { color: var(--red); }
+
+/* ─── 📍 주소 + 호출 버튼 블록 ─── */
+.ma-address-block {
+  background: var(--bg);
+  border: 1px solid var(--bl);
+  border-radius: 7px;
+  padding: 8px 10px;
+  margin-top: 6px;
+}
+.ma-address {
+  font-size: 11px;
+  color: var(--navy);
+  font-weight: 600;
+  margin-bottom: 3px;
+  line-height: 1.4;
+}
+.ma-from-base {
+  font-size: 10.5px;
+  color: var(--stone);
+  margin-bottom: 6px;
+  font-style: italic;
+}
+.ma-map-btns {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+.btn-yandex, .btn-gmap {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px;
+  padding: 8px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn-yandex {
+  background: #FC3F1D;
+  color: white;
+}
+.btn-yandex:active { background: #D8341A; transform: scale(0.97); }
+.btn-gmap {
+  background: white;
+  color: var(--navy);
+  border: 1px solid var(--bl);
+}
+.btn-gmap:active { background: var(--ivory); transform: scale(0.97); }
+
 /* ─── 점심 미팅 블록 ─── */
 .lunch-block {
   background: linear-gradient(135deg, #FFF8E8 0%, #FAF0DA 100%);
@@ -1431,7 +1494,7 @@ body {
       </div>
     </div>
 
-    <div class="day-block" data-date="5/18" data-searchable="look mgmt nino geo models nino ic mgmt iya kay">
+    <div class="day-block" data-date="5/18" data-searchable="look mgmt nino geo models nino (다른 사람!) ic mgmt iya kay">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/18</span>
@@ -1463,6 +1526,13 @@ body {
             </div>
             <div class="contact-name">👤 Nino</div>
             <div class="phone-display">+995 577 46 7050</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995577467050" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995577467050"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> VIP 1 + 일반 3 = 4개</div>
+            
+            <div class="ma-address-block">
+              <div class="ma-address">📍 37 Sh. Rustaveli Avenue, Tbilisi 0108</div>
+              <div class="ma-from-base">🏨 도보 9분 (770m)</div>
+              <div class="ma-map-btns"><a class="btn-gmap" href="https://www.google.com/maps/search/?api=1&query=41.7035579,44.7913198" target="_blank" rel="noopener"><span class="btn-icon">📍</span>지도</a><a class="btn-yandex" href="https://yandex.com/maps/?rtext=41.69905,44.7982845~41.7035579,44.7913198&rtt=taxi" target="_blank" rel="noopener"><span class="btn-icon">🚕</span>Yandex 호출</a></div>
+            </div>
             
             
           </div>
@@ -1475,8 +1545,15 @@ body {
               <div class="ma-time">14:00</div>
               <div class="ma-agency">Geo Models</div>
             </div>
-            <div class="contact-name">👤 Nino</div>
+            <div class="contact-name">👤 Nino (다른 사람!)</div>
             <div class="phone-display">+995 599 85 8404</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995599858404" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995599858404"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 일반 2개</div>
+            
+            <div class="ma-address-block">
+              <div class="ma-address">📍 Zurab Anjaparidze Str. #4, Tbilisi</div>
+              <div class="ma-from-base">🏨 Yandex 약 25분 (7.2km · €8-10)</div>
+              <div class="ma-map-btns"><a class="btn-gmap" href="https://www.google.com/maps/search/?api=1&query=41.7229276,44.717089" target="_blank" rel="noopener"><span class="btn-icon">📍</span>지도</a><a class="btn-yandex" href="https://yandex.com/maps/?rtext=41.69905,44.7982845~41.7229276,44.717089&rtt=taxi" target="_blank" rel="noopener"><span class="btn-icon">🚕</span>Yandex 호출</a></div>
+            </div>
             
             
           </div>
@@ -1491,6 +1568,13 @@ body {
             </div>
             <div class="contact-name">👤 Iya Kay</div>
             <div class="phone-display">+995 577 55 8675</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995577558675" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995577558675"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 일반 5개</div>
+            
+            <div class="ma-address-block">
+              <div class="ma-address">📍 Tskneti Hwy 63, Tbilisi</div>
+              <div class="ma-from-base">🏨 Yandex 약 22분 (6.5km · €7-9) · Geo에서 4분 거리</div>
+              <div class="ma-map-btns"><a class="btn-gmap" href="https://www.google.com/maps/search/?api=1&query=41.7125256,44.7214857" target="_blank" rel="noopener"><span class="btn-icon">📍</span>지도</a><a class="btn-yandex" href="https://yandex.com/maps/?rtext=41.69905,44.7982845~41.7125256,44.7214857&rtt=taxi" target="_blank" rel="noopener"><span class="btn-icon">🚕</span>Yandex 호출</a></div>
+            </div>
             
             
           </div>
@@ -1543,8 +1627,10 @@ body {
             </div>
             <div class="contact-name">👤 Ika</div>
             <div class="phone-display">+995 577 21 0361</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995577210361" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995577210361"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 2인용 한 팩</div>
             
-            <div class="ma-note">📌 호텔캐스팅</div>
+            
+            <div class="ma-note">📌 호텔캐스팅 (에이전트 부부)</div>
           </div>
         </div>
 
@@ -1557,8 +1643,15 @@ body {
             </div>
             <div class="contact-name">👤 Nini</div>
             <div class="phone-display">+995 555 36 1313</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/995555361313" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+995555361313"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 도자기 1팩</div>
             
+            <div class="ma-address-block">
+              <div class="ma-address">📍 Mtskheta Street 18, Tbilisi (Vake district)</div>
+              <div class="ma-from-base">🏨 Yandex 약 12분 (3.3km · €3-4)</div>
+              <div class="ma-map-btns"><a class="btn-gmap" href="https://www.google.com/maps/search/?api=1&query=41.7059916,44.7714227" target="_blank" rel="noopener"><span class="btn-icon">📍</span>지도</a><a class="btn-yandex" href="https://yandex.com/maps/?rtext=41.69905,44.7982845~41.7059916,44.7714227&rtt=taxi" target="_blank" rel="noopener"><span class="btn-icon">🚕</span>Yandex 호출</a></div>
+            </div>
             
+            <div class="ma-note">📌 🚪 2nd entrance · door code 248 (push together)</div>
           </div>
         </div>
 
@@ -1648,6 +1741,8 @@ body {
             </div>
             <div class="contact-name">👤 Nina</div>
             <div class="phone-display">+374 43 70 8356</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37443708356" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37443708356"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 작은선물 1</div>
+            
             
             <div class="ma-note">📌 호텔미팅 (에이전트)</div>
           </div>
@@ -1662,6 +1757,8 @@ body {
             </div>
             <div class="contact-name">👤 Lidia</div>
             <div class="phone-display">+374 93 23 1113</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37493231113" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37493231113"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 일반 3</div>
+            
             
             
           </div>
@@ -1676,6 +1773,8 @@ body {
             </div>
             <div class="contact-name">👤 Eric</div>
             <div class="phone-display">+374 33 31 0033</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37433310033" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37433310033"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> ❌ 선물 없음</div>
+            
             
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
@@ -1690,6 +1789,8 @@ body {
             </div>
             <div class="contact-name">👤 Gor</div>
             <div class="phone-display">+374 77 40 3304</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/37477403304" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+37477403304"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 일반 3</div>
+            
             
             
           </div>
@@ -1781,6 +1882,8 @@ body {
             </div>
             <div class="contact-name">👤 Lina</div>
             <div class="phone-display">+359 88 583 5499</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359885835499" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359885835499"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 호텔캐스팅용</div>
+            
             
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
@@ -1795,6 +1898,8 @@ body {
             </div>
             <div class="contact-name">👤 Radostina</div>
             <div class="phone-display">+359 88 865 6016</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359888656016" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359888656016"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 2개</div>
+            
             
             
           </div>
@@ -1834,6 +1939,8 @@ body {
             </div>
             <div class="contact-name">👤 Kirilka Ebru</div>
             <div class="phone-display">+359 88 944 5137</div><div class="phone-display phone-alt">+359 88 208 1193</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359889445137" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359889445137"><span class="btn-icon">📞</span>전화</a></div><div class="contact-row contact-row-alt"><a class="btn-wa btn-sm" href="https://wa.me/359882081193" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WA (보조)</a><a class="btn-tel btn-sm" href="tel:+359882081193"><span class="btn-icon">📞</span>전화 (보조)</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 1개</div>
+            
             
             
           </div>
@@ -1848,6 +1955,8 @@ body {
             </div>
             <div class="contact-name">👤 Dian</div>
             <div class="phone-display">+359 88 560 3622</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359885603622" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359885603622"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 3개</div>
+            
             
             
           </div>
@@ -1862,8 +1971,10 @@ body {
             </div>
             <div class="contact-name">👤 Angel</div>
             <div class="phone-display">+359 89 235 6400</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/359892356400" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+359892356400"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 호텔캐스팅용</div>
             
-            <div class="ma-note">📌 호텔 캐스팅</div>
+            
+            <div class="ma-note">📌 호텔 캐스팅 (에이전트 1명)</div>
           </div>
         </div>
 
@@ -2035,6 +2146,8 @@ body {
             <div class="phone-display">+40 722 241 141</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40722241141" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40722241141"><span class="btn-icon">📞</span>전화</a></div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2047,6 +2160,8 @@ body {
             </div>
             <div class="contact-name">👤 Toni</div>
             <div class="phone-display">+40 723 238 181</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40723238181" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40723238181"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             
           </div>
@@ -2063,6 +2178,8 @@ body {
             <div class="phone-display">+40 799 975 895</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40799975895" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40799975895"><span class="btn-icon">📞</span>전화</a></div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2075,6 +2192,8 @@ body {
             </div>
             <div class="contact-name">👤 Mari</div>
             <div class="phone-display">+40 744 765 968</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40744765968" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40744765968"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             
           </div>
@@ -2101,6 +2220,8 @@ body {
             </div>
             <div class="contact-name">👤 Bogdan</div>
             <div class="phone-display">+40 722 221 212</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/40722221212" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+40722221212"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             
           </div>
@@ -2220,6 +2341,8 @@ body {
             <div class="phone-display">+381 66 5566456</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/381665566456" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+381665566456"><span class="btn-icon">📞</span>전화</a></div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2232,6 +2355,8 @@ body {
             </div>
             <div class="contact-name">👤 Arkan</div>
             <div class="phone-display">+381 63 1215903</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/381631215903" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+381631215903"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             
           </div>
@@ -2248,6 +2373,8 @@ body {
             <div class="phone-display">+381 64 6107290</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/381646107290" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+381646107290"><span class="btn-icon">📞</span>전화</a></div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2260,6 +2387,8 @@ body {
             </div>
             <div class="contact-name">👤 친한 모델한테 구걸 중</div>
             <div class="no-contact">📵 연락처 미확보</div>
+            
+            
             
             <div class="ma-note">📌 확정 전</div>
           </div>
@@ -2340,6 +2469,8 @@ body {
             <div class="no-contact">📵 연락처 미확보</div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2352,6 +2483,8 @@ body {
             </div>
             <div class="contact-name">👤 Danijela</div>
             <div class="phone-display">+385 95 396 5701</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385953965701" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385953965701"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
@@ -2368,6 +2501,8 @@ body {
             <div class="no-contact">📵 연락처 미확보</div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2380,6 +2515,8 @@ body {
             </div>
             <div class="contact-name">👤 Ivan</div>
             <div class="phone-display">+385 95 5501 652</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385955501652" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385955501652"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             <div class="ma-note">📌 호텔캐스팅</div>
           </div>
@@ -2443,6 +2580,8 @@ body {
             <div class="phone-display">+385 91 571 3569</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385915713569" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385915713569"><span class="btn-icon">📞</span>전화</a></div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2455,6 +2594,8 @@ body {
             </div>
             <div class="contact-name">👤 Marko</div>
             <div class="no-contact">📵 연락처 미확보</div>
+            
+            
             
             
           </div>
@@ -2471,6 +2612,8 @@ body {
             <div class="no-contact">📵 연락처 미확보</div>
             
             
+            
+            
           </div>
         </div>
 
@@ -2483,6 +2626,8 @@ body {
             </div>
             <div class="contact-name">👤 Bonbon</div>
             <div class="phone-display">+385 91 614 8056</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/385916148056" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+385916148056"><span class="btn-icon">📞</span>전화</a></div>
+            
+            
             
             <div class="lunch-block">
               <div class="lunch-label">🍽 점심 미팅</div>
