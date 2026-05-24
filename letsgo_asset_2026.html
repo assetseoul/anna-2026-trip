@@ -1334,6 +1334,13 @@ body {
   letter-spacing: 1px;
 }
 
+
+.transport-addr { font-size: 11px; color: var(--navy); margin-top: 4px; line-height: 1.4; }
+.transport-phone { margin-top: 6px; }
+.transport-booking { margin-top: 6px; }
+.btn-booking { display: inline-flex; align-items: center; gap: 4px; padding: 8px 12px; background: var(--red); color: white; border-radius: 6px; font-size: 11.5px; font-weight: 600; text-decoration: none; font-family: 'DM Sans', sans-serif; }
+.btn-booking:active { background: #c52d12; transform: scale(0.97); }
+.transport-note { font-size: 11px; color: var(--stone); margin-top: 6px; font-style: italic; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -2083,10 +2090,10 @@ body {
           <div class="card-icon">✈️</div>
           <div class="card-body">
             <div class="card-route">IST → OTP</div>
-            <div class="time-line">🕐 17:00 - 18:20</div>
-            <div class="card-detail">창규 별도편 · Anima Wings A2725 · 위탁수하물 미포함</div>
-            <div class="note-line">⚠ ⚠ 동일편 만석으로 별도 발권 (PNR 1400826962649422 · ₩335,300) · 취소 요청 중 (피드백 대기)</div>
-            <div class="bgs"><span class="b bc">창규</span><span class="b bw">⚠ 미발권</span></div>
+            <div class="time-line">🕐 10:15 - 12:00</div>
+            <div class="card-detail">TAROM RO262 · 창규 변경편 (PNR 1400827094644366 · ₩480,000)</div>
+            <div class="note-line">⚠ ✅ 발권 완료 (실제 이용함) · ⚠ 기존 Anima Wings 편(₩335,300)은 트립닷컴 전액 취소 처리 진행 중 — 이번주 팔로우업 필요</div>
+            <div class="bgs"><span class="b bc">창규</span><span class="b bo">✓ 발권완료</span></div>
           </div>
         </div>
 
@@ -2487,7 +2494,7 @@ body {
         </div>
       </div>
       
-    <div class="day-block" data-date="5/28" data-searchable="beg → zag doubletree by hilton zagreb 3467452644 models by danijela danijela midkenn robert im studio ivan faith model vanja">
+    <div class="day-block" data-date="5/28" data-searchable="beg → zag 🚗 sixt 렌트카 픽업 (자그레브 공항) 9733701454 doubletree by hilton zagreb 3467452644 models by danijela danijela midikenn robert im studio ivan faith model vanja">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/28</span>
@@ -2505,6 +2512,20 @@ body {
             <div class="card-detail">JU600 에어 세르비아 · ATR 72 · 수하물 8kg / 23kg</div>
             <div class="note-line">⚠ 안나·회준·창규 동일편 (창규 PNR 1400826962687822)</div>
             <div class="bgs"><span class="b ba">안나</span><span class="b bh">회준</span><span class="b bc">창규</span><span class="b bo">✓ 발권완료</span></div>
+          </div>
+        </div>
+
+        <div class="card card-transport">
+          <div class="card-icon">🚗</div>
+          <div class="card-body">
+            <div class="hotel-name">🚗 SIXT 렌트카 픽업 (자그레브 공항)</div>
+            <div class="card-detail">⏰ 픽업 11:00 · BMW X1 (SFAR) · 자그레브 공항 → 호텔 주차 → 5/30 11:00 스플리트 공항 반납 · €423.66 · 보안코드 00b2addacc</div>
+            <div class="transport-addr">📍 Rudolfa Fizira 21, 10150 Zagreb · 공항 도착 홀 (Nero 카페 옆)</div>
+            <div class="transport-phone"><a class="btn-tel-sm" href="tel:+38516651599"><span class="btn-icon">📞</span>+385 1 6651 599</a></div>
+            <div class="transport-booking"><a class="btn-booking" href="https://www.sixt.com/php/reservation/show?res=9733701454&name=HEO" target="_blank" rel="noopener"><span class="btn-icon">📄</span>예약 확인 페이지</a></div>
+            <div class="hotel-ref">#9733701454</div>
+            <div class="transport-note">📄 Booking confirmation PDF — Sixt 공식 페이지에서 조회 가능 (예약번호 + 성 HEO)</div>
+            <div class="bgs"><span class="b bo">✓ 예약완료</span></div>
           </div>
         </div>
 
@@ -2566,14 +2587,14 @@ body {
           <div class="card-body">
             <div class="ma-header">
               <div class="ma-time">14:00</div>
-              <div class="ma-agency">Midkenn</div>
+              <div class="ma-agency">Midikenn</div>
             </div>
             <div class="contact-name">👤 Robert</div>
-            <div class="no-contact">📵 연락처 미확보</div>
+            <div class="phone-display">+44 7731 463768</div><div class="contact-row"><a class="btn-wa" href="https://wa.me/447731463768" target="_blank" rel="noopener"><span class="btn-icon">💬</span>WhatsApp</a><a class="btn-tel" href="tel:+447731463768"><span class="btn-icon">📞</span>전화</a></div>
+            <div class="ma-gift">🎁 <b>선물:</b> 일반 1</div>
             
             
-            
-            <div class="ma-note">📌 호텔캐스팅</div>
+            <div class="ma-note">📌 호텔캐스팅 · 에이전트 1명</div>
           </div>
         </div>
 
@@ -2611,7 +2632,7 @@ body {
       </div>
     </div>
 
-    <div class="day-block" data-date="5/29" data-searchable="sixt 렌트카 픽업 9733701454">
+    <div class="day-block" data-date="5/29" data-searchable="🚗 자그레브 → 리예카 출발 bmw x1">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/29</span>
@@ -2624,9 +2645,13 @@ body {
         <div class="card card-transport">
           <div class="card-icon">🚗</div>
           <div class="card-body">
-            <div class="hotel-name">SIXT 렌트카 픽업</div>
-            <div class="card-detail">BMW X1 · ZAG → SPU · €423.66</div>
-            <div class="hotel-ref">#9733701454</div>
+            <div class="hotel-name">🚗 자그레브 → 리예카 출발</div>
+            <div class="card-detail">⏰ 늦어도 08:30 출발 · 약 1.5시간 · 12:00 봉봉 점심 미팅 시간 엄수 필수</div>
+            
+            
+            
+            <div class="hotel-ref">#BMW X1</div>
+            
             <div class="bgs"><span class="b bo">✓ 예약완료</span></div>
           </div>
         </div>
@@ -2644,7 +2669,7 @@ body {
         </div>
       </div>
       
-    <div class="day-block" data-date="5/29" data-searchable="n models belizar faith model marko · vanja bonbon (casting director) bonbon">
+    <div class="day-block" data-date="5/29" data-searchable="n models belizar faith model marko · vanja bonbon (casting director) bonbon 회준 슬로베니아 이동 버스 - 미예매">
       <div class="day-header">
         <div class="day-date">
           <span class="day-num">5/29</span>
@@ -2709,6 +2734,20 @@ body {
           </div>
         </div>
 <div class="note-card">📍 자그레브 → 리예카 약 1.5시간 · 리예카 → 스플리트 약 4.5시간</div>
+
+        <div class="card card-transport">
+          <div class="card-icon">🚗</div>
+          <div class="card-body">
+            <div class="hotel-name">회준 슬로베니아 이동</div>
+            <div class="card-detail">리예카 → 슬로베니아 (버스 이동 예정 · 5/29 늦오후~5/30 사이)</div>
+            
+            
+            
+            <div class="hotel-ref">#버스 - 미예매</div>
+            
+            <div class="bgs"><span class="b bw">⚠ 미발권</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2748,7 +2787,7 @@ body {
             <div class="bgs"><span class="b bc">창규</span><span class="b bw">⚠ 미발권</span></div>
           </div>
         </div>
-<div class="note-card">🎬 스카우팅 트립 종료 · 다음 일정은 안나·미라 크로아티아 홀리데이</div>
+<div class="note-card">🎬 스카우팅 트립 종료 · 한 분 한 분 정말 수고 많으셨습니다! 🙌✨</div>
       </div>
     </div>
     </section>
