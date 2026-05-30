@@ -22,7 +22,7 @@
   --warn:#C53030; --warn-bg:#FFF5F5;
   --ok:#276749; --ok-bg:#E6F4EE;
   --pub:#7B3FA0; --pub-bg:#F3EAFF;
-  --EUR: 1720;
+  --EUR: 1750;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
@@ -222,6 +222,70 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
    BUDGET TAB
 ══════════════════════════════════ */
 #budget-panel { display: none; }
+
+/* ── BACKUP CARD ── */
+.backup-card {
+  background: white;
+  margin: 14px;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid var(--bl);
+  box-shadow: 0 1px 3px rgba(15,25,35,0.04);
+}
+.backup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.backup-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  color: var(--deep);
+}
+.backup-status {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: var(--ok-bg);
+  color: var(--ok);
+  font-family: 'DM Mono', monospace;
+}
+.backup-status.warn {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.backup-info {
+  font-size: 11px;
+  color: var(--stone);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.backup-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.backup-btn {
+  padding: 10px;
+  border: 1px solid var(--bl);
+  background: var(--bg);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--deep);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.backup-btn:active { transform: scale(0.97); background: var(--gold-light); }
+.backup-note {
+  font-size: 10px;
+  color: var(--stone);
+  text-align: center;
+  margin-top: 4px;
+  line-height: 1.4;
+}
 #info-panel { display: none; }
 
 /* ── INFO TAB ── */
@@ -652,7 +716,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   <!-- LEGEND -->
   <div class="legend">
     <div class="lg"><div class="ld" style="background:var(--anna)"></div>안나</div>
-    <div class="lg"><div class="ld" style="background:var(--mira)"></div>미라 (5/30~6/10)</div>
+    <div class="lg"><div class="ld" style="background:var(--mira)"></div>미라 (5/29~6/10)</div>
     <div class="lg"><div class="ld" style="background:var(--hyojin)"></div>효진 (6/3~6/9)</div>
   </div>
 
@@ -670,22 +734,47 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
   <!-- 스플리트 -->
   <span class="sec">스플리트</span>
-  <div class="card" data-date="0529" data-searchable="5/29 스플리트 자그레브 hotel oscar 호텔오스카">
+  <div class="card" data-date="0529" data-searchable="5/29 스플리트 자그레브 hotel oscar 호텔오스카 미라 합류 OU443 OU656 VIE 비엔나">
     <div class="card-header">
       <div class="date-col"><div class="dm">5/29</div><div class="ds">금</div></div>
       <div class="card-body">
-        <div class="card-route">ZAG → 스플리트</div>
+        <div class="card-route">ZAG → 스플리트 · 미라 합류 🎉</div>
         <div class="detail-section">
-          <div class="detail-row"><span class="detail-icon">🚗</span><span class="detail-text">렌트카 이동 (리예카 MA 미팅 경유 옵션)</span></div>
+          <div class="detail-row"><span class="detail-icon">🚗</span><span class="detail-text">안나 렌트카 이동 (리예카 MA 미팅 경유 옵션)</span></div>
           <div class="detail-row"><span class="detail-icon">📍</span><span class="detail-text">리예카→스플리트 약 4.5h · 도착 ~22:30</span></div>
+          <div class="detail-row"><span class="detail-icon">✈️</span><span class="detail-text"><b>안나 SPU 공항 픽업</b> 22:50 · 미라 도착편 OU656</span></div>
         </div>
+
+        <!-- 미라 항공편 -->
+        <div class="flight-block">
+          <div class="flight-airline">🇭🇷 크로아티아항공 OU443 + OU656 · 미라 도착</div>
+          <div class="flight-route-row" style="margin-top:8px">
+            <div>
+              <div class="flight-time">19:45</div>
+              <div style="font-size:10px;color:var(--stone)">VIE 5/29(금)</div>
+            </div>
+            <div class="flight-arrow">──✈──</div>
+            <div style="text-align:right">
+              <div class="flight-time">22:50</div>
+              <div style="font-size:10px;color:var(--stone)">SPU 5/29(금)</div>
+            </div>
+          </div>
+          <div class="flight-info-row">자그레브 환승 1h30m · 총 3h05m · 일반석 · 위탁 1개</div>
+          <div style="margin-top:8px;background:var(--mira-bg);border-radius:8px;padding:8px 10px;font-size:10px;line-height:1.5;">
+            <div style="font-weight:500;color:var(--mira);margin-bottom:4px;">📍 세부 일정</div>
+            <div>• <b>OU443</b> 19:45 VIE → 20:35 ZAG <span style="color:var(--stone)">(DHC-8-400, 50m)</span></div>
+            <div>• <b>환승</b> 1h30m (수하물 재수속 불필요)</div>
+            <div>• <b>OU656</b> 22:05 ZAG → 22:50 SPU <span style="color:var(--stone)">(A220-300, 45m)</span></div>
+          </div>
+        </div>
+
         <div class="hotel-block">
           <div class="hotel-name">🏨 Hotel Oscar</div>
           <div class="ci-co-grid">
             <div class="ci-co-item">
               <div class="ci-co-label">체크인</div>
               <div class="ci-co-std">기준: 15:00~</div>
-              <div class="ci-co-our">예정: ~22:30</div>
+              <div class="ci-co-our">예정: ~23:30</div>
             </div>
             <div class="ci-co-item">
               <div class="ci-co-label">체크아웃</div>
@@ -699,7 +788,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
             <a class="lk" href="https://hoteloscar.book.rentl.io/reservations/734a48ee-6a7d-484d-be38-945dde267095?language=en" target="_blank">📎 예약확인서</a>
           </div>
         </div>
-        <div class="bgs"><span class="b ba">안나</span><div class="nt" style="font-size:10px;color:var(--stone);font-style:italic;margin-top:2px">미라 5/30 합류</div></div>
+        <div class="bgs"><span class="b ba">안나</span><span class="b bm">미라 (22:50 도착)</span></div>
       </div>
     </div>
   </div>
@@ -716,7 +805,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
           <div class="detail-row"><span class="detail-icon">⛴</span><span class="detail-text"><b>페리</b> 스플리트→수페타르 · Line 631 · 50분 · 선착순 ~€40</span></div>
         </div>
         <div class="bgs">
-          <span class="b ba">안나</span><span class="b bm">미라 합류</span>
+          <span class="b ba">안나</span><span class="b bm">미라</span>
           <a class="lk" href="https://www.jadrolinija.hr/en/travel/split_-_supetar_brac" target="_blank">🕐 페리 시간표</a>
         </div>
       </div>
@@ -1147,6 +1236,9 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
       <div style="font-size:9px;color:rgba(255,255,255,.3);text-align:center;margin-top:6px;font-family:'DM Mono',monospace;">
         (+) 받을 금액 / (-) 줄 금액
       </div>
+      <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.4;">
+        💡 6/3~6/8 효진 체류 = 3인 분배 · 그 외 = 안나·미라 2인 분배
+      </div>
     </div>
   </div>
 
@@ -1177,7 +1269,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     <div class="summary-divider"></div>
     <div class="summary-item">
       <div class="summary-label">1€ =</div>
-      <div class="summary-val">₩1,720</div>
+      <div class="summary-val">₩1,750</div>
     </div>
   </div>
 
@@ -1187,6 +1279,20 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
       <div class="emoji">🧾</div>
       <p>아직 지출 내역이 없어요.<br>위 버튼으로 추가해보세요!</p>
     </div>
+  </div>
+
+  <!-- 데이터 안전망 -->
+  <div class="backup-card">
+    <div class="backup-header">
+      <span class="backup-title">🛡 데이터 안전망</span>
+      <span class="backup-status" id="backup-status">대기 중</span>
+    </div>
+    <div class="backup-info" id="backup-info">자동 백업이 활성화되어 있어요</div>
+    <div class="backup-btns">
+      <button class="backup-btn" onclick="downloadBackup()">📥 JSON 다운로드</button>
+      <button class="backup-btn" onclick="uploadBackup()">📤 백업 복원</button>
+    </div>
+    <div class="backup-note">💡 중요한 시점에 JSON으로 다운로드 받아두면 100% 안전합니다</div>
   </div>
 
 </div><!-- end budget-panel -->
@@ -1207,7 +1313,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     <div class="info-common-grid">
       <div class="info-common-card">
         <div class="info-common-label">통화</div>
-        <div class="info-common-value">EUR (€)<br><span style="font-size:10px;color:var(--stone);">1€ ≈ ₩1,720</span></div>
+        <div class="info-common-value">EUR (€)<br><span style="font-size:10px;color:var(--stone);">1€ ≈ ₩1,750</span></div>
       </div>
       <div class="info-common-card">
         <div class="info-common-label">전압 / 콘센트</div>
@@ -1720,11 +1826,179 @@ window.dispatchEvent(new Event('firebase-ready'));
 </script>
 
 <script>
-const EUR_RATE = 1720;
+const EUR_RATE = 1750;
 let entries = [];
 let fundAmount = 0;
 let currentPayer = '';
 let currentFilter = 'all';
+
+// ════════════════════════════════════════
+// 🛡 데이터 안전망 (백업 & 복원 시스템)
+// ════════════════════════════════════════
+const BACKUP_KEY = 'asset_trip_croatia_v1';
+const BACKUP_TIMESTAMP_KEY = 'asset_trip_croatia_last_backup';
+
+// LocalStorage 자동 백업
+function saveLocalBackup() {
+  try {
+    const backup = {
+      version: 1,
+      timestamp: Date.now(),
+      fund: fundAmount,
+      entries: entries.map(e => {
+        const {fbKey, ...rest} = e;
+        return rest;
+      })
+    };
+    localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
+    localStorage.setItem(BACKUP_TIMESTAMP_KEY, String(Date.now()));
+    updateBackupStatus();
+  } catch(err) {
+    console.error('로컬 백업 실패:', err);
+  }
+}
+
+// LocalStorage 백업 조회
+function getLocalBackup() {
+  try {
+    const data = localStorage.getItem(BACKUP_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch(err) {
+    return null;
+  }
+}
+
+// 백업 상태 UI 업데이트
+function updateBackupStatus() {
+  const statusEl = document.getElementById('backup-status');
+  const infoEl = document.getElementById('backup-info');
+  if (!statusEl || !infoEl) return;
+  
+  const ts = localStorage.getItem(BACKUP_TIMESTAMP_KEY);
+  const backup = getLocalBackup();
+  
+  if (!backup || !ts) {
+    statusEl.textContent = '백업 없음';
+    statusEl.className = 'backup-status warn';
+    infoEl.textContent = '아직 자동 백업이 없어요';
+    return;
+  }
+  
+  const elapsed = Date.now() - parseInt(ts);
+  const min = Math.floor(elapsed / 60000);
+  const hr = Math.floor(min / 60);
+  let timeStr;
+  if (min < 1) timeStr = '방금 전';
+  else if (min < 60) timeStr = `${min}분 전`;
+  else if (hr < 24) timeStr = `${hr}시간 전`;
+  else timeStr = `${Math.floor(hr/24)}일 전`;
+  
+  statusEl.textContent = '✓ 자동';
+  statusEl.className = 'backup-status';
+  infoEl.textContent = `마지막 백업: ${timeStr} · ${backup.entries.length}건 · 공금 €${backup.fund}`;
+}
+
+// JSON 파일 다운로드
+function downloadBackup() {
+  const backup = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    fund: fundAmount,
+    entries: entries.map(e => {
+      const {fbKey, ...rest} = e;
+      return rest;
+    })
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().slice(0,10);
+  a.download = `croatia-trip-backup-${date}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert(`✅ 백업 완료\n${backup.entries.length}건 · 공금 €${backup.fund}`);
+}
+
+// JSON 파일 업로드 후 복원
+function uploadBackup() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json,.json';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const backup = JSON.parse(text);
+      if (!backup.entries || !Array.isArray(backup.entries)) {
+        alert('❌ 올바른 백업 파일이 아닙니다');
+        return;
+      }
+      const ok = confirm(
+        `📤 백업 복원\n\n` +
+        `복원할 데이터:\n` +
+        `• 지출 ${backup.entries.length}건\n` +
+        `• 공금 €${backup.fund}\n\n` +
+        `⚠️ 현재 Firebase 데이터를 모두 덮어쓰게 됩니다.\n` +
+        `계속하시겠어요?`
+      );
+      if (!ok) return;
+      await restoreFromBackup(backup);
+      alert(`✅ 복원 완료!\n지출 ${backup.entries.length}건 복원됨`);
+    } catch(err) {
+      alert('❌ 복원 실패: ' + err.message);
+    }
+  };
+  input.click();
+}
+
+// 백업 객체로 Firebase 복원
+async function restoreFromBackup(backup) {
+  if (!window._fb) throw new Error('Firebase 연결 안 됨');
+  // 공금 복원
+  await window._fb.setFund(backup.fund || 0);
+  // 기존 entries 모두 삭제
+  const oldEntries = [...entries];
+  for (const e of oldEntries) {
+    if (e.fbKey) await window._fb.removeEntry(e.fbKey);
+  }
+  // 새 entries 추가
+  for (const e of backup.entries) {
+    await window._fb.pushEntry(e);
+  }
+}
+
+// Firebase 비어있는데 LocalStorage에 백업 있으면 복구 제안
+let recoveryChecked = false;
+function checkAutoRecovery() {
+  if (recoveryChecked) return;
+  recoveryChecked = true;
+  
+  const backup = getLocalBackup();
+  // Firebase 데이터가 비어있고 + LocalStorage에 백업 있음
+  if (entries.length === 0 && fundAmount === 0 && backup && backup.entries.length > 0) {
+    const ts = parseInt(localStorage.getItem(BACKUP_TIMESTAMP_KEY) || '0');
+    const days = Math.floor((Date.now() - ts) / (1000*60*60*24));
+    const ok = confirm(
+      `🔄 자동 복구 알림\n\n` +
+      `Firebase가 비어있는데, 이 기기에 백업이 있어요:\n` +
+      `• 지출 ${backup.entries.length}건\n` +
+      `• 공금 €${backup.fund}\n` +
+      `• ${days}일 전 백업\n\n` +
+      `자동으로 복구하시겠어요?`
+    );
+    if (ok) {
+      restoreFromBackup(backup).then(() => {
+        alert('✅ 자동 복구 완료!');
+      }).catch(err => {
+        alert('❌ 복구 실패: ' + err.message);
+      });
+    }
+  }
+}
 
 // ── Firebase 연결 (준비되면 구독) ──
 function initFirebase() {
@@ -1733,6 +2007,7 @@ function initFirebase() {
     renderFund();
     calcSettle();
     renderSummary();
+    saveLocalBackup();  // 🛡 자동 백업
   });
   window._fb.onEntries(data => {
     entries = data;
@@ -1740,6 +2015,9 @@ function initFirebase() {
     renderSummary();
     calcSettle();
     renderEntries();
+    saveLocalBackup();  // 🛡 자동 백업
+    // 첫 데이터 로드 후 1.5초 뒤 자동 복구 체크
+    setTimeout(checkAutoRecovery, 1500);
   });
 }
 
@@ -1830,22 +2108,40 @@ function renderFund() {
 }
 
 // ── SETTLEMENT ──
+// ── 효진 체류 기간 판단 (6/3 12:00 ~ 6/9 06:00, 날짜 단위 처리) ──
+function isHyojinPresent(dateStr) {
+  if (!dateStr) return false;
+  // 6/3 ~ 6/8: 효진 체류 / 6/9은 새벽 출발이라 제외
+  return dateStr >= '2026-06-03' && dateStr <= '2026-06-08';
+}
+
+// 각 entry별 분배 멤버 결정
+function getSplitMembers(entry) {
+  // 효진이 직접 결제했으면 무조건 3인 분배 (효진이 거기 있었다는 의미)
+  if (entry.payer === '효진') return ['안나','미라','효진'];
+  // 효진 체류 기간이면 3인, 아니면 안나·미라 2인
+  return isHyojinPresent(entry.date) ? ['안나','미라','효진'] : ['안나','미라'];
+}
+
 function calcSettle() {
   const members = ['안나','미라','효진'];
   const paid = {안나:0, 미라:0, 효진:0};
-  let personal_total = 0;
+  const owed = {안나:0, 미라:0, 효진:0};
   entries.forEach(e => {
     if (e.payer !== '공금') {
       paid[e.payer] = (paid[e.payer]||0) + e.eur;
-      personal_total += e.eur;
+      const splitMembers = getSplitMembers(e);
+      const share = e.eur / splitMembers.length;
+      splitMembers.forEach(m => {
+        owed[m] = (owed[m]||0) + share;
+      });
     }
   });
-  const share = personal_total / 3;
   const idMap = {안나:'anna', 미라:'mira', 효진:'hyojin'};
   members.forEach(m => {
     const el = document.getElementById('settle-' + idMap[m]);
     if (!el) return;
-    const v = (paid[m]||0) - share;
+    const v = (paid[m]||0) - (owed[m]||0);
     el.textContent = (v>=0?'+':'') + '€' + v.toFixed(0);
     el.className = 'settle-net ' + (v>0.5?'pos':v<-0.5?'neg':'zero');
   });
@@ -1949,6 +2245,9 @@ function filterEntries(f) {
 
 // ── INIT ──
 autoScroll();
+updateBackupStatus();
+// 매 분마다 백업 상태 갱신
+setInterval(updateBackupStatus, 60000);
 </script>
 </body>
 </html>
