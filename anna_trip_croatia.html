@@ -601,6 +601,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 .entry-date-cat { font-size: 9px; color: var(--stone); font-family: 'DM Mono', monospace; }
 .entry-desc { font-size: 12px; font-weight: 400; color: #1A1A2E; }
 .entry-payer { font-size: 10px; color: var(--stone); margin-top: 2px; }
+.entry-split { font-size: 9px; color: var(--gold); margin-top: 3px; font-family: 'DM Mono', monospace; }
 .entry-amounts { text-align: right; }
 .entry-eur { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 300; color: #1A1A2E; }
 .entry-krw { font-size: 10px; color: var(--stone); }
@@ -671,6 +672,60 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 .payer-option.selected-미라 { border-color: var(--mira); background: var(--mira-bg); color: var(--mira); }
 .payer-option.selected-효진 { border-color: var(--hyojin); background: var(--hyojin-bg); color: var(--hyojin); }
 
+/* ── 분배 대상 선택 ── */
+.split-mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.split-mode-btn {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid var(--bl);
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--stone);
+  transition: all 0.15s;
+}
+.split-mode-btn.active {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  color: var(--deep);
+  font-weight: 500;
+}
+.split-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+.split-cb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--bl);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  user-select: none;
+  transition: all 0.15s;
+}
+.split-cb:has(input:checked) {
+  border-color: var(--gold);
+  background: var(--gold-light);
+  font-weight: 500;
+}
+.split-cb input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
 /* Budget summary bar */
 .budget-summary {
   background: var(--bg); border-bottom: 1px solid var(--bl);
@@ -688,7 +743,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-title">Croatia · Montenegro</div>
+  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.1</span></div>
   <span id="sync-indicator" style="font-size:10px;color:var(--gold);opacity:0;transition:opacity 0.3s;margin-right:4px;">✓ 저장됨</span>
   <a href="https://www.notion.so/2fdc50f0f2fb80a3938edcfe4f3373f4?source=copy_link" target="_blank" class="notion-btn">
     <span class="notion-icon">𝒩</span> 노션
@@ -1237,7 +1292,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
         (+) 받을 금액 / (-) 줄 금액
       </div>
       <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.4;">
-        💡 6/3~6/8 효진 체류 = 3인 분배 · 그 외 = 안나·미라 2인 분배
+        💡 6/3~6/8 효진 체류 = 3인 자동 분배 · 입력 시 직접 선택도 가능
       </div>
     </div>
   </div>
@@ -1783,6 +1838,24 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
         <div class="payer-option" onclick="selectPayer('효진')" id="p-효진">효진</div>
       </div>
     </div>
+
+    <!-- 분배 대상 (공금 아닐 때만 표시) -->
+    <div class="form-field" id="split-field" style="display:none;">
+      <label class="form-label">
+        분배 대상
+        <span id="split-auto-hint" style="font-size:10px;color:var(--stone);font-weight:400;margin-left:6px;"></span>
+      </label>
+      <div class="split-mode-toggle">
+        <div class="split-mode-btn active" id="split-mode-auto" onclick="setSplitMode('auto')">🤖 자동</div>
+        <div class="split-mode-btn" id="split-mode-manual" onclick="setSplitMode('manual')">✋ 직접 선택</div>
+      </div>
+      <div class="split-checkboxes" id="split-checkboxes" style="display:none;">
+        <label class="split-cb"><input type="checkbox" id="split-안나" checked><span>안나</span></label>
+        <label class="split-cb"><input type="checkbox" id="split-미라" checked><span>미라</span></label>
+        <label class="split-cb"><input type="checkbox" id="split-효진"><span>효진</span></label>
+      </div>
+    </div>
+
     <div class="form-field">
       <label class="form-label">메모 (선택)</label>
       <input class="form-input" type="text" id="f-memo" placeholder="추가 메모...">
@@ -2001,21 +2074,59 @@ function checkAutoRecovery() {
 }
 
 // ── Firebase 연결 (준비되면 구독) ──
+// Firebase 데이터 수신 상태 추적
+let _fbDataReceived = { fund: false, entries: false };
+let _fbLastSync = 0;
+
+function updateFbStatus() {
+  const statusEl = document.getElementById('backup-status');
+  const infoEl = document.getElementById('backup-info');
+  if (!statusEl) return;
+  
+  const now = Date.now();
+  const elapsed = now - _fbLastSync;
+  
+  if (_fbDataReceived.entries && _fbDataReceived.fund) {
+    statusEl.textContent = '🔥 Firebase ✓';
+    statusEl.className = 'backup-status';
+    if (infoEl) {
+      const cnt = entries.length;
+      infoEl.textContent = `실시간 연결 · ${cnt}건 · 공금 €${fundAmount}`;
+    }
+  } else if (elapsed > 5000) {
+    // 5초 안에 데이터 못 받음 = 연결 문제
+    statusEl.textContent = '⚠ 연결 실패';
+    statusEl.className = 'backup-status warn';
+    if (infoEl) infoEl.textContent = 'Firebase 데이터를 못 받았어요. 새로고침 시도하세요.';
+  }
+}
+
 function initFirebase() {
+  // 5초 후 연결 상태 체크
+  setTimeout(updateFbStatus, 5500);
+  
   window._fb.onFund(val => {
     fundAmount = val;
+    _fbDataReceived.fund = true;
+    _fbLastSync = Date.now();
     renderFund();
     calcSettle();
     renderSummary();
-    saveLocalBackup();  // 🛡 자동 백업
+    // 🛡 백업: 실제 데이터 수신 후에만 저장 (빈 데이터로 덮어쓰기 방지)
+    if (_fbDataReceived.entries) saveLocalBackup();
+    updateFbStatus();
   });
   window._fb.onEntries(data => {
     entries = data;
+    _fbDataReceived.entries = true;
+    _fbLastSync = Date.now();
     renderFund();
     renderSummary();
     calcSettle();
     renderEntries();
-    saveLocalBackup();  // 🛡 자동 백업
+    // 🛡 백업: 데이터가 있을 때만 저장 (빈 응답으로 백업 덮어쓰기 방지)
+    if (entries.length > 0 || fundAmount > 0) saveLocalBackup();
+    updateFbStatus();
     // 첫 데이터 로드 후 1.5초 뒤 자동 복구 체크
     setTimeout(checkAutoRecovery, 1500);
   });
@@ -2117,9 +2228,13 @@ function isHyojinPresent(dateStr) {
 
 // 각 entry별 분배 멤버 결정
 function getSplitMembers(entry) {
-  // 효진이 직접 결제했으면 무조건 3인 분배 (효진이 거기 있었다는 의미)
+  // 1순위: 수동 지정된 분배 대상이 있으면 그것 사용
+  if (entry.splitWith && Array.isArray(entry.splitWith) && entry.splitWith.length > 0) {
+    return entry.splitWith;
+  }
+  // 2순위: 효진이 직접 결제했으면 무조건 3인 분배
   if (entry.payer === '효진') return ['안나','미라','효진'];
-  // 효진 체류 기간이면 3인, 아니면 안나·미라 2인
+  // 3순위: 효진 체류 기간이면 3인, 아니면 안나·미라 2인 (자동)
   return isHyojinPresent(entry.date) ? ['안나','미라','효진'] : ['안나','미라'];
 }
 
@@ -2177,11 +2292,20 @@ function renderEntries() {
   sorted.forEach(e => {
     const div = document.createElement('div');
     div.className = 'entry-item ' + (payerClass[e.payer]||'');
+    // 분배 정보 표시 (공금 아닐 때만)
+    let splitInfo = '';
+    if (e.payer !== '공금') {
+      const members = getSplitMembers(e);
+      const isManual = e.splitWith && e.splitWith.length > 0;
+      const icon = isManual ? '✋' : '🤖';
+      splitInfo = `<div class="entry-split">${icon} 분배: ${members.join('·')}</div>`;
+    }
     div.innerHTML = `
       <div>
         <div class="entry-date-cat">${e.date} · ${catIcons[e.cat]||'📌'} ${e.cat}</div>
         <div class="entry-desc">${e.desc}</div>
         <div class="entry-payer">${e.payer==='공금'?'💼 공금':'👤 '+e.payer}${e.memo?' · '+e.memo:''}</div>
+        ${splitInfo}
       </div>
       <div class="entry-amounts">
         <div class="entry-eur">€${e.eur.toFixed(2)}</div>
@@ -2200,6 +2324,8 @@ function deleteEntry(fbKey) {
 }
 
 // ── MODAL ──
+let splitMode = 'auto'; // 'auto' | 'manual'
+
 function openModal() {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('f-date').value = today;
@@ -2208,6 +2334,14 @@ function openModal() {
   document.getElementById('f-memo').value = '';
   currentPayer = '';
   document.querySelectorAll('.payer-option').forEach(el=>el.className='payer-option');
+  // 분배 모드 초기화
+  splitMode = 'auto';
+  document.getElementById('split-field').style.display = 'none';
+  document.getElementById('split-mode-auto').classList.add('active');
+  document.getElementById('split-mode-manual').classList.remove('active');
+  document.getElementById('split-checkboxes').style.display = 'none';
+  // 날짜 변경 시 힌트 업데이트
+  document.getElementById('f-date').onchange = updateAutoSplitHint;
   document.getElementById('modal').classList.add('open');
 }
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
@@ -2217,6 +2351,51 @@ function selectPayer(p) {
   currentPayer = p;
   document.querySelectorAll('.payer-option').forEach(el=>el.className='payer-option');
   document.getElementById('p-'+p).className = 'payer-option selected-'+p;
+  // 공금이면 분배 필드 숨김, 아니면 표시
+  const splitField = document.getElementById('split-field');
+  if (p === '공금') {
+    splitField.style.display = 'none';
+  } else {
+    splitField.style.display = 'block';
+    updateAutoSplitHint();
+    // 직접 선택 모드면 결제자 본인 자동 체크
+    if (splitMode === 'manual') {
+      ['안나','미라','효진'].forEach(m => {
+        if (m === p) document.getElementById('split-'+m).checked = true;
+      });
+    }
+  }
+}
+
+// 자동 모드일 때 어떻게 분배될지 미리보기
+function updateAutoSplitHint() {
+  const date = document.getElementById('f-date').value;
+  const hintEl = document.getElementById('split-auto-hint');
+  if (!hintEl) return;
+  if (currentPayer === '효진') {
+    hintEl.textContent = '(자동: 안나·미라·효진 3인)';
+  } else if (isHyojinPresent(date)) {
+    hintEl.textContent = '(자동: 안나·미라·효진 3인)';
+  } else {
+    hintEl.textContent = '(자동: 안나·미라 2인)';
+  }
+}
+
+function setSplitMode(mode) {
+  splitMode = mode;
+  document.getElementById('split-mode-auto').classList.toggle('active', mode === 'auto');
+  document.getElementById('split-mode-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('split-checkboxes').style.display = mode === 'manual' ? 'grid' : 'none';
+  // 수동 모드로 전환 시: 자동 로직 기본값으로 체크박스 미리 설정
+  if (mode === 'manual') {
+    const date = document.getElementById('f-date').value;
+    const autoMembers = (currentPayer === '효진' || isHyojinPresent(date))
+      ? ['안나','미라','효진']
+      : ['안나','미라'];
+    ['안나','미라','효진'].forEach(m => {
+      document.getElementById('split-'+m).checked = autoMembers.includes(m);
+    });
+  }
 }
 
 function addEntry() {
@@ -2229,7 +2408,17 @@ function addEntry() {
     alert('날짜, 내용, 금액, 결제자를 모두 입력해주세요.');
     return;
   }
-  if (window._fb) window._fb.pushEntry({ date, desc, eur, cat, payer: currentPayer, memo });
+  // 분배 대상 결정
+  const entry = { date, desc, eur, cat, payer: currentPayer, memo };
+  if (currentPayer !== '공금' && splitMode === 'manual') {
+    const selected = ['안나','미라','효진'].filter(m => document.getElementById('split-'+m).checked);
+    if (selected.length === 0) {
+      alert('분배 대상을 최소 1명 이상 선택해주세요.');
+      return;
+    }
+    entry.splitWith = selected;
+  }
+  if (window._fb) window._fb.pushEntry(entry);
   showSync();
   closeModal();
 }
