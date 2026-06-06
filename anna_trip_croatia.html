@@ -528,7 +528,36 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   border-radius: 12px; padding: 12px 14px;
   margin-bottom: 10px;
 }
-.fund-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.45); font-family: 'DM Mono', monospace; margin-bottom: 4px; }
+.fund-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.45); font-family: 'DM Mono', monospace; margin-bottom: 8px; }
+.fund-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.fund-bd-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.fund-bd-label {
+  font-size: 10px;
+  color: rgba(255,255,255,.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'DM Mono', monospace;
+}
+.fund-bd-val {
+  font-size: 12px;
+  color: rgba(255,255,255,.7);
+  font-family: 'DM Mono', monospace;
+}
+.fund-bd-val.negative { color: #f5a589; }
+.fund-bd-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 4px 0 2px;
+}
 .fund-amount-row { display: flex; align-items: baseline; gap: 8px; }
 .fund-eur { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 300; color: var(--gold); line-height: 1; }
 .fund-krw { font-size: 11px; color: rgba(255,255,255,.4); }
@@ -602,6 +631,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 .entry-desc { font-size: 12px; font-weight: 400; color: #1A1A2E; }
 .entry-payer { font-size: 10px; color: var(--stone); margin-top: 2px; }
 .entry-split { font-size: 9px; color: var(--gold); margin-top: 3px; font-family: 'DM Mono', monospace; }
+.entry-split.fund { color: #8B7355; font-weight: 500; }
 .entry-amounts { text-align: right; }
 .entry-eur { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 300; color: #1A1A2E; }
 .entry-krw { font-size: 10px; color: var(--stone); }
@@ -661,6 +691,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   margin-top: 6px;
 }
 .payer-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+.payer-grid-3 { grid-template-columns: repeat(3,1fr); }
 .payer-option {
   border: 2px solid var(--bl); border-radius: 10px;
   padding: 8px 4px; text-align: center; cursor: pointer;
@@ -726,6 +757,18 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   cursor: pointer;
 }
 
+/* ── 공금 자동 차감 안내 ── */
+.fund-auto-hint {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--gold-light);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--deep);
+  line-height: 1.5;
+}
+
 /* Budget summary bar */
 .budget-summary {
   background: var(--bg); border-bottom: 1px solid var(--bl);
@@ -743,7 +786,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.1</span></div>
+  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.3</span></div>
   <span id="sync-indicator" style="font-size:10px;color:var(--gold);opacity:0;transition:opacity 0.3s;margin-right:4px;">✓ 저장됨</span>
   <a href="https://www.notion.so/2fdc50f0f2fb80a3938edcfe4f3373f4?source=copy_link" target="_blank" class="notion-btn">
     <span class="notion-icon">𝒩</span> 노션
@@ -1262,13 +1305,25 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     <div class="budget-header-inner">
       <div class="budget-title">💰 공금 & 정산</div>
       <div class="fund-card">
-        <div class="fund-label">공금 잔액 (미라 관리)</div>
-        <div class="fund-amount-row">
-          <div class="fund-eur" id="fund-balance">€0</div>
-          <div class="fund-krw" id="fund-balance-krw">₩0</div>
+        <div class="fund-label">공금 풀 (가상) · 미라 관리</div>
+        <div class="fund-breakdown">
+          <div class="fund-bd-row">
+            <div class="fund-bd-label">투입</div>
+            <div class="fund-bd-val" id="fund-total">€0</div>
+          </div>
+          <div class="fund-bd-row">
+            <div class="fund-bd-label">사용</div>
+            <div class="fund-bd-val negative" id="fund-used">€0</div>
+          </div>
+          <div class="fund-bd-divider"></div>
+          <div class="fund-amount-row">
+            <div class="fund-bd-label" style="color:var(--gold);font-weight:500">남음</div>
+            <div class="fund-eur" id="fund-balance">€0</div>
+            <div class="fund-krw" id="fund-balance-krw">₩0</div>
+          </div>
         </div>
         <div class="fund-input-row">
-          <input class="fund-input" type="number" placeholder="초기 공금 입력 (€)" id="fund-init-input" step="0.01">
+          <input class="fund-input" type="number" placeholder="총 투입 공금 (€)" id="fund-init-input" step="0.01">
           <button class="fund-btn" onclick="setFund()">설정</button>
         </div>
       </div>
@@ -1292,7 +1347,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
         (+) 받을 금액 / (-) 줄 금액
       </div>
       <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.4;">
-        💡 6/3~6/8 효진 체류 = 3인 자동 분배 · 입력 시 직접 선택도 가능
+        💡 3인 분배 = 공금 자동 차감 · 2인 분배 = 정산
       </div>
     </div>
   </div>
@@ -1831,15 +1886,14 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     </div>
     <div class="form-field">
       <label class="form-label">결제자</label>
-      <div class="payer-grid">
-        <div class="payer-option" onclick="selectPayer('공금')" id="p-공금">💼 공금</div>
+      <div class="payer-grid payer-grid-3">
         <div class="payer-option" onclick="selectPayer('안나')" id="p-안나">안나</div>
         <div class="payer-option" onclick="selectPayer('미라')" id="p-미라">미라</div>
         <div class="payer-option" onclick="selectPayer('효진')" id="p-효진">효진</div>
       </div>
     </div>
 
-    <!-- 분배 대상 (공금 아닐 때만 표시) -->
+    <!-- 분배 대상 -->
     <div class="form-field" id="split-field" style="display:none;">
       <label class="form-label">
         분배 대상
@@ -1850,9 +1904,12 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
         <div class="split-mode-btn" id="split-mode-manual" onclick="setSplitMode('manual')">✋ 직접 선택</div>
       </div>
       <div class="split-checkboxes" id="split-checkboxes" style="display:none;">
-        <label class="split-cb"><input type="checkbox" id="split-안나" checked><span>안나</span></label>
-        <label class="split-cb"><input type="checkbox" id="split-미라" checked><span>미라</span></label>
-        <label class="split-cb"><input type="checkbox" id="split-효진"><span>효진</span></label>
+        <label class="split-cb"><input type="checkbox" id="split-안나" checked onchange="updateFundHint()"><span>안나</span></label>
+        <label class="split-cb"><input type="checkbox" id="split-미라" checked onchange="updateFundHint()"><span>미라</span></label>
+        <label class="split-cb"><input type="checkbox" id="split-효진" onchange="updateFundHint()"><span>효진</span></label>
+      </div>
+      <div class="fund-auto-hint" id="fund-auto-hint" style="display:none;">
+        💼 <b>3인 분배 → 공금에서 자동 차감</b> (정산 제외)
       </div>
     </div>
 
@@ -2205,16 +2262,21 @@ function setFund() {
 }
 
 function renderFund() {
-  const pubSpent = entries.filter(e=>e.payer==='공금').reduce((s,e)=>s+e.eur,0);
+  // 공금 차감 entries 합계 (3인 분배 + 옛 데이터 호환)
+  const pubSpent = entries.filter(isFundEntry).reduce((s,e) => s + e.eur, 0);
   const balance = fundAmount - pubSpent;
+  const totalEl = document.getElementById('fund-total');
+  const usedEl = document.getElementById('fund-used');
   const balEl = document.getElementById('fund-balance');
   const krwEl = document.getElementById('fund-balance-krw');
   const inEl = document.getElementById('fund-init-input');
+  if (totalEl) totalEl.textContent = '€' + fundAmount.toFixed(2);
+  if (usedEl) usedEl.textContent = '−€' + pubSpent.toFixed(2);
   if (balEl) balEl.textContent = '€' + balance.toFixed(2);
   if (krwEl) krwEl.textContent = '₩' + Math.round(balance*EUR_RATE).toLocaleString();
   if (inEl) {
     inEl.value = fundAmount || '';
-    inEl.placeholder = fundAmount ? `현재: €${fundAmount}` : '초기 공금 입력 (€)';
+    inEl.placeholder = fundAmount ? `현재: €${fundAmount}` : '총 투입 공금 (€)';
   }
 }
 
@@ -2243,14 +2305,14 @@ function calcSettle() {
   const paid = {안나:0, 미라:0, 효진:0};
   const owed = {안나:0, 미라:0, 효진:0};
   entries.forEach(e => {
-    if (e.payer !== '공금') {
-      paid[e.payer] = (paid[e.payer]||0) + e.eur;
-      const splitMembers = getSplitMembers(e);
-      const share = e.eur / splitMembers.length;
-      splitMembers.forEach(m => {
-        owed[m] = (owed[m]||0) + share;
-      });
-    }
+    // 공금 차감 entry (3인 분배 또는 옛 데이터)는 정산에서 제외
+    if (isFundEntry(e)) return;
+    paid[e.payer] = (paid[e.payer]||0) + e.eur;
+    const splitMembers = getSplitMembers(e);
+    const share = e.eur / splitMembers.length;
+    splitMembers.forEach(m => {
+      owed[m] = (owed[m]||0) + share;
+    });
   });
   const idMap = {안나:'anna', 미라:'mira', 효진:'hyojin'};
   members.forEach(m => {
@@ -2291,20 +2353,27 @@ function renderEntries() {
   const sorted = [...filtered].sort((a,b) => (b.date||'').localeCompare(a.date||''));
   sorted.forEach(e => {
     const div = document.createElement('div');
-    div.className = 'entry-item ' + (payerClass[e.payer]||'');
-    // 분배 정보 표시 (공금 아닐 때만)
-    let splitInfo = '';
-    if (e.payer !== '공금') {
+    const isFund = isFundEntry(e);
+    div.className = 'entry-item ' + (isFund ? 'fund' : (payerClass[e.payer]||''));
+    // 분배/공금 정보 표시
+    let splitInfo;
+    if (isFund) {
+      splitInfo = `<div class="entry-split fund">💼 3인 분배 → 공금에서 자동 차감</div>`;
+    } else {
       const members = getSplitMembers(e);
       const isManual = e.splitWith && e.splitWith.length > 0;
       const icon = isManual ? '✋' : '🤖';
       splitInfo = `<div class="entry-split">${icon} 분배: ${members.join('·')}</div>`;
     }
+    // 결제자 표시 (공금 차감이어도 누가 실제 결제했는지 표시)
+    const payerDisplay = (e.payer === '공금')
+      ? '💼 공금 (legacy)'
+      : `👤 ${e.payer}`;
     div.innerHTML = `
       <div>
         <div class="entry-date-cat">${e.date} · ${catIcons[e.cat]||'📌'} ${e.cat}</div>
         <div class="entry-desc">${e.desc}</div>
-        <div class="entry-payer">${e.payer==='공금'?'💼 공금':'👤 '+e.payer}${e.memo?' · '+e.memo:''}</div>
+        <div class="entry-payer">${payerDisplay}${e.memo?' · '+e.memo:''}</div>
         ${splitInfo}
       </div>
       <div class="entry-amounts">
@@ -2326,6 +2395,13 @@ function deleteEntry(fbKey) {
 // ── MODAL ──
 let splitMode = 'auto'; // 'auto' | 'manual'
 
+// 헬퍼: entry가 공금 차감 대상인지 판단
+// 기준: 옛 데이터(payer==='공금' or fromFund===true) 또는 새 로직(분배 대상이 3명)
+function isFundEntry(entry) {
+  if (entry.payer === '공금' || entry.fromFund === true) return true;
+  return getSplitMembers(entry).length === 3;
+}
+
 function openModal() {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('f-date').value = today;
@@ -2340,8 +2416,9 @@ function openModal() {
   document.getElementById('split-mode-auto').classList.add('active');
   document.getElementById('split-mode-manual').classList.remove('active');
   document.getElementById('split-checkboxes').style.display = 'none';
+  document.getElementById('fund-auto-hint').style.display = 'none';
   // 날짜 변경 시 힌트 업데이트
-  document.getElementById('f-date').onchange = updateAutoSplitHint;
+  document.getElementById('f-date').onchange = () => { updateAutoSplitHint(); updateFundHint(); };
   document.getElementById('modal').classList.add('open');
 }
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
@@ -2351,20 +2428,10 @@ function selectPayer(p) {
   currentPayer = p;
   document.querySelectorAll('.payer-option').forEach(el=>el.className='payer-option');
   document.getElementById('p-'+p).className = 'payer-option selected-'+p;
-  // 공금이면 분배 필드 숨김, 아니면 표시
-  const splitField = document.getElementById('split-field');
-  if (p === '공금') {
-    splitField.style.display = 'none';
-  } else {
-    splitField.style.display = 'block';
-    updateAutoSplitHint();
-    // 직접 선택 모드면 결제자 본인 자동 체크
-    if (splitMode === 'manual') {
-      ['안나','미라','효진'].forEach(m => {
-        if (m === p) document.getElementById('split-'+m).checked = true;
-      });
-    }
-  }
+  // 분배 필드 표시
+  document.getElementById('split-field').style.display = 'block';
+  updateAutoSplitHint();
+  updateFundHint();
 }
 
 // 자동 모드일 때 어떻게 분배될지 미리보기
@@ -2379,6 +2446,22 @@ function updateAutoSplitHint() {
   } else {
     hintEl.textContent = '(자동: 안나·미라 2인)';
   }
+}
+
+// 현재 분배 대상이 3명인지 체크해서 공금 차감 안내 표시
+function updateFundHint() {
+  const hintEl = document.getElementById('fund-auto-hint');
+  if (!hintEl) return;
+  const date = document.getElementById('f-date').value;
+  let memberCount;
+  if (splitMode === 'manual') {
+    memberCount = ['안나','미라','효진'].filter(m => document.getElementById('split-'+m).checked).length;
+  } else {
+    // auto
+    const auto = (currentPayer === '효진' || isHyojinPresent(date)) ? 3 : 2;
+    memberCount = auto;
+  }
+  hintEl.style.display = memberCount === 3 ? 'block' : 'none';
 }
 
 function setSplitMode(mode) {
@@ -2396,6 +2479,7 @@ function setSplitMode(mode) {
       document.getElementById('split-'+m).checked = autoMembers.includes(m);
     });
   }
+  updateFundHint();
 }
 
 function addEntry() {
@@ -2408,9 +2492,8 @@ function addEntry() {
     alert('날짜, 내용, 금액, 결제자를 모두 입력해주세요.');
     return;
   }
-  // 분배 대상 결정
   const entry = { date, desc, eur, cat, payer: currentPayer, memo };
-  if (currentPayer !== '공금' && splitMode === 'manual') {
+  if (splitMode === 'manual') {
     const selected = ['안나','미라','효진'].filter(m => document.getElementById('split-'+m).checked);
     if (selected.length === 0) {
       alert('분배 대상을 최소 1명 이상 선택해주세요.');
