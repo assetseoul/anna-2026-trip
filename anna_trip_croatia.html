@@ -559,6 +559,109 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   margin: 4px 0 2px;
 }
 .fund-amount-row { display: flex; align-items: baseline; gap: 8px; }
+
+/* 일별 환율 표 */
+.rate-table {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--bl);
+  overflow: hidden;
+}
+.rate-table-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--bl);
+  font-family: 'DM Mono', monospace;
+}
+.rate-table-row:last-child { border-bottom: none; }
+.rate-table-row.dim {
+  background: #FAF8F4;
+  color: var(--stone);
+}
+.rate-table-header {
+  background: var(--bg);
+  color: var(--stone);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+.rate-table-avg {
+  background: var(--gold-light);
+  color: var(--deep);
+  font-weight: 500;
+}
+
+/* 환율 설정 카드 */
+.rate-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+.rate-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+}
+.rate-hint {
+  font-size: 9px;
+  color: rgba(255,255,255,0.35);
+  font-family: 'DM Mono', monospace;
+}
+.rate-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rate-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex: 1;
+}
+.rate-eur-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  font-family: 'DM Mono', monospace;
+}
+.rate-value {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  color: var(--gold);
+  font-weight: 500;
+}
+.rate-input {
+  width: 70px;
+  padding: 6px 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  text-align: right;
+}
+.rate-input::placeholder { color: rgba(255,255,255,0.3); }
+.rate-input:focus { outline: none; border-color: var(--gold); }
+.rate-btn {
+  padding: 6px 12px;
+  background: var(--gold);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+}
 .fund-debts {
   margin-top: 10px;
   padding: 10px;
@@ -943,7 +1046,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v3.0</span></div>
+  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v3.1</span></div>
   <span id="sync-indicator" style="font-size:10px;color:var(--gold);opacity:0;transition:opacity 0.3s;margin-right:4px;">✓ 저장됨</span>
   <a href="https://www.notion.so/2fdc50f0f2fb80a3938edcfe4f3373f4?source=copy_link" target="_blank" class="notion-btn">
     <span class="notion-icon">𝒩</span> 노션
@@ -1635,7 +1738,8 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
       </div>
       <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.5;">
         💼 공금 = 공금에서 받을 선결제 환급<br>
-        👥 개인 = 2인 분배 정산 (안나↔미라, 안나↔효진, 미라↔효진)
+        👥 개인 = 2인 분배 정산 (안나↔미라, 안나↔효진, 미라↔효진)<br>
+        💱 평균 환율 ₩1,774 / € · 일별 환율은 정보 탭 참조
       </div>
     </div>
   </div>
@@ -1685,8 +1789,8 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     </div>
     <div class="summary-divider"></div>
     <div class="summary-item">
-      <div class="summary-label">1€ =</div>
-      <div class="summary-val">₩1,750</div>
+      <div class="summary-label">1€ 평균</div>
+      <div class="summary-val" id="avg-rate-display">₩1,774</div>
     </div>
   </div>
 
@@ -1730,7 +1834,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
     <div class="info-common-grid">
       <div class="info-common-card">
         <div class="info-common-label">통화</div>
-        <div class="info-common-value">EUR (€)<br><span style="font-size:10px;color:var(--stone);">1€ ≈ ₩1,750</span></div>
+        <div class="info-common-value">EUR (€)<br><span style="font-size:10px;color:var(--stone);">평균 ₩1,774 · 6/5 ₩1,796.93</span></div>
       </div>
       <div class="info-common-card">
         <div class="info-common-label">전압 / 콘센트</div>
@@ -1760,6 +1864,35 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
         <div class="info-common-label">긴급번호</div>
         <div class="info-common-value">112 (통합)<br><span style="font-size:10px;color:var(--stone);">한국대사관: +385 1 4821 282</span></div>
       </div>
+    </div>
+  </div>
+
+  <!-- 일별 환율 표 -->
+  <div class="info-common-section">
+    <div class="info-common-title">💱 일별 매매기준율 (네이버 N pay 증권)</div>
+    <div class="rate-table">
+      <div class="rate-table-row rate-table-header">
+        <span>날짜</span>
+        <span>매매기준율</span>
+        <span>비고</span>
+      </div>
+      <div class="rate-table-row"><span>5/29 금</span><span>₩1,756.46</span><span style="color:var(--stone)">출발</span></div>
+      <div class="rate-table-row dim"><span>5/30 토</span><span>₩1,756.46</span><span style="color:var(--stone)">5/29 유지</span></div>
+      <div class="rate-table-row dim"><span>5/31 일</span><span>₩1,756.46</span><span style="color:var(--stone)">5/29 유지</span></div>
+      <div class="rate-table-row"><span>6/1 월</span><span>₩1,761.89</span><span style="color:#68A36A">▲5.43</span></div>
+      <div class="rate-table-row"><span>6/2 화</span><span>₩1,780.37</span><span style="color:#68A36A">▲18.48</span></div>
+      <div class="rate-table-row dim"><span>6/3 수</span><span>₩1,780.37</span><span style="color:var(--stone)">지방선거</span></div>
+      <div class="rate-table-row"><span>6/4 목</span><span>₩1,782.66</span><span style="color:#68A36A">▲2.29</span></div>
+      <div class="rate-table-row"><span>6/5 금</span><span>₩1,796.93</span><span style="color:#68A36A">▲14.27</span></div>
+      <div class="rate-table-row dim"><span>6/6 토</span><span>₩1,796.93</span><span style="color:var(--stone)">현충일</span></div>
+      <div class="rate-table-row rate-table-avg">
+        <span><b>평균</b></span>
+        <span><b>₩1,774.28</b></span>
+        <span style="color:var(--gold)">공금/정산 적용</span>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--stone);margin-top:8px;line-height:1.5">
+      💡 각 지출은 결제일 환율로 환산 표시 · 공금과 정산 거래는 평균 환율로 표시
     </div>
   </div>
 
@@ -2263,7 +2396,44 @@ window.dispatchEvent(new Event('firebase-ready'));
 </script>
 
 <script>
-const EUR_RATE = 1750;
+// ════════════════════════════════════════
+// 💱 일별 환율 (네이버 N pay 증권 매매기준율, 영업일 기준)
+// 휴일/주말: 직전 영업일 환율 유지
+// ════════════════════════════════════════
+const EUR_RATES = {
+  '2026-05-29': 1756.46,  // 금
+  '2026-05-30': 1756.46,  // 토 (5/29 유지)
+  '2026-05-31': 1756.46,  // 일 (5/29 유지)
+  '2026-06-01': 1761.89,  // 월
+  '2026-06-02': 1780.37,  // 화
+  '2026-06-03': 1780.37,  // 수 (지방선거 휴일, 6/2 유지)
+  '2026-06-04': 1782.66,  // 목
+  '2026-06-05': 1796.93,  // 금
+  '2026-06-06': 1796.93,  // 토 현충일 (6/5 유지)
+  // 향후 (현재 환율 적용, 실제 변동 시 업데이트 필요)
+  '2026-06-07': 1796.93,
+  '2026-06-08': 1796.93,
+  '2026-06-09': 1796.93,
+  '2026-06-10': 1796.93,
+};
+
+// 평균 환율 계산 (여행 시작일~오늘): 공금/정산 거래에 사용
+const TRIP_START_DATE = '2026-05-29';
+const TODAY_STR = '2026-06-06';
+function calcAvgRate() {
+  const dates = Object.keys(EUR_RATES).filter(d => d >= TRIP_START_DATE && d <= TODAY_STR);
+  if (dates.length === 0) return 1797;
+  const sum = dates.reduce((s,d) => s + EUR_RATES[d], 0);
+  return sum / dates.length;
+}
+const EUR_RATE_AVG = calcAvgRate();  // 약 1774.28
+let EUR_RATE = EUR_RATE_AVG;  // 공금/정산은 평균 환율 사용
+
+// 특정 날짜의 환율 조회 (entry KRW 표시용)
+function getRateForDate(dateStr) {
+  if (!dateStr) return EUR_RATE_AVG;
+  return EUR_RATES[dateStr] || EUR_RATE_AVG;
+}
 let entries = [];
 let fundAmount = 0;
 let currentPayer = '';
@@ -2468,7 +2638,7 @@ function updateFbStatus() {
 function initFirebase() {
   // 5초 후 연결 상태 체크
   setTimeout(updateFbStatus, 5500);
-  
+
   window._fb.onFund(val => {
     fundAmount = val;
     _fbDataReceived.fund = true;
@@ -2476,7 +2646,6 @@ function initFirebase() {
     renderFund();
     calcSettle();
     renderSummary();
-    // 🛡 백업: 실제 데이터 수신 후에만 저장 (빈 데이터로 덮어쓰기 방지)
     if (_fbDataReceived.entries) saveLocalBackup();
     updateFbStatus();
   });
@@ -2488,10 +2657,8 @@ function initFirebase() {
     renderSummary();
     calcSettle();
     renderEntries();
-    // 🛡 백업: 데이터가 있을 때만 저장 (빈 응답으로 백업 덮어쓰기 방지)
     if (entries.length > 0 || fundAmount > 0) saveLocalBackup();
     updateFbStatus();
-    // 첫 데이터 로드 후 1.5초 뒤 자동 복구 체크
     setTimeout(checkAutoRecovery, 1500);
   });
 }
@@ -2776,6 +2943,9 @@ function renderSummary() {
   if (t) t.textContent = '€' + total.toFixed(2);
   if (p) p.textContent = '€' + pub.toFixed(2);
   if (r) r.textContent = '€' + prv.toFixed(2);
+  // 평균 환율 표시
+  const avgEl = document.getElementById('avg-rate-display');
+  if (avgEl) avgEl.textContent = '₩' + Math.round(EUR_RATE_AVG).toLocaleString();
 }
 
 // ── ENTRIES ──
@@ -2819,7 +2989,7 @@ function renderEntries() {
       </div>
       <div class="entry-amounts">
         <div class="entry-eur">€${e.eur.toFixed(2)}</div>
-        <div class="entry-krw">₩${Math.round(e.eur*EUR_RATE).toLocaleString()}</div>
+        <div class="entry-krw">₩${Math.round(e.eur*getRateForDate(e.date)).toLocaleString()}</div>
       </div>
       <button class="entry-delete" onclick="deleteEntry('${e.fbKey}')">×</button>
     `;
