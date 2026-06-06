@@ -559,6 +559,33 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
   margin: 4px 0 2px;
 }
 .fund-amount-row { display: flex; align-items: baseline; gap: 8px; }
+.fund-debts {
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(255,200,100,0.08);
+  border: 1px solid rgba(255,200,100,0.2);
+  border-radius: 8px;
+}
+.fund-debts-title {
+  font-size: 10px;
+  color: rgba(255,200,100,0.9);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.fund-debt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  padding: 3px 0;
+}
+.fund-debt-row .debt-name { color: rgba(255,255,255,0.7); }
+.fund-debt-row .debt-amount {
+  font-family: 'DM Mono', monospace;
+  color: #FFD18A;
+  font-weight: 500;
+}
 .fund-eur { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 300; color: var(--gold); line-height: 1; }
 .fund-krw { font-size: 11px; color: rgba(255,255,255,.4); }
 .fund-input-row { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
@@ -581,12 +608,61 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 .settle-card {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px; padding: 10px 14px;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  border-radius: 12px; padding: 10px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
 }
 .settle-person { text-align: center; }
-.settle-name { font-size: 9px; color: rgba(255,255,255,.4); margin-bottom: 3px; }
-.settle-net { font-size: 13px; font-weight: 500; }
+.settle-person-v2 {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.settle-name {
+  font-size: 10px;
+  color: rgba(255,255,255,.7);
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.settle-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.settle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+}
+.settle-label {
+  color: rgba(255,255,255,.45);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.3px;
+}
+.settle-fund, .settle-personal {
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255,255,255,.85);
+}
+.settle-fund.pos, .settle-personal.pos { color: #68D391; }
+.settle-fund.neg, .settle-personal.neg { color: #FC8181; }
+.settle-fund.zero, .settle-personal.zero { color: rgba(255,255,255,.3); }
+.settle-total-row {
+  margin-top: 3px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.settle-total-row .settle-label {
+  color: rgba(255,255,255,.7);
+  font-weight: 500;
+}
+.settle-net { font-size: 12px; font-weight: 600; font-family: 'DM Mono', monospace; }
 .settle-net.pos { color: #68D391; }
 .settle-net.neg { color: #FC8181; }
 .settle-net.zero { color: rgba(255,255,255,.5); }
@@ -786,7 +862,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.6</span></div>
+  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.7</span></div>
   <span id="sync-indicator" style="font-size:10px;color:var(--gold);opacity:0;transition:opacity 0.3s;margin-right:4px;">✓ 저장됨</span>
   <a href="https://www.notion.so/2fdc50f0f2fb80a3938edcfe4f3373f4?source=copy_link" target="_blank" class="notion-btn">
     <span class="notion-icon">𝒩</span> 노션
@@ -1414,6 +1490,11 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
             <div class="fund-krw" id="fund-balance-krw">₩0</div>
           </div>
         </div>
+        <!-- 공금이 갚을 돈 (선결제 환급) -->
+        <div class="fund-debts" id="fund-debts" style="display:none;">
+          <div class="fund-debts-title">💰 공금이 돌려줄 돈 (선결제)</div>
+          <div id="fund-debts-list"></div>
+        </div>
         <div class="fund-input-row">
           <input class="fund-input" type="number" placeholder="총 투입 공금 (€)" id="fund-init-input" step="0.01">
           <button class="fund-btn" onclick="setFund()">설정</button>
@@ -1422,24 +1503,63 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
       <!-- 정산 요약 -->
       <div class="settle-card">
-        <div class="settle-person">
+        <div class="settle-person-v2">
           <div class="settle-name">안나</div>
-          <div class="settle-net" id="settle-anna">€0</div>
+          <div class="settle-detail">
+            <div class="settle-row">
+              <span class="settle-label">💼 공금</span>
+              <span class="settle-fund" id="settle-fund-anna">€0</span>
+            </div>
+            <div class="settle-row">
+              <span class="settle-label">👥 개인</span>
+              <span class="settle-personal" id="settle-personal-anna">€0</span>
+            </div>
+            <div class="settle-row settle-total-row">
+              <span class="settle-label">합계</span>
+              <span class="settle-net" id="settle-anna">€0</span>
+            </div>
+          </div>
         </div>
-        <div class="settle-person">
+        <div class="settle-person-v2">
           <div class="settle-name">미라</div>
-          <div class="settle-net" id="settle-mira">€0</div>
+          <div class="settle-detail">
+            <div class="settle-row">
+              <span class="settle-label">💼 공금</span>
+              <span class="settle-fund" id="settle-fund-mira">€0</span>
+            </div>
+            <div class="settle-row">
+              <span class="settle-label">👥 개인</span>
+              <span class="settle-personal" id="settle-personal-mira">€0</span>
+            </div>
+            <div class="settle-row settle-total-row">
+              <span class="settle-label">합계</span>
+              <span class="settle-net" id="settle-mira">€0</span>
+            </div>
+          </div>
         </div>
-        <div class="settle-person">
+        <div class="settle-person-v2">
           <div class="settle-name">효진</div>
-          <div class="settle-net" id="settle-hyojin">€0</div>
+          <div class="settle-detail">
+            <div class="settle-row">
+              <span class="settle-label">💼 공금</span>
+              <span class="settle-fund" id="settle-fund-hyojin">€0</span>
+            </div>
+            <div class="settle-row">
+              <span class="settle-label">👥 개인</span>
+              <span class="settle-personal" id="settle-personal-hyojin">€0</span>
+            </div>
+            <div class="settle-row settle-total-row">
+              <span class="settle-label">합계</span>
+              <span class="settle-net" id="settle-hyojin">€0</span>
+            </div>
+          </div>
         </div>
       </div>
       <div style="font-size:9px;color:rgba(255,255,255,.3);text-align:center;margin-top:6px;font-family:'DM Mono',monospace;">
         (+) 받을 금액 / (-) 줄 금액
       </div>
       <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.4;">
-        💡 3인 분배 = 공금 자동 차감 · 2인 분배 = 정산
+        💼 공금 = 공금에서 받을 선결제금 · 👥 개인 = 안나·미라 간 정산
       </div>
     </div>
   </div>
@@ -2370,6 +2490,27 @@ function renderFund() {
     inEl.value = fundAmount || '';
     inEl.placeholder = fundAmount ? `현재: €${fundAmount}` : '총 투입 공금 (€)';
   }
+
+  // 공금이 갚을 돈 (선결제 환급) 표시
+  const debts = {안나:0, 미라:0, 효진:0};
+  entries.filter(isFundEntry).forEach(e => {
+    if (e.payer && e.payer !== '공금') {
+      debts[e.payer] = (debts[e.payer]||0) + e.eur;
+    }
+  });
+  const debtsEl = document.getElementById('fund-debts');
+  const debtsListEl = document.getElementById('fund-debts-list');
+  if (debtsEl && debtsListEl) {
+    const debtors = Object.entries(debts).filter(([_, v]) => v > 0.5);
+    if (debtors.length === 0) {
+      debtsEl.style.display = 'none';
+    } else {
+      debtsEl.style.display = 'block';
+      debtsListEl.innerHTML = debtors
+        .map(([name, amt]) => `<div class="fund-debt-row"><span class="debt-name">→ ${name}</span><span class="debt-amount">€${amt.toFixed(2)}</span></div>`)
+        .join('');
+    }
+  }
 }
 
 // ── SETTLEMENT ──
@@ -2394,11 +2535,19 @@ function getSplitMembers(entry) {
 
 function calcSettle() {
   const members = ['안나','미라','효진'];
-  const paid = {안나:0, 미라:0, 효진:0};
-  const owed = {안나:0, 미라:0, 효진:0};
+  const fundOwed = {안나:0, 미라:0, 효진:0};  // 공금에서 받을 돈 (선결제 환급)
+  const paid = {안나:0, 미라:0, 효진:0};       // 개인이 다른 사람에게 받을 금액
+  const owed = {안나:0, 미라:0, 효진:0};       // 개인이 다른 사람에게 줄 금액
+
   entries.forEach(e => {
-    // 공금 차감 entry (3인 분배 또는 옛 데이터)는 정산에서 제외
-    if (isFundEntry(e)) return;
+    if (isFundEntry(e)) {
+      // 공금 차감 entry: 결제자가 공금에서 환급받을 돈
+      if (e.payer && e.payer !== '공금') {
+        fundOwed[e.payer] = (fundOwed[e.payer]||0) + e.eur;
+      }
+      return;
+    }
+    // 일반 정산 (2인 분배 등)
     paid[e.payer] = (paid[e.payer]||0) + e.eur;
     const splitMembers = getSplitMembers(e);
     const share = e.eur / splitMembers.length;
@@ -2406,13 +2555,31 @@ function calcSettle() {
       owed[m] = (owed[m]||0) + share;
     });
   });
+
   const idMap = {안나:'anna', 미라:'mira', 효진:'hyojin'};
   members.forEach(m => {
-    const el = document.getElementById('settle-' + idMap[m]);
-    if (!el) return;
-    const v = (paid[m]||0) - (owed[m]||0);
-    el.textContent = (v>=0?'+':'') + '€' + v.toFixed(0);
-    el.className = 'settle-net ' + (v>0.5?'pos':v<-0.5?'neg':'zero');
+    const id = idMap[m];
+    const fundNet = fundOwed[m] || 0;
+    const personalNet = (paid[m]||0) - (owed[m]||0);
+    const totalNet = fundNet + personalNet;
+    // 공금 환급액
+    const fundEl = document.getElementById('settle-fund-' + id);
+    if (fundEl) {
+      fundEl.textContent = (fundNet>0?'+':'') + '€' + fundNet.toFixed(0);
+      fundEl.className = 'settle-fund ' + (fundNet>0.5?'pos':'zero');
+    }
+    // 개인 정산
+    const personalEl = document.getElementById('settle-personal-' + id);
+    if (personalEl) {
+      personalEl.textContent = (personalNet>=0?'+':'') + '€' + personalNet.toFixed(0);
+      personalEl.className = 'settle-personal ' + (personalNet>0.5?'pos':personalNet<-0.5?'neg':'zero');
+    }
+    // 합계
+    const totalEl = document.getElementById('settle-' + id);
+    if (totalEl) {
+      totalEl.textContent = (totalNet>=0?'+':'') + '€' + totalNet.toFixed(0);
+      totalEl.className = 'settle-net ' + (totalNet>0.5?'pos':totalNet<-0.5?'neg':'zero');
+    }
   });
 }
 
