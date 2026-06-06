@@ -667,6 +667,87 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 .settle-net.neg { color: #FC8181; }
 .settle-net.zero { color: rgba(255,255,255,.5); }
 
+/* 정산 거래 리스트 카드 */
+.transactions-card {
+  background: var(--deep);
+  margin: 0 14px 14px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.transactions-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.transactions-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  color: white;
+}
+.transactions-subtitle {
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  font-family: 'DM Mono', monospace;
+}
+.transactions-section {
+  margin-bottom: 10px;
+}
+.transactions-section:last-child {
+  margin-bottom: 0;
+}
+.transactions-section-title {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  font-family: 'DM Mono', monospace;
+}
+.tx-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+.tx-row:last-child { margin-bottom: 0; }
+.tx-from-to {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: white;
+}
+.tx-arrow {
+  color: rgba(255,255,255,0.4);
+  font-size: 11px;
+  margin: 0 2px;
+}
+.tx-name {
+  font-weight: 500;
+}
+.tx-name.tx-fund {
+  color: #FFD18A;
+}
+.tx-name.tx-안나 { color: #C8A8A0; }
+.tx-name.tx-미라 { color: #A8B8C8; }
+.tx-name.tx-효진 { color: #B8C8A8; }
+.tx-amount {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #68D391;
+}
+.tx-amount-krw {
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  font-family: 'DM Mono', monospace;
+  margin-left: 4px;
+}
+
 /* Budget action bar */
 .budget-actions {
   display: flex; gap: 8px;
@@ -862,7 +943,7 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.7</span></div>
+  <div class="topbar-title">Croatia · Montenegro <span style="font-size:9px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace;margin-left:6px;">v2.9</span></div>
   <span id="sync-indicator" style="font-size:10px;color:var(--gold);opacity:0;transition:opacity 0.3s;margin-right:4px;">✓ 저장됨</span>
   <a href="https://www.notion.so/2fdc50f0f2fb80a3938edcfe4f3373f4?source=copy_link" target="_blank" class="notion-btn">
     <span class="notion-icon">𝒩</span> 노션
@@ -1558,9 +1639,29 @@ body { font-family: 'DM Sans', sans-serif; font-weight: 300; background: var(--b
       <div style="font-size:9px;color:rgba(255,255,255,.3);text-align:center;margin-top:6px;font-family:'DM Mono',monospace;">
         (+) 받을 금액 / (-) 줄 금액
       </div>
-      <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.4;">
-        💼 공금 = 공금에서 받을 선결제금 · 👥 개인 = 안나·미라 간 정산
+      <div style="font-size:9px;color:rgba(255,255,255,.4);text-align:center;margin-top:4px;line-height:1.5;">
+        💼 공금 = 공금에서 받을 선결제 환급<br>
+        👥 개인 = 2인 분배 정산 (안나↔미라, 안나↔효진, 미라↔효진)
       </div>
+    </div>
+  </div>
+
+  <!-- 정산 거래 리스트 -->
+  <div class="transactions-card" id="transactions-card" style="display:none;">
+    <div class="transactions-header">
+      <span class="transactions-title">💸 정산 거래 (최적 매칭)</span>
+      <span class="transactions-subtitle">누가 누구에게 줄지</span>
+    </div>
+    <div class="transactions-section" id="transactions-personal-section" style="display:none;">
+      <div class="transactions-section-title">👥 개인 간</div>
+      <div id="transactions-personal-list"></div>
+    </div>
+    <div class="transactions-section" id="transactions-fund-section" style="display:none;">
+      <div class="transactions-section-title">💼 공금 환급</div>
+      <div id="transactions-fund-list"></div>
+    </div>
+    <div id="transactions-empty" style="display:none;font-size:11px;color:var(--stone);text-align:center;padding:10px;">
+      아직 정산할 거래가 없어요
     </div>
   </div>
 
@@ -2535,52 +2636,139 @@ function getSplitMembers(entry) {
 
 function calcSettle() {
   const members = ['안나','미라','효진'];
-  const fundOwed = {안나:0, 미라:0, 효진:0};  // 공금에서 받을 돈 (선결제 환급)
-  const paid = {안나:0, 미라:0, 효진:0};       // 개인이 다른 사람에게 받을 금액
-  const owed = {안나:0, 미라:0, 효진:0};       // 개인이 다른 사람에게 줄 금액
+  const fundOwed = {안나:0, 미라:0, 효진:0};
+  const paid = {안나:0, 미라:0, 효진:0};
+  const owed = {안나:0, 미라:0, 효진:0};
+  // 페어 매트릭스: pairDebts[from][to] = from이 to에게 줘야 할 돈
+  const pairDebts = {
+    안나: {미라:0, 효진:0},
+    미라: {안나:0, 효진:0},
+    효진: {안나:0, 미라:0}
+  };
 
   entries.forEach(e => {
     if (isFundEntry(e)) {
-      // 공금 차감 entry: 결제자가 공금에서 환급받을 돈
       if (e.payer && e.payer !== '공금') {
         fundOwed[e.payer] = (fundOwed[e.payer]||0) + e.eur;
       }
       return;
     }
-    // 일반 정산 (2인 분배 등)
     paid[e.payer] = (paid[e.payer]||0) + e.eur;
     const splitMembers = getSplitMembers(e);
     const share = e.eur / splitMembers.length;
     splitMembers.forEach(m => {
       owed[m] = (owed[m]||0) + share;
+      // 결제자 본인이 아니면 결제자에게 share만큼 줘야 함
+      if (m !== e.payer && pairDebts[m] && pairDebts[m][e.payer] !== undefined) {
+        pairDebts[m][e.payer] = (pairDebts[m][e.payer]||0) + share;
+      }
     });
   });
 
+  // 각 사람 표시 (3줄)
   const idMap = {안나:'anna', 미라:'mira', 효진:'hyojin'};
   members.forEach(m => {
     const id = idMap[m];
     const fundNet = fundOwed[m] || 0;
     const personalNet = (paid[m]||0) - (owed[m]||0);
     const totalNet = fundNet + personalNet;
-    // 공금 환급액
     const fundEl = document.getElementById('settle-fund-' + id);
     if (fundEl) {
       fundEl.textContent = (fundNet>0?'+':'') + '€' + fundNet.toFixed(0);
       fundEl.className = 'settle-fund ' + (fundNet>0.5?'pos':'zero');
     }
-    // 개인 정산
     const personalEl = document.getElementById('settle-personal-' + id);
     if (personalEl) {
       personalEl.textContent = (personalNet>=0?'+':'') + '€' + personalNet.toFixed(0);
       personalEl.className = 'settle-personal ' + (personalNet>0.5?'pos':personalNet<-0.5?'neg':'zero');
     }
-    // 합계
     const totalEl = document.getElementById('settle-' + id);
     if (totalEl) {
       totalEl.textContent = (totalNet>=0?'+':'') + '€' + totalNet.toFixed(0);
       totalEl.className = 'settle-net ' + (totalNet>0.5?'pos':totalNet<-0.5?'neg':'zero');
     }
   });
+
+  // 거래 리스트 렌더링
+  renderTransactions(pairDebts, fundOwed);
+}
+
+// 페어별 정산 거래 렌더링 (상쇄 처리)
+function renderTransactions(pairDebts, fundOwed) {
+  const personalSection = document.getElementById('transactions-personal-section');
+  const fundSection = document.getElementById('transactions-fund-section');
+  const personalList = document.getElementById('transactions-personal-list');
+  const fundList = document.getElementById('transactions-fund-list');
+  const card = document.getElementById('transactions-card');
+  const emptyMsg = document.getElementById('transactions-empty');
+  if (!personalList || !fundList || !card) return;
+
+  // 페어별 상쇄: A→B와 B→A를 합쳐서 한 방향만 남김
+  const personalTxs = [];
+  const members = ['안나','미라','효진'];
+  for (let i = 0; i < members.length; i++) {
+    for (let j = i+1; j < members.length; j++) {
+      const a = members[i], b = members[j];
+      const aToB = pairDebts[a]?.[b] || 0;
+      const bToA = pairDebts[b]?.[a] || 0;
+      const net = aToB - bToA;
+      if (net > 0.5) personalTxs.push({from: a, to: b, amount: net});
+      else if (net < -0.5) personalTxs.push({from: b, to: a, amount: -net});
+    }
+  }
+
+  // 공금 환급 거래
+  const fundTxs = [];
+  members.forEach(m => {
+    if ((fundOwed[m]||0) > 0.5) {
+      fundTxs.push({from: '공금', to: m, amount: fundOwed[m]});
+    }
+  });
+
+  // 렌더링
+  const renderTx = tx => {
+    const fromClass = tx.from === '공금' ? 'tx-fund' : 'tx-' + tx.from;
+    const fromIcon = tx.from === '공금' ? '💼' : '👤';
+    return `<div class="tx-row">
+      <div class="tx-from-to">
+        <span class="tx-name ${fromClass}">${fromIcon} ${tx.from}</span>
+        <span class="tx-arrow">→</span>
+        <span class="tx-name tx-${tx.to}">${tx.to}</span>
+      </div>
+      <div>
+        <span class="tx-amount">€${tx.amount.toFixed(2)}</span>
+        <span class="tx-amount-krw">₩${Math.round(tx.amount*EUR_RATE).toLocaleString()}</span>
+      </div>
+    </div>`;
+  };
+
+  if (personalTxs.length > 0) {
+    personalSection.style.display = 'block';
+    personalList.innerHTML = personalTxs.map(renderTx).join('');
+  } else {
+    personalSection.style.display = 'none';
+  }
+
+  if (fundTxs.length > 0) {
+    fundSection.style.display = 'block';
+    fundList.innerHTML = fundTxs.map(renderTx).join('');
+  } else {
+    fundSection.style.display = 'none';
+  }
+
+  // 카드 표시 여부 결정
+  if (personalTxs.length > 0 || fundTxs.length > 0) {
+    card.style.display = 'block';
+    emptyMsg.style.display = 'none';
+  } else {
+    // entries가 있는데 정산이 0인 경우만 빈 메시지
+    if (entries.length > 0) {
+      card.style.display = 'block';
+      emptyMsg.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  }
 }
 
 // ── SUMMARY ──
@@ -2737,6 +2925,12 @@ function setSplitMode(mode) {
     ['안나','미라','효진'].forEach(m => {
       document.getElementById('split-'+m).checked = autoMembers.includes(m);
     });
+    // 수동 모드 안내 표시
+    const hintEl = document.getElementById('split-auto-hint');
+    if (hintEl) hintEl.textContent = '(자유 조합: 안나↔효진, 미라↔효진 등)';
+  } else {
+    // 자동 모드 안내로 복귀
+    updateAutoSplitHint();
   }
   updateFundHint();
 }
