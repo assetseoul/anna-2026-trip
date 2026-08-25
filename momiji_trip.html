@@ -948,7 +948,7 @@ body{
 
   <div class="fx-hero">
     <div class="fx-big">¥100 = ₩<span id="rv">930</span></div>
-    <div class="fx-cap">JPY / KRW · 기준 환율</div>
+    <div class="fx-cap" id="cap">JPY / KRW · 기준 환율</div>
   </div>
 
   <div class="card">
@@ -1034,24 +1034,27 @@ function closeChip(){
   openChip=null;
 }
 
-const R=9.30;
+let R=9.30;   /*RATE*/          // \uc790\ub3d9 \uac31\uc2e0 \uac12
+let RDATE='';  /*RDATE*/
 let mode='J';
+
 function calc(){
   const v=parseFloat(document.getElementById('inp').value)||0;
   const o=document.getElementById('out');
-  if(mode==='J') o.textContent='₩ '+Math.round(v*R).toLocaleString('ko-KR');
-  else o.textContent='¥ '+Math.round(v/R).toLocaleString('ja-JP');
+  if(mode==='J') o.textContent='\u20a9 '+Math.round(v*R).toLocaleString('ko-KR');
+  else o.textContent='\u00a5 '+Math.round(v/R).toLocaleString('ja-JP');
 }
 function swap(){
   mode = mode==='J'?'K':'J';
-  document.getElementById('lbA').textContent = mode==='J'?'🇯🇵 JPY 엔화':'🇰🇷 KRW 원화';
-  document.getElementById('lbB').textContent = mode==='J'?'한국 원화 KRW':'일본 엔화 JPY';
+  document.getElementById('lbA').textContent = mode==='J'?'\ud83c\uddef\ud83c\uddf5 JPY \uc5d4\ud654':'\ud83c\uddf0\ud83c\uddf7 KRW \uc6d0\ud654';
+  document.getElementById('lbB').textContent = mode==='J'?'\ud55c\uad6d \uc6d0\ud654 KRW':'\uc77c\ubcf8 \uc5d4\ud654 JPY';
   document.getElementById('inp').value='';
-  document.getElementById('out').textContent = mode==='J'?'₩ 0':'¥ 0';
+  document.getElementById('out').textContent = mode==='J'?'\u20a9 0':'\u00a5 0';
 }
-(function(){
-  const w=n=>'₩'+Math.round(n*R).toLocaleString('ko-KR');
-  document.getElementById('rv').textContent=Math.round(100*R).toLocaleString('ko-KR');
+
+function render(){
+  const w=n=>'\u20a9'+Math.round(n*R).toLocaleString('ko-KR');
+  document.getElementById('rv').textContent=(100*R).toLocaleString('ko-KR',{maximumFractionDigits:1});
   document.getElementById('q1').textContent=w(1000);
   document.getElementById('q2').textContent=w(5000);
   document.getElementById('q3').textContent=w(10000);
@@ -1059,7 +1062,39 @@ function swap(){
   document.getElementById('q5').textContent=w(50000);
   document.getElementById('q6').textContent=w(100000);
   document.getElementById('tot').textContent=w(352720);
-})();
+  calc();
+}
+
+async function loadRate(){
+  const cap=document.getElementById('cap');
+  cap.textContent='JPY / KRW \u00b7 \ubd88\ub7ec\uc624\ub294 \uc911\u2026';
+  const srcs=[
+    {u:'https://api.frankfurter.dev/v1/latest?base=JPY&symbols=KRW',
+     g:d=>({r:d.rates&&d.rates.KRW, d:d.date})},
+    {u:'https://open.er-api.com/v6/latest/JPY',
+     g:d=>({r:d.rates&&d.rates.KRW, d:(d.time_last_update_utc||'').slice(5,16)})},
+    {u:'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/jpy.json',
+     g:d=>({r:d.jpy&&d.jpy.krw, d:d.date})}
+  ];
+  for(const s of srcs){
+    try{
+      const res=await fetch(s.u,{cache:'no-store'});
+      if(!res.ok) continue;
+      const {r,d}=s.g(await res.json());
+      if(r&&isFinite(r)){
+        R=r; render();
+        cap.textContent='JPY / KRW \u00b7 \uc2e4\uc2dc\uac04 \u00b7 '+(d||'');
+        return;
+      }
+    }catch(e){}
+  }
+  render();
+  cap.textContent='JPY / KRW \u00b7 '+(RDATE?RDATE+' \uae30\uc900':'\uc800\uc7a5\ub41c \uae30\uc900\uac12');
+}
+
+render();
+loadRate();
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) loadRate(); });
 </script>
 </body>
 </html>
