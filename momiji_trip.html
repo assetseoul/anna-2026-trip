@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>모모지 트립 · もみじ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+JP:wght@400;600&display=swap');
+
+:root{
+  --kraft:#C9A87C;
+  --kraft-dk:#B08F63;
+  --kraft-lt:#E8D9C2;
+  --paper:#F7F2E9;
+  --crimson:#8E1B2E;
+  --crimson-lt:#B03146;
+  --ink:#2C2620;
+  --ink-soft:#6E6357;
+  --rule:#C4B7A4;
+  --white:#FFFDF9;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  padding-bottom:76px;
+  line-height:1.6;
+}
+
+/* ============ HEADER ============ */
+.hdr{
+  background:var(--kraft);
+  padding:18px 20px 16px;
+  position:sticky;top:0;z-index:90;
+  border-bottom:3px double var(--crimson);
+  background-image:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.02) 0 1px,transparent 1px 4px);
+}
+.hdr-rule{height:2px;background:var(--crimson);margin-bottom:10px}
+.hdr-in{display:flex;align-items:flex-end;justify-content:space-between}
+.logo{
+  font-family:'Noto Serif JP',serif;
+  font-size:26px;font-weight:600;color:var(--crimson);
+  letter-spacing:6px;line-height:1;
+}
+.logo-sub{
+  font-size:9px;color:var(--ink);letter-spacing:3px;
+  margin-top:7px;text-transform:uppercase;font-weight:500;opacity:.7;
+}
+.logo-leaf{font-size:26px;line-height:1}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:95;
+  background:var(--crimson);display:flex;
+  border-top:2px solid var(--kraft-dk);
+}
+.nav button{
+  flex:1;background:none;border:none;cursor:pointer;
+  padding:9px 2px 11px;color:rgba(255,253,249,.55);
+  font-family:'Noto Sans KR',sans-serif;font-size:9.5px;
+  letter-spacing:1px;display:flex;flex-direction:column;
+  align-items:center;gap:4px;transition:.18s;
+  border-right:1px solid rgba(255,255,255,.13);
+}
+.nav button:last-child{border-right:none}
+.nav button.on{color:var(--white);background:rgba(0,0,0,.14)}
+.nav .ic{width:22px;height:22px;display:block}
+.nav .ic svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ============ PAGE ============ */
+.pg{display:none;padding:16px 14px}
+.pg.on{display:block}
+
+/* ============ MUJI GRID CHIPS ============ */
+.grid-chips{
+  border-top:2px solid var(--crimson);
+  border-bottom:2px solid var(--crimson);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:var(--white);margin-bottom:18px;
+}
+.chip{
+  padding:11px 3px 9px;text-align:center;cursor:pointer;
+  border-right:1px solid var(--rule);transition:.15s;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.chip:last-child{border-right:none}
+.chip:active{background:var(--kraft-lt)}
+.chip.on{background:var(--crimson)}
+.chip.on .chip-ic svg{stroke:var(--white)}
+.chip.on .chip-lb{color:var(--white)}
+.chip-ic{width:26px;height:26px}
+.chip-ic svg{width:100%;height:100%;stroke:var(--crimson);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.chip-lb{font-size:8.5px;color:var(--crimson);letter-spacing:.5px;font-weight:700}
+
+/* chip detail panel */
+.chip-panel{
+  display:none;background:var(--white);
+  border:2px solid var(--crimson);border-top:none;
+  margin:-18px 0 18px;padding:14px 15px;
+}
+.chip-panel.on{display:block}
+.cp-title{
+  font-family:'Noto Serif JP',serif;font-size:14px;font-weight:600;
+  color:var(--crimson);letter-spacing:2px;margin-bottom:10px;
+  padding-bottom:7px;border-bottom:1px solid var(--rule);
+}
+.cp-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:11.5px;border-bottom:1px dotted var(--rule)}
+.cp-row:last-child{border-bottom:none}
+.cp-k{color:var(--ink-soft);flex-shrink:0}
+.cp-v{color:var(--ink);font-weight:500;text-align:right}
+.cp-close{
+  display:block;width:100%;margin-top:11px;padding:7px;
+  background:var(--kraft-lt);border:1px solid var(--rule);
+  color:var(--ink-soft);font-size:10px;letter-spacing:2px;
+  font-family:'Noto Sans KR',sans-serif;cursor:pointer;
+}
+
+/* ============ DAY TABS ============ */
+.days{
+  display:flex;border:2px solid var(--crimson);
+  background:var(--white);margin-bottom:18px;
+}
+.day-t{
+  flex:1;padding:9px 2px;text-align:center;cursor:pointer;
+  border-right:1px solid var(--rule);transition:.15s;
+}
+.day-t:last-child{border-right:none}
+.day-t.on{background:var(--crimson)}
+.day-t .dn{
+  font-family:'Noto Serif JP',serif;font-size:17px;font-weight:600;
+  color:var(--crimson);display:block;line-height:1.1;
+}
+.day-t .dw{font-size:8.5px;color:var(--ink-soft);letter-spacing:.5px;margin-top:2px}
+.day-t.on .dn,.day-t.on .dw{color:var(--white)}
+
+.day{display:none}
+.day.on{display:block}
+
+/* ============ HERO (washi) ============ */
+.hero{
+  background:var(--crimson);color:var(--white);
+  padding:20px 18px;margin-bottom:20px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;opacity:.14;
+  background-image:
+    radial-gradient(circle at 12% 20%,#fff 1.5px,transparent 2px),
+    radial-gradient(circle at 78% 12%,#fff 1.5px,transparent 2px),
+    radial-gradient(circle at 45% 68%,#fff 1.5px,transparent 2px),
+    radial-gradient(circle at 88% 78%,#fff 1.5px,transparent 2px),
+    radial-gradient(circle at 28% 88%,#fff 1.5px,transparent 2px),
+    radial-gradient(circle at 62% 38%,#fff 1.5px,transparent 2px);
+  background-size:120px 120px;
+}
+.hero-leaf{
+  position:absolute;right:-14px;top:-10px;
+  font-size:82px;opacity:.13;transform:rotate(18deg);
+}
+.hero-lb{font-size:9px;letter-spacing:4px;opacity:.72;margin-bottom:7px;position:relative}
+.hero-t{
+  font-family:'Noto Serif JP',serif;font-size:22px;font-weight:600;
+  letter-spacing:2px;margin-bottom:5px;position:relative;
+}
+.hero-s{font-size:11.5px;opacity:.8;position:relative;letter-spacing:.5px}
+
+/* ============ SECTION ============ */
+.sec{
+  display:flex;align-items:center;gap:9px;
+  margin:22px 0 11px;
+}
+.sec-ic{width:19px;height:19px;flex-shrink:0}
+.sec-ic svg{width:100%;height:100%;stroke:var(--crimson);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sec-t{
+  font-family:'Noto Serif JP',serif;font-size:12px;font-weight:600;
+  color:var(--crimson);letter-spacing:3px;white-space:nowrap;
+}
+.sec-line{flex:1;height:1px;background:var(--crimson);opacity:.4}
+
+/* ============ CARD ============ */
+.card{
+  background:var(--white);border:1px solid var(--rule);
+  padding:14px 15px;margin-bottom:9px;
+}
+.card-hd{display:flex;align-items:flex-start;gap:12px}
+.card-ic{width:30px;height:30px;flex-shrink:0;margin-top:1px}
+.card-ic svg{width:100%;height:100%;stroke:var(--crimson);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.card-bd{flex:1;min-width:0}
+.card-tm{
+  font-size:10px;font-weight:700;color:var(--crimson);
+  letter-spacing:1.5px;margin-bottom:3px;
+}
+.card-t{font-size:13.5px;font-weight:700;margin-bottom:4px;letter-spacing:.3px}
+.card-s{font-size:11.5px;color:var(--ink-soft);line-height:1.65}
+.card-n{
+  font-size:9.5px;color:var(--kraft-dk);letter-spacing:.5px;
+  margin-top:7px;font-family:ui-monospace,monospace;word-break:break-all;
+}
+.card-lk{
+  display:inline-block;margin-top:7px;font-size:10.5px;
+  color:var(--crimson);text-decoration:none;font-weight:700;
+  border-bottom:1px solid var(--crimson);padding-bottom:1px;letter-spacing:.5px;
+}
+.tag{
+  display:inline-block;margin-top:8px;padding:2px 9px;
+  font-size:9px;font-weight:700;letter-spacing:1px;
+  border:1px solid var(--crimson);color:var(--crimson);
+}
+.tag.fill{background:var(--crimson);color:var(--white)}
+.tag.soft{border-color:var(--kraft-dk);color:var(--kraft-dk)}
+
+/* ============ OPTIONS ============ */
+.opt{
+  background:var(--white);border:1px solid var(--rule);
+  padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:.15s;
+  position:relative;
+}
+.opt.on{border-color:var(--crimson);border-width:2px;background:#FDF8F0;padding:11px 13px}
+.opt.on::after{
+  content:'✓';position:absolute;top:9px;right:12px;
+  color:var(--crimson);font-size:14px;font-weight:900;
+}
+.opt-hd{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.opt-ic{width:19px;height:19px;flex-shrink:0}
+.opt-ic svg{width:100%;height:100%;stroke:var(--crimson);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.opt-t{font-size:12.5px;font-weight:700;letter-spacing:.3px}
+.opt-d{font-size:11px;color:var(--ink-soft);line-height:1.6;padding-left:28px}
+
+/* ============ NOTE ============ */
+.note{
+  background:var(--kraft-lt);border-left:3px solid var(--crimson);
+  padding:11px 13px;font-size:11.5px;color:var(--ink);
+  margin-bottom:11px;line-height:1.65;
+}
+.note b{color:var(--crimson)}
+
+/* ============ RES ============ */
+.res-cat{
+  display:flex;align-items:center;gap:9px;
+  margin:24px 0 12px;padding-bottom:8px;
+  border-bottom:2px solid var(--crimson);
+}
+.res-cat .sec-ic{width:20px;height:20px}
+.res-cat-t{font-family:'Noto Serif JP',serif;font-size:14px;font-weight:600;color:var(--crimson);letter-spacing:3px}
+.rrow{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:11.5px;border-bottom:1px dotted var(--rule)}
+.rrow:last-of-type{border-bottom:none}
+.rk{color:var(--ink-soft);flex-shrink:0}
+.rv{font-weight:500;text-align:right}
+
+/* ============ FX ============ */
+.fx-hero{
+  background:var(--kraft);border:2px solid var(--crimson);
+  padding:24px 18px;text-align:center;margin-bottom:16px;
+}
+.fx-big{font-family:'Noto Serif JP',serif;font-size:32px;font-weight:600;color:var(--crimson);letter-spacing:1px}
+.fx-cap{font-size:10px;color:var(--ink);letter-spacing:2px;margin-top:6px;opacity:.75}
+.fx-lb{font-size:9.5px;font-weight:700;color:var(--crimson);letter-spacing:2.5px;margin-bottom:7px}
+.fx-in{
+  width:100%;padding:13px 14px;border:1px solid var(--rule);
+  background:var(--paper);font-size:19px;font-weight:700;color:var(--ink);
+  font-family:'Noto Sans KR',sans-serif;outline:none;
+}
+.fx-in:focus{border-color:var(--crimson)}
+.fx-swap{display:flex;justify-content:center;margin:11px 0}
+.fx-swap button{
+  width:34px;height:34px;border:1px solid var(--crimson);
+  background:var(--white);color:var(--crimson);font-size:15px;cursor:pointer;
+}
+.fx-out{background:var(--kraft-lt);border:1px solid var(--rule);padding:15px;text-align:center}
+.fx-out-n{font-size:25px;font-weight:700;color:var(--crimson)}
+.fx-out-u{font-size:10px;color:var(--ink-soft);letter-spacing:2px;margin-top:3px}
+
+.total{border-top:2px solid var(--crimson)!important;padding-top:8px!important;margin-top:5px}
+.total .rk,.total .rv{font-weight:700;color:var(--crimson);font-size:12.5px}
+
+/* footer mark */
+.mark{
+  text-align:center;padding:26px 0 10px;
+  font-family:'Noto Serif JP',serif;font-size:10px;
+  color:var(--kraft-dk);letter-spacing:5px;
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-rule"></div>
+  <div class="hdr-in">
+    <div>
+      <div class="logo">紅葉旅</div>
+      <div class="logo-sub">momiji trip · 2026.09.23—27</div>
+    </div>
+    <span class="logo-leaf">🍁</span>
+  </div>
+</div>
+
+<!-- ================= SCHEDULE ================= -->
+<div id="p-sch" class="pg on">
+
+  <div class="grid-chips">
+    <div class="chip" onclick="chip(this,'c-air')">
+      <span class="chip-ic"><svg viewBox="0 0 24 24"><path d="M2 13l9-2 4-8 2 1-2 7 6-1.5 1 2-6 2.5 1 7-2 1-4-7-9 2z"/></svg></span>
+      <span class="chip-lb">항공</span>
+    </div>
+    <div class="chip" onclick="chip(this,'c-car')">
+      <span class="chip-ic"><svg viewBox="0 0 24 24"><path d="M4 16h16M5 16V11l2-5h10l2 5v5M5 16v2.5M19 16v2.5"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg></span>
+      <span class="chip-lb">렌터카</span>
+    </div>
+    <div class="chip" onclick="chip(this,'c-stay')">
+      <span class="chip-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span>
+      <span class="chip-lb">숙소</span>
+    </div>
+    <div class="chip" onclick="chip(this,'c-eat')">
+      <span class="chip-ic"><svg viewBox="0 0 24 24"><path d="M6 3v8a2 2 0 004 0V3M8 11v10M17 3c-1.5 1-2 3-2 5s.5 3 2 3v10"/></svg></span>
+      <span class="chip-lb">식사</span>
+    </div>
+    <div class="chip" onclick="chip(this,'c-ppl')">
+      <span class="chip-ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.3"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 14.8c2.8.2 5 2.2 5 5.2"/></svg></span>
+      <span class="chip-lb">인원</span>
+    </div>
+  </div>
+
+  <div id="c-air" class="chip-panel">
+    <div class="cp-title">항공편 · ASIANA</div>
+    <div class="cp-row"><span class="cp-k">가는 편</span><span class="cp-v">9/23 (수) OZ1065<br>GMP 19:50 → HND 22:00</span></div>
+    <div class="cp-row"><span class="cp-k">오는 편</span><span class="cp-v">9/27 (일) OZ1075<br>HND 12:05 → GMP 14:25</span></div>
+    <div class="cp-row"><span class="cp-k">기종</span><span class="cp-v">A330-300 · B클래스</span></div>
+    <div class="cp-row"><span class="cp-k">터미널</span><span class="cp-v">하네다 T3 (국제선)</span></div>
+    <button class="cp-close" onclick="closeChip()">닫기 ✕</button>
+  </div>
+
+  <div id="c-car" class="chip-panel">
+    <div class="cp-title">렌터카 · SIXT</div>
+    <div class="cp-row"><span class="cp-k">픽업</span><span class="cp-v">9/24 (목) 09:30</span></div>
+    <div class="cp-row"><span class="cp-k">반납</span><span class="cp-v">9/27 (일) 09:30</span></div>
+    <div class="cp-row"><span class="cp-k">장소</span><span class="cp-v">Haneda Innovation City zone F<br>텐쿠바시역 직결</span></div>
+    <div class="cp-row"><span class="cp-k">차량</span><span class="cp-v">FVAR 대형 미니밴<br>(Delica / Vellfire급)</span></div>
+    <div class="cp-row"><span class="cp-k">포함</span><span class="cp-v">LDW 면책 0엔 · 내비 · 무제한 주행<br>추가운전자 · 24/7 긴급지원</span></div>
+    <div class="cp-row"><span class="cp-k">요금</span><span class="cp-v">¥77,440</span></div>
+    <div class="cp-row"><span class="cp-k">셔틀</span><span class="cp-v">T1·2·3 ORIX 카운터 → 15분<br>운행 08:00–19:00</span></div>
+    <div class="cp-row"><span class="cp-k">예약번호</span><span class="cp-v">9736390252</span></div>
+    <button class="cp-close" onclick="closeChip()">닫기 ✕</button>
+  </div>
+
+  <div id="c-stay" class="chip-panel">
+    <div class="cp-title">숙소 3곳</div>
+    <div class="cp-row"><span class="cp-k">9/23</span><span class="cp-v">메트로폴리탄 하네다<br>Superior Queen ×2 · ¥42,480</span></div>
+    <div class="cp-row"><span class="cp-k">9/24–26</span><span class="cp-v">森四季 VILLA · HIKARI<br>A-frame 독채 · ¥232,800</span></div>
+    <div class="cp-row"><span class="cp-k">9/26</span><span class="cp-v">에어비앤비 하츠다이<br>232㎡ 단독주택 · ₩1,356,578</span></div>
+    <button class="cp-close" onclick="closeChip()">닫기 ✕</button>
+  </div>
+
+  <div id="c-eat" class="chip-panel">
+    <div class="cp-title">확정 식사</div>
+    <div class="cp-row"><span class="cp-k">9/24 18:00</span><span class="cp-v">유카와탄 (프렌치)<br>4인 · AX5G4C</span></div>
+    <div class="cp-row"><span class="cp-k">9/25 18:00</span><span class="cp-v">Ogosso (신슈 샤모)<br>4인 · 카운터석 · 아버님 예약</span></div>
+    <div class="cp-row"><span class="cp-k">9/26 14:00</span><span class="cp-v">すし ふくづか (스시)<br>4인 · 저녁과 동일 코스</span></div>
+    <div class="cp-row"><span class="cp-k">9/26 저녁</span><span class="cp-v">에어비앤비 홈파티 6인</span></div>
+    <button class="cp-close" onclick="closeChip()">닫기 ✕</button>
+  </div>
+
+  <div id="c-ppl" class="chip-panel">
+    <div class="cp-title">여행 인원</div>
+    <div class="cp-row"><span class="cp-k">기본</span><span class="cp-v">4인 · 세원 · 영학 · 부모님</span></div>
+    <div class="cp-row"><span class="cp-k">9/26 밤</span><span class="cp-v">6인 · 영은·규식 부부 합류</span></div>
+    <div class="cp-row"><span class="cp-k">차량</span><span class="cp-v">7인승 미니밴 (여유)</span></div>
+    <div class="cp-row"><span class="cp-k">주차</span><span class="cp-v">에어비앤비 3대 무료</span></div>
+    <button class="cp-close" onclick="closeChip()">닫기 ✕</button>
+  </div>
+
+  <div class="days">
+    <div class="day-t on" onclick="day(0)"><span class="dn">23</span><span class="dw">水 도쿄</span></div>
+    <div class="day-t" onclick="day(1)"><span class="dn">24</span><span class="dw">木 가루이자와</span></div>
+    <div class="day-t" onclick="day(2)"><span class="dn">25</span><span class="dw">金 가루이자와</span></div>
+    <div class="day-t" onclick="day(3)"><span class="dn">26</span><span class="dw">土 하츠다이</span></div>
+    <div class="day-t" onclick="day(4)"><span class="dn">27</span><span class="dw">日 귀국</span></div>
+  </div>
+
+  <!-- DAY 0 -->
+  <div class="day on" id="d0">
+    <div class="hero">
+      <span class="hero-leaf">🍁</span>
+      <div class="hero-lb">DAY 1 · 9月23日 水</div>
+      <div class="hero-t">도착 · 하네다</div>
+      <div class="hero-s">김포 출발 → 하네다 야간 도착 → 취침</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M2 13l9-2 4-8 2 1-2 7 6-1.5 1 2-6 2.5 1 7-2 1-4-7-9 2z"/></svg></span><span class="sec-t">항공</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M2 13l9-2 4-8 2 1-2 7 6-1.5 1 2-6 2.5 1 7-2 1-4-7-9 2z"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">GMP 19:50 → HND 22:00</div>
+          <div class="card-t">아시아나 OZ1065</div>
+          <div class="card-s">B클래스 · A330-300 · 2시간 10분<br>하네다 T3 도착 · 기내식 포함</div>
+          <span class="tag fill">확정</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span><span class="sec-t">숙소</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">23:00 체크인 예정</div>
+          <div class="card-t">호텔 메트로폴리탄 하네다</div>
+          <div class="card-s">Superior Queen Riverside ×2실 · 조식 포함<br>체크아웃 9/24 11:00 · 03-3747-1101</div>
+          <div class="card-n">#3719-8862-5577 / #3719-8863-4763</div>
+          <span class="tag fill">확정 · ¥42,480</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">입국·수하물 수령까지 약 1시간. <b>택시로 호텔 이동</b> — 체크인 가능 시간 15:00~29:00이라 늦어도 문제없어요.</div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day" id="d1">
+    <div class="hero">
+      <span class="hero-leaf">🍁</span>
+      <div class="hero-lb">DAY 2 · 9月24日 木</div>
+      <div class="hero-t">가루이자와 입성</div>
+      <div class="hero-s">렌터카 픽업 → 드라이브 → 온천 → 프렌치 → 모닥불</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 16h16M5 16V11l2-5h10l2 5v5"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg></span><span class="sec-t">렌터카</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 16h16M5 16V11l2-5h10l2 5v5"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">09:30 픽업</div>
+          <div class="card-t">SIXT · 대형 미니밴</div>
+          <div class="card-s">Haneda Innovation City zone F<br>호텔에서 도보 5분 · LDW 면책 0엔<br>가루이자와까지 약 2시간 30분</div>
+          <div class="card-n">#9736390252</div>
+          <span class="tag fill">확정 · ¥77,440</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span><span class="sec-t">체크인</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 21V10l8-6 8 6v11M4 21h16M12 4v17"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">13:00 얼리 체크인</div>
+          <div class="card-t">森四季 VILLA · HIKARI</div>
+          <div class="card-s">A-frame 독채 · 이끼정원 · 킹베드 2<br>스파욕조 · BBQ · 파이어핏 · 풀키친<br>24h 버틀러 · 체크아웃 9/26 10:00</div>
+          <div class="card-n">#X-ZTHMPC9OPB4</div>
+          <span class="tag fill">확정 · ¥232,800</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M6 3v8a2 2 0 004 0V3M8 11v10M17 3c-1.5 1-2 3-2 5s.5 3 2 3v10"/></svg></span><span class="sec-t">점심 선택</span><span class="sec-line"></span></div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M12 21V9M12 9c0-3 2-6 5-6M12 12c0-2.5-2-5-5-5"/></svg></span><span class="opt-t">하르니레 테라스</span></div>
+      <div class="opt-d">숲속 오픈 테라스 몰 · 소바부터 카페까지 다 있음<br>빌라 도보권 · 도착 첫 끼로 가장 자연스러움</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M3 12c4-4 10-4 14 0-4 4-10 4-14 0z"/><circle cx="8" cy="12" r=".8"/><path d="M17 9l4 3-4 3"/></svg></span><span class="opt-t">신슈 민물고기 정식</span></div>
+      <div class="opt-d">이와나·산천어 · 가루이자와 현지 특산<br>여기서만 먹을 수 있는 한 끼</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-3a6 6 0 0112 0v3M9 6c0-1 1-1.5 1-2.5M12 5.5c0-1 1-1.5 1-2.5M15 6c0-1 1-1.5 1-2.5"/></svg></span><span class="sec-t">오후 액티비티</span><span class="sec-line"></span></div>
+    <div class="opt on" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-3a6 6 0 0112 0v3M9 6c0-1 1-1.5 1-2.5M12 5.5c0-1 1-1.5 1-2.5M15 6c0-1 1-1.5 1-2.5"/></svg></span><span class="opt-t">호시노 온천 톰보노유</span></div>
+      <div class="opt-d">원천 직접 방류 · 히노키 노천탕 · 1915년 개탕<br>빌라 도보 5분 · ¥1,550/인</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-1.5 2.5-1 5 0 6.5 1-1.5 1.5-4 0-6.5zM4 11c2.5.5 4.5 2 5.5 3.5-2 .5-4.5-.5-5.5-3.5zM20 11c-2.5.5-4.5 2-5.5 3.5 2 .5 4.5-.5 5.5-3.5zM12 14v7"/></svg></span><span class="opt-t">구모바 연못 산책</span></div>
+      <div class="opt-d">단풍 시작 시즌 · 30분 평지 코스<br>어르신 부담없는 산책로</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 9h13v6a4 4 0 01-4 4H8a4 4 0 01-4-4V9zM17 10h2a2 2 0 010 4h-2M7 5c0-1 1-1 1-2M11 5c0-1 1-1 1-2"/></svg></span><span class="opt-t">마루야마 커피 + 상점</span></div>
+      <div class="opt-d">가루이자와 명물 로스터리<br>구 가루이자와 긴자 거리 구경</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M8 21h8M9 3h6l-1 5a4 4 0 01-4 0z"/><path d="M12 8v13M6 5c-1 3 0 5 2 6M18 5c1 3 0 5-2 6"/></svg></span><span class="sec-t">저녁</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M8 21h8M9 3h6l-1 5a4 4 0 01-4 0zM12 8v13"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">18:00 · 4인</div>
+          <div class="card-t">Bleston Court Yukawatan</div>
+          <div class="card-s">가루이자와 최고급 프렌치 · 食べログ 4점대<br>호시노야 부지 내 · 빌라에서 차 5분</div>
+          <div class="card-n">예약 ID · AX5G4C</div>
+          <a class="card-lk" href="https://tblc.hk/rAX5G4C" target="_blank">예약 상세 보기 →</a><br>
+          <span class="tag fill">예약 완료</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M12 3c1 4-2 5-2 8a3 3 0 006 0c0-1.5-1-2.5-1-4M5 21h14"/></svg></span><span class="sec-t">밤</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M12 3c1 4-2 5-2 8a3 3 0 006 0c0-1.5-1-2.5-1-4M5 21h14"/></svg></span>
+        <div class="card-bd">
+          <div class="card-t">파이어핏 캠프파이어</div>
+          <div class="card-s">HIKARI 빌라 전용 파이어핏<br>장작 · 별하늘 · 가루이자와의 첫 밤</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day" id="d2">
+    <div class="hero">
+      <span class="hero-leaf">🍁</span>
+      <div class="hero-lb">DAY 3 · 9月25日 金 · 추석</div>
+      <div class="hero-t">가루이자와 풀데이</div>
+      <div class="hero-s">아버님이 짜시는 하루 · 자유 탐방</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 19h16M6 19c0-4 2.5-7 6-7s6 3 6 7M9 8c0-1 1-1.5 1-2.5M13 8c0-1 1-1.5 1-2.5"/></svg></span><span class="sec-t">조식 선택</span><span class="sec-line"></span></div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 19h16M6 19c0-4 2.5-7 6-7s6 3 6 7"/></svg></span><span class="opt-t">빌라 직접 조리</span></div>
+      <div class="opt-d">풀키친 완비 · 전날 장 봐두기<br>프라이빗한 가족 아침</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-5h4v5"/></svg></span><span class="opt-t">SHISHI-IWA HOUSE · SHOLA</span></div>
+      <div class="opt-d">반 시게루 건축 레스토랑 · 숙박객 외 조식 가능<br>숲속 아침 · 예약 필요</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M6 3v8a2 2 0 004 0V3M8 11v10M17 3c-1.5 1-2 3-2 5s.5 3 2 3v10"/></svg></span><span class="sec-t">점심 선택</span><span class="sec-line"></span></div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M12 13c0-4 3-7 7-7 0 4-3 7-7 7zM12 13c0-4-3-7-7-7 0 4 3 7 7 7zM12 13v8"/></svg></span><span class="opt-t">신슈 마쓰타케 정식</span></div>
+      <div class="opt-d">9월 말 = 송이버섯 피크 시즌<br>어르신도 아는 신슈 제철의 맛</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8zM9 8V6a3 3 0 016 0v2"/></svg></span><span class="opt-t">프린스 아웃렛 런치</span></div>
+      <div class="opt-d">쇼핑 동선과 연계 · 부담 없이<br>가루이자와 최대 쇼핑몰</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="sec-t">오후 선택</span><span class="sec-line"></span></div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8zM9 8V6a3 3 0 016 0v2"/></svg></span><span class="opt-t">프린스 쇼핑 플라자</span></div>
+      <div class="opt-d">가루이자와역 바로 앞 · 대형 아웃렛</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-8h5l3 8M10 9h5"/></svg></span><span class="opt-t">자전거 별장지 산책</span></div>
+      <div class="opt-d">클래식 별장지 · 가루이자와 여름 피서지 감성</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-3a6 6 0 0112 0v3M9 6c0-1 1-1.5 1-2.5M12 5.5c0-1 1-1.5 1-2.5M15 6c0-1 1-1.5 1-2.5"/></svg></span><span class="opt-t">시오쓰보 온천 (가족탕)</span></div>
+      <div class="opt-d">800년 역사 · 4인 가족탕 가능 · ¥1,000~</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M5 10h14v3a7 7 0 01-14 0v-3zM5 21h14M9 4c0 1.5-1 2-1 3M13 4c0 1.5-1 2-1 3"/></svg></span><span class="sec-t">저녁</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M5 10h14v3a7 7 0 01-14 0v-3zM5 21h14"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">18:00 · 4인 · 카운터석</div>
+          <div class="card-t">軽井沢 Ogosso (오곳소)</div>
+          <div class="card-s">신슈 샤모(軍鶏)·소고기·자라 요리<br>나카가루이자와역 인근 · 오야코동 명물<br>예약자 李 · 080-8588-4474</div>
+          <span class="tag fill">아버님 예약 완료</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 15h16M6 15c0-3 2.5-5 6-5s6 2 6 5M8 6c0 1.5-1 2-1 3M12 5c0 1.5-1 2-1 3M16 6c0 1.5-1 2-1 3M3 19h18"/></svg></span>
+        <div class="card-bd">
+          <div class="card-t">빌라 BBQ (대안 · 야식)</div>
+          <div class="card-s">이자카야 후 or 단독으로<br>HIKARI 빌라 BBQ 그릴 이용</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day" id="d3">
+    <div class="hero">
+      <span class="hero-leaf">🍁</span>
+      <div class="hero-lb">DAY 4 · 9月26日 土</div>
+      <div class="hero-t">하츠다이 · 오쿠시부</div>
+      <div class="hero-s">가루이자와 → 카구라자카 스시 → 하츠다이</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 16h16M5 16V11l2-5h10l2 5v5"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg></span><span class="sec-t">이동</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 21V10l8-6 8 6v11M4 21h16"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">10:00 체크아웃</div>
+          <div class="card-t">森四季 → 도쿄 하츠다이</div>
+          <div class="card-s">간에쓰도 경유 약 2시간 30분<br>중간 SA 휴식 겸 가벼운 점심</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span><span class="sec-t">체크인</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">16:00 체크인</div>
+          <div class="card-t">에어비앤비 · 단독주택 232㎡</div>
+          <div class="card-s">하츠다이 · 신주쿠 4분 · 시부야 10분<br>주차장 3대 무료 · 6인 홈파티 가능<br>호스트 +81 70-3324-3972</div>
+          <div class="card-n">#HMA8ZNFZCT</div>
+          <span class="tag fill">확정 · ₩1,356,578</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-1.5 2.5-1 5 0 6.5 1-1.5 1.5-4 0-6.5zM4 11c2.5.5 4.5 2 5.5 3.5-2 .5-4.5-.5-5.5-3.5zM20 11c-2.5.5-4.5 2-5.5 3.5 2 .5 4.5-.5 5.5-3.5zM12 14v7"/></svg></span><span class="sec-t">하츠다이 탐방 선택</span><span class="sec-line"></span></div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 21h16M6 21V7l6-4 6 4v14M10 21v-6h4v6M9 10h6"/></svg></span><span class="opt-t">도쿄 오페라시티</span></div>
+      <div class="opt-d">하츠다이역 직결 랜드마크 · 아트갤러리<br>신국립극장 · 54층 전망 · 도보 4분</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-1.5 2.5-1 5 0 6.5 1-1.5 1.5-4 0-6.5zM4 11c2.5.5 4.5 2 5.5 3.5-2 .5-4.5-.5-5.5-3.5zM20 11c-2.5.5-4.5 2-5.5 3.5 2 .5 4.5-.5 5.5-3.5zM12 14v7"/></svg></span><span class="opt-t">요요기 공원</span></div>
+      <div class="opt-d">도쿄 도립공원 5위 규모 · 하츠다이 남쪽 도보 18분<br>분수광장 · 대관람 잔디 · 9월 말 초가을</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M5 21h14M7 21V10h10v11M4 10l8-6 8 6M10 21v-5h4v5"/></svg></span><span class="opt-t">요요기하치만구 (代々木八幡宮)</span></div>
+      <div class="opt-d">380년 역사 신사 · 조몬시대 유적지<br>파워스팟 · 울창한 숲길</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 9h13v6a4 4 0 01-4 4H8a4 4 0 01-4-4V9zM17 10h2a2 2 0 010 4h-2M7 5c0-1 1-1 1-2M11 5c0-1 1-1 1-2"/></svg></span><span class="opt-t">오쿠시부 (奥渋) 카페 산책</span></div>
+      <div class="opt-d">개인 로스터리·서점·편집숍 밀집<br>도쿄 로컬 컬처의 발신지</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8zM9 8V6a3 3 0 016 0v2"/></svg></span><span class="opt-t">신주쿠 쇼핑 (무인양품·이세탄)</span></div>
+      <div class="opt-d">하츠다이에서 4분 · 장보기 겸<br>홈파티용 식재료·주류 구입</div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M3 14c3-2 6-2 9 0s6 2 9 0M4 14l1 5h14l1-5M8 9l1-3M12 8l1-3M16 9l1-3"/></svg></span><span class="sec-t">점심 · 이번 여행의 스시</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M3 14c3-2 6-2 9 0s6 2 9 0M4 14l1 5h14l1-5"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">14:00 · 4인 · 1부</div>
+          <div class="card-t">すし ふくづか (후쿠즈카)</div>
+          <div class="card-s">카구라자카 효고요코초 골목 안쪽 · 카운터 7석<br>간판 없는 은신처 · 밤의 다회(夜咄の茶事) 공간<br>츠마미+니기리 오마카세 (저녁과 동일 코스)<br>3-5 Tsukudocho 2F · 03-5579-2860</div>
+          <div class="card-n">OpenTable · Sat, Sep 26 2:00 PM</div>
+          <span class="tag fill">예약 완료</span>
+        </div>
+      </div>
+    </div>
+    <div class="note">🍣 <b>14:00 1부는 저녁과 동일한 코스</b> — 축약판 아님 (확인 완료)<br>향과 온도에 집착하는 오야카타 · 와사비 3종 · 온도별 냉장고 3대<br>소믈리에 페어링 (프랑스 와인 전용)</div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.3"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 14.8c2.8.2 5 2.2 5 5.2"/></svg></span><span class="sec-t">저녁 · 6인 홈파티</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.3"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M16 14.8c2.8.2 5 2.2 5 5.2"/></svg></span>
+        <div class="card-bd">
+          <div class="card-t">에어비앤비 홈파티</div>
+          <div class="card-s">영은·규식 부부 이사 마치고 합류<br>232㎡ 단독주택 · 총 6인 · 1박<br>점심이 스시 풀코스라 저녁은 가볍게</div>
+          <span class="tag">6인</span>
+        </div>
+      </div>
+    </div>
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8zM9 8V6a3 3 0 016 0v2"/></svg></span><span class="sec-t">홈파티 준비 선택</span><span class="sec-line"></span></div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8zM9 8V6a3 3 0 016 0v2"/></svg></span><span class="opt-t">신주쿠 장보기 (이세탄 데파치카)</span></div>
+      <div class="opt-d">하츠다이에서 4분 · 델리·와인·안주<br>체크인 전 들러서 한 번에</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 19h16M6 19c0-4 2.5-7 6-7s6 3 6 7"/></svg></span><span class="opt-t">배달 · 케이터링</span></div>
+      <div class="opt-d">Uber Eats / 出前館 · 이사 끝나는 시간 맞춰서<br>준비 부담 없음</div>
+    </div>
+    <div class="opt" onclick="pick(this)">
+      <div class="opt-hd"><span class="opt-ic"><svg viewBox="0 0 24 24"><path d="M5 10h14v3a7 7 0 01-14 0v-3zM5 21h14M9 4c0 1.5-1 2-1 3M13 4c0 1.5-1 2-1 3"/></svg></span><span class="opt-t">근처 이자카야 가볍게</span></div>
+      <div class="opt-d">하츠다이·오쿠시부 로컬 이자카야<br>6인 자리 · 이사 후 편하게</div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day" id="d4">
+    <div class="hero">
+      <span class="hero-leaf">🍁</span>
+      <div class="hero-lb">DAY 5 · 9月27日 日</div>
+      <div class="hero-t">귀국</div>
+      <div class="hero-s">체크아웃 → 렌터카 반납 → 하네다 → 서울</div>
+    </div>
+
+    <div class="note">⏰ <b>OZ1075 12:05 출발 · 탑승 마감 11:30</b><br>렌터카 09:30 반납 → 셔틀로 T3 이동 (15분) → 10:30 수속 완료 목표</div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="sec-t">아침 타임라인</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <div class="card-bd">
+          <div class="card-s">
+            <b>07:30</b> &nbsp;기상 · 짐 정리<br>
+            <b>08:30</b> &nbsp;에어비앤비 체크아웃 (10:00까지)<br>
+            <b>09:30</b> &nbsp;SIXT 렌터카 반납 (Innovation City zone F)<br>
+            <b>09:45</b> &nbsp;셔틀 → 하네다 T3<br>
+            <b>10:30</b> &nbsp;체크인·수속 완료<br>
+            <b>12:05</b> &nbsp;이륙 ✈️
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M2 13l9-2 4-8 2 1-2 7 6-1.5 1 2-6 2.5 1 7-2 1-4-7-9 2z"/></svg></span><span class="sec-t">귀국편</span><span class="sec-line"></span></div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M2 13l9-2 4-8 2 1-2 7 6-1.5 1 2-6 2.5 1 7-2 1-4-7-9 2z"/></svg></span>
+        <div class="card-bd">
+          <div class="card-tm">HND 12:05 → GMP 14:25</div>
+          <div class="card-t">아시아나 OZ1075</div>
+          <div class="card-s">B클래스 · A330-300 · 2시간 20분<br>하네다 T3 출발 · 기내식 포함</div>
+          <span class="tag fill">확정</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mark">紅 葉 旅 · 完</div>
+  </div>
+</div>
+
+<!-- ================= RESERVATION ================= -->
+<div id="p-res" class="pg">
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M2 13l9-2 4-8 2 1-2 7 6-1.5 1 2-6 2.5 1 7-2 1-4-7-9 2z"/></svg></span><span class="res-cat-t">항공</span></div>
+  <div class="card">
+    <div class="card-t">아시아나 OZ1065 · 가는 편</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">날짜</span><span class="rv">9/23 (수)</span></div>
+      <div class="rrow"><span class="rk">구간</span><span class="rv">GMP 19:50 → HND 22:00</span></div>
+      <div class="rrow"><span class="rk">기종</span><span class="rv">A330-300 · B클래스</span></div>
+      <div class="rrow"><span class="rk">소요</span><span class="rv">2시간 10분</span></div>
+    </div>
+    <span class="tag fill">확정</span>
+  </div>
+  <div class="card">
+    <div class="card-t">아시아나 OZ1075 · 오는 편</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">날짜</span><span class="rv">9/27 (일)</span></div>
+      <div class="rrow"><span class="rk">구간</span><span class="rv">HND 12:05 → GMP 14:25</span></div>
+      <div class="rrow"><span class="rk">기종</span><span class="rv">A330-300 · B클래스</span></div>
+      <div class="rrow"><span class="rk">소요</span><span class="rv">2시간 20분</span></div>
+    </div>
+    <span class="tag fill">확정</span>
+  </div>
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 16h16M5 16V11l2-5h10l2 5v5"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg></span><span class="res-cat-t">렌터카</span></div>
+  <div class="card">
+    <div class="card-t">SIXT · 대형 미니밴</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">픽업</span><span class="rv">9/24 (목) 09:30</span></div>
+      <div class="rrow"><span class="rk">반납</span><span class="rv">9/27 (일) 09:30</span></div>
+      <div class="rrow"><span class="rk">장소</span><span class="rv">Haneda Innovation City<br>zone F · 텐쿠바시역 직결</span></div>
+      <div class="rrow"><span class="rk">차량</span><span class="rv">FVAR (Delica / Vellfire급)</span></div>
+      <div class="rrow"><span class="rk">보험</span><span class="rv">LDW 자기부담금 0엔</span></div>
+      <div class="rrow"><span class="rk">포함</span><span class="rv">내비 · 무제한주행 · 추가운전자</span></div>
+      <div class="rrow"><span class="rk">셔틀</span><span class="rv">08:00–19:00 · 15분 간격</span></div>
+      <div class="rrow"><span class="rk">요금</span><span class="rv">¥77,440 (픽업 시 결제)</span></div>
+      <div class="rrow"><span class="rk">보안코드</span><span class="rv">3e2cdedca0</span></div>
+    </div>
+    <div class="card-n">예약번호 · 9736390252</div>
+    <a class="card-lk" href="https://www.sixt.com/php/reservation/rentalinfo?ref=9736390252" target="_blank">예약 확인서 보기 →</a><br>
+    <span class="tag fill">확정</span>
+  </div>
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M3 20V9l9-6 9 6v11M3 20h18M9 20v-6h6v6"/></svg></span><span class="res-cat-t">숙소</span></div>
+  <div class="card">
+    <div class="card-t">호텔 메트로폴리탄 하네다</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">체크인</span><span class="rv">9/23 (수) · 도착 23:00</span></div>
+      <div class="rrow"><span class="rk">체크아웃</span><span class="rv">9/24 (목) 11:00</span></div>
+      <div class="rrow"><span class="rk">객실</span><span class="rv">Superior Queen Riverside ×2</span></div>
+      <div class="rrow"><span class="rk">조식</span><span class="rv">포함 (얼리버드)</span></div>
+      <div class="rrow"><span class="rk">요금</span><span class="rv">¥42,480 (2실)</span></div>
+      <div class="rrow"><span class="rk">전화</span><span class="rv">03-3747-1101</span></div>
+    </div>
+    <div class="card-n">#3719-8862-5577 · #3719-8863-4763</div>
+    <span class="tag fill">확정</span>
+  </div>
+  <div class="card">
+    <div class="card-t">Karuizawa Forest Seasons VILLA · HIKARI</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">체크인</span><span class="rv">9/24 (목) 13:00 (얼리)</span></div>
+      <div class="rrow"><span class="rk">체크아웃</span><span class="rv">9/26 (토) 10:00</span></div>
+      <div class="rrow"><span class="rk">객실</span><span class="rv">A-frame 독채 · 4인 · 1동</span></div>
+      <div class="rrow"><span class="rk">시설</span><span class="rv">킹베드×2 · 스파욕조 · BBQ<br>파이어핏 · 풀키친 · 24h 버틀러</span></div>
+      <div class="rrow"><span class="rk">주소</span><span class="rv">長野県北佐久郡軽井沢町長倉2147-118</span></div>
+      <div class="rrow"><span class="rk">스마트락</span><span class="rv">예약 전화번호 뒤 4자리</span></div>
+      <div class="rrow"><span class="rk">요금</span><span class="rv">¥232,800</span></div>
+    </div>
+    <div class="card-n">#X-ZTHMPC9OPB4</div>
+    <span class="tag fill">확정</span>
+  </div>
+  <div class="card">
+    <div class="card-t">에어비앤비 · 하츠다이 단독주택</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">체크인</span><span class="rv">9/26 (토) 16:00</span></div>
+      <div class="rrow"><span class="rk">체크아웃</span><span class="rv">9/27 (일) 10:00</span></div>
+      <div class="rrow"><span class="rk">규모</span><span class="rv">232㎡ · 주차 3대</span></div>
+      <div class="rrow"><span class="rk">위치</span><span class="rv">시부야구 하츠다이<br>신주쿠 4분 · 시부야 10분</span></div>
+      <div class="rrow"><span class="rk">호스트</span><span class="rv">+81 70-3324-3972</span></div>
+      <div class="rrow"><span class="rk">요금</span><span class="rv">₩1,356,578</span></div>
+    </div>
+    <div class="card-n">#HMA8ZNFZCT</div>
+    <span class="tag fill">확정</span>
+  </div>
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M6 3v8a2 2 0 004 0V3M8 11v10M17 3c-1.5 1-2 3-2 5s.5 3 2 3v10"/></svg></span><span class="res-cat-t">레스토랑</span></div>
+  <div class="card">
+    <div class="card-t">Bleston Court Yukawatan</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">날짜</span><span class="rv">9/24 (목) 18:00</span></div>
+      <div class="rrow"><span class="rk">인원</span><span class="rv">4명</span></div>
+      <div class="rrow"><span class="rk">장르</span><span class="rv">프렌치 · 호시노야 부지 내</span></div>
+    </div>
+    <div class="card-n">예약 ID · AX5G4C</div>
+    <a class="card-lk" href="https://tblc.hk/rAX5G4C" target="_blank">예약 상세 보기 →</a><br>
+    <span class="tag fill">예약 완료</span>
+  </div>
+  <div class="card">
+    <div class="card-t">軽井沢 Ogosso (오곳소)</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">날짜</span><span class="rv">9/25 (금) 18:00</span></div>
+      <div class="rrow"><span class="rk">인원</span><span class="rv">4명 · 카운터석</span></div>
+      <div class="rrow"><span class="rk">장르</span><span class="rv">신슈 샤모·소고기·자라<br>오야코동 명물</span></div>
+      <div class="rrow"><span class="rk">주소</span><span class="rv">長野県北佐久郡軽井沢町長倉1999-1</span></div>
+      <div class="rrow"><span class="rk">예약자</span><span class="rv">李 · 080-8588-4474</span></div>
+      <div class="rrow"><span class="rk">휴무</span><span class="rv">수요일</span></div>
+    </div>
+    <span class="tag fill">아버님 예약</span>
+  </div>
+  <div class="card">
+    <div class="card-t">すし ふくづか (후쿠즈카)</div>
+    <div style="margin-top:9px">
+      <div class="rrow"><span class="rk">날짜</span><span class="rv">9/26 (토) 14:00</span></div>
+      <div class="rrow"><span class="rk">인원</span><span class="rv">4명 · 1부 (14:00–16:00)</span></div>
+      <div class="rrow"><span class="rk">코스</span><span class="rv">저녁과 동일 오마카세<br>츠마미+니기리 · 페어링 선택</span></div>
+      <div class="rrow"><span class="rk">주소</span><span class="rv">新宿区津久戸町3-5 2F<br>카구라자카 효고요코초 안쪽</span></div>
+      <div class="rrow"><span class="rk">전화</span><span class="rv">03-5579-2860</span></div>
+      <div class="rrow"><span class="rk">가는 길</span><span class="rv">이다바시역 도보 6분<br>우시고메카구라자카 A3 도보 5분</span></div>
+      <div class="rrow"><span class="rk">취소</span><span class="rv">전날 16시까지 무료</span></div>
+    </div>
+    <div class="card-n">OpenTable · 예약자 Sewon H.</div>
+    <span class="tag fill">예약 완료</span>
+  </div>
+
+  <div class="mark">紅 葉 旅</div>
+</div>
+
+<!-- ================= SPOTS ================= -->
+<div id="p-spot" class="pg">
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-1.5 2.5-1 5 0 6.5 1-1.5 1.5-4 0-6.5zM4 11c2.5.5 4.5 2 5.5 3.5-2 .5-4.5-.5-5.5-3.5zM20 11c-2.5.5-4.5 2-5.5 3.5 2 .5 4.5-.5 5.5-3.5zM12 14v7"/></svg></span><span class="res-cat-t">가루이자와</span></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18v-3a6 6 0 0112 0v3M9 6c0-1 1-1.5 1-2.5M12 5.5c0-1 1-1.5 1-2.5M15 6c0-1 1-1.5 1-2.5"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">호시노 온천 톰보노유</div>
+      <div class="card-s">원천 직접 방류 · 히노키 노천탕 · 1915년<br>빌라 도보 5분 · ¥1,550/인</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M3 15c3-2 6-2 9 0s6 2 9 0M3 19c3-2 6-2 9 0s6 2 9 0M8 9c0-2 1.5-4 4-4s4 2 4 4"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">구모바 연못 (雲場池)</div>
+      <div class="card-s">단풍 명소 · 30분 평지 산책<br>9월 말 단풍 시작 시즌</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M12 21V9M12 9c0-3 2-6 5-6M12 12c0-2.5-2-5-5-5"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">하르니레 테라스</div>
+      <div class="card-s">숲속 오픈 몰 · 카페·소바·레스토랑·쇼핑<br>빌라 도보권</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 9h13v6a4 4 0 01-4 4H8a4 4 0 01-4-4V9zM17 10h2a2 2 0 010 4h-2"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">마루야마 커피</div>
+      <div class="card-s">가루이자와 명물 로스터리<br>구 가루이자와 긴자 거리</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M8 21h8M9 3h6l-1 5a4 4 0 01-4 0zM12 8v13"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">블레스톤 코트 유카와탄</div>
+      <div class="card-s">가루이자와 최고급 프렌치<br>9/24 18:00 예약 완료</div>
+      <span class="tag fill">예약됨</span>
+    </div></div></div>
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 21h16M6 21V7l6-4 6 4v14"/></svg></span><span class="res-cat-t">하츠다이 · 오쿠시부</span></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 21h16M6 21V7l6-4 6 4v14M10 21v-6h4v6M9 10h6"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">도쿄 오페라시티</div>
+      <div class="card-s">하츠다이역 직결 · 아트갤러리 · 신국립극장<br>일본 유일 현대무대예술 국립극장</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M12 3c-1.5 2.5-1 5 0 6.5 1-1.5 1.5-4 0-6.5zM4 11c2.5.5 4.5 2 5.5 3.5-2 .5-4.5-.5-5.5-3.5zM20 11c-2.5.5-4.5 2-5.5 3.5 2 .5 4.5-.5 5.5-3.5zM12 14v7"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">요요기 공원</div>
+      <div class="card-s">도쿄 도립공원 5위 규모 · 하츠다이 도보 18분<br>분수광장 · 사이클링 코스 · 넓은 잔디</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M5 21h14M7 21V10h10v11M4 10l8-6 8 6M10 21v-5h4v5"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">요요기하치만구 (代々木八幡宮)</div>
+      <div class="card-s">380년 역사 · 조몬시대 주거 유적<br>도심 속 파워스팟 · 울창한 숲</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M4 9h13v6a4 4 0 01-4 4H8a4 4 0 01-4-4V9zM17 10h2a2 2 0 010 4h-2M7 5c0-1 1-1 1-2M11 5c0-1 1-1 1-2"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">오쿠시부 (奥渋)</div>
+      <div class="card-s">개인 로스터리·서점·편집숍 밀집 지역<br>도쿄 로컬 컬처 발신지</div>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M3 14c3-2 6-2 9 0s6 2 9 0M4 14l1 5h14l1-5"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">すし ふくづか · 카구라자카</div>
+      <div class="card-s">효고요코초 골목 안쪽 · 간판 없는 은신처<br>카운터 7석 · 9/26 14:00 예약</div>
+      <span class="tag fill">예약됨</span>
+    </div></div></div>
+
+  <div class="card"><div class="card-hd">
+    <span class="card-ic"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8zM9 8V6a3 3 0 016 0v2"/></svg></span>
+    <div class="card-bd">
+      <div class="card-t">신주쿠 (무인양품 · 이세탄)</div>
+      <div class="card-s">하츠다이에서 4분<br>홈파티 장보기 · 마지막 쇼핑</div>
+    </div></div></div>
+
+  <div class="mark">紅 葉 旅</div>
+</div>
+
+<!-- ================= FX ================= -->
+<div id="p-fx" class="pg">
+
+  <div class="fx-hero">
+    <div class="fx-big">¥100 = ₩<span id="rv">930</span></div>
+    <div class="fx-cap">JPY / KRW · 기준 환율</div>
+  </div>
+
+  <div class="card">
+    <div class="fx-lb" id="lbA">🇯🇵 JPY 엔화</div>
+    <input type="number" class="fx-in" id="inp" placeholder="0" inputmode="decimal" oninput="calc()">
+    <div class="fx-swap"><button onclick="swap()">⇅</button></div>
+    <div class="fx-out">
+      <div class="fx-out-n" id="out">₩ 0</div>
+      <div class="fx-out-u" id="lbB">한국 원화 KRW</div>
+    </div>
+  </div>
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-8M22 20H2"/></svg></span><span class="res-cat-t">예산 요약</span></div>
+  <div class="card">
+    <div class="rrow"><span class="rk">🏨 메트로폴리탄 하네다</span><span class="rv">¥42,480</span></div>
+    <div class="rrow"><span class="rk">🚗 SIXT 렌터카 3일</span><span class="rv">¥77,440</span></div>
+    <div class="rrow"><span class="rk">🌲 森四季 HIKARI 2박</span><span class="rv">¥232,800</span></div>
+    <div class="rrow"><span class="rk">🏠 에어비앤비 하츠다이</span><span class="rv">₩1,356,578</span></div>
+    <div class="rrow"><span class="rk">🥂 유카와탄 디너</span><span class="rv">현장 결제</span></div>
+    <div class="rrow"><span class="rk">🏮 Ogosso 이자카야</span><span class="rv">현장 결제</span></div>
+    <div class="rrow"><span class="rk">🍣 すし ふくづか</span><span class="rv">현장 결제</span></div>
+    <div class="rrow total"><span class="rk">엔화 소계</span><span class="rv">¥352,720</span></div>
+    <div class="rrow total"><span class="rk">원화 환산 (약)</span><span class="rv" id="tot">₩3,280,296</span></div>
+  </div>
+
+  <div class="res-cat"><span class="sec-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span><span class="res-cat-t">빠른 환산</span></div>
+  <div class="card">
+    <div class="rrow"><span class="rk">¥1,000</span><span class="rv" id="q1">₩9,300</span></div>
+    <div class="rrow"><span class="rk">¥5,000</span><span class="rv" id="q2">₩46,500</span></div>
+    <div class="rrow"><span class="rk">¥10,000</span><span class="rv" id="q3">₩93,000</span></div>
+    <div class="rrow"><span class="rk">¥30,000</span><span class="rv" id="q4">₩279,000</span></div>
+    <div class="rrow"><span class="rk">¥50,000</span><span class="rv" id="q5">₩465,000</span></div>
+    <div class="rrow"><span class="rk">¥100,000</span><span class="rv" id="q6">₩930,000</span></div>
+  </div>
+
+  <div class="mark">紅 葉 旅</div>
+</div>
+
+<!-- ================= NAV ================= -->
+<div class="nav">
+  <button class="on" onclick="page('sch',this)">
+    <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>일정
+  </button>
+  <button onclick="page('res',this)">
+    <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 002-2h14a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H5a2 2 0 00-2-2v-2a2 2 0 000-4V8z"/><path d="M12 7v10"/></svg></span>예약
+  </button>
+  <button onclick="page('spot',this)">
+    <span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3L3 6v15l6-3 6 3 6-3V3l-6 3-6-3z"/><path d="M9 3v15M15 6v15"/></svg></span>스팟
+  </button>
+  <button onclick="page('fx',this)">
+    <span class="ic"><svg viewBox="0 0 24 24"><path d="M7 6l5 6M17 6l-5 6M12 12v7M8 15h8M8 18h8"/></svg></span>환율
+  </button>
+</div>
+
+<script>
+function page(id,el){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  el.classList.add('on');
+  window.scrollTo(0,0);
+}
+function day(i){
+  document.querySelectorAll('.day-t').forEach((t,n)=>t.classList.toggle('on',n===i));
+  document.querySelectorAll('.day').forEach((d,n)=>d.classList.toggle('on',n===i));
+  closeChip();
+}
+function pick(el){
+  el.classList.toggle('on');
+}
+let openChip=null;
+function chip(el,id){
+  const p=document.getElementById(id);
+  const wasOpen=p.classList.contains('on');
+  document.querySelectorAll('.chip-panel').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  if(!wasOpen){p.classList.add('on');el.classList.add('on');openChip=id;}
+  else openChip=null;
+}
+function closeChip(){
+  document.querySelectorAll('.chip-panel').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  openChip=null;
+}
+
+const R=9.30;
+let mode='J';
+function calc(){
+  const v=parseFloat(document.getElementById('inp').value)||0;
+  const o=document.getElementById('out');
+  if(mode==='J') o.textContent='₩ '+Math.round(v*R).toLocaleString('ko-KR');
+  else o.textContent='¥ '+Math.round(v/R).toLocaleString('ja-JP');
+}
+function swap(){
+  mode = mode==='J'?'K':'J';
+  document.getElementById('lbA').textContent = mode==='J'?'🇯🇵 JPY 엔화':'🇰🇷 KRW 원화';
+  document.getElementById('lbB').textContent = mode==='J'?'한국 원화 KRW':'일본 엔화 JPY';
+  document.getElementById('inp').value='';
+  document.getElementById('out').textContent = mode==='J'?'₩ 0':'¥ 0';
+}
+(function(){
+  const w=n=>'₩'+Math.round(n*R).toLocaleString('ko-KR');
+  document.getElementById('rv').textContent=Math.round(100*R).toLocaleString('ko-KR');
+  document.getElementById('q1').textContent=w(1000);
+  document.getElementById('q2').textContent=w(5000);
+  document.getElementById('q3').textContent=w(10000);
+  document.getElementById('q4').textContent=w(30000);
+  document.getElementById('q5').textContent=w(50000);
+  document.getElementById('q6').textContent=w(100000);
+  document.getElementById('tot').textContent=w(352720);
+})();
+</script>
+</body>
+</html>
