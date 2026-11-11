@@ -206,6 +206,7 @@ table.tb th{background:var(--soft);font-size:11px;color:var(--mute)}
       <div id="listCol">
         <div class="stats" id="stats"></div>
         <div class="tl" id="timeline"></div>
+        <div id="flightBox"></div>
         <div id="lodgingBox"></div>
         <div class="acts" id="dayActs"></div>
       </div>
@@ -232,7 +233,7 @@ table.tb th{background:var(--soft);font-size:11px;color:var(--mute)}
    ============================================================ */
 const CONFIG = {
   API_URL: "",          // Apps Script 웹앱 URL (비우면 이 기기에만 저장되는 데모 모드)
-  ACCESS_CODE: "",      // 접속 코드 (비우면 입력 화면 생략). 서버(Apps Script)에서도 같은 값을 검사
+  REQUIRE_CODE: true,   // true면 접속 코드 입력 화면 표시. 코드 값은 HTML에 두지 않고 Apps Script(스크립트 속성 ACCESS_CODE)에서만 검사
   USERS: ["안나","김수하","양박옥"],
   TZ_LOCAL_OFFSET_FROM_SEOUL: -1, // 중국·몽골 모두 서울보다 1시간 늦음
   DEFAULT_FX: {CNY_KRW: 200, MNT_KRW: 0.4}, // 오프라인 초기값(접속 시 갱신됨)
@@ -254,7 +255,9 @@ const COUNTRY={
    데모 데이터 — 시트 연동 전 화면 확인용 (실제 값 아님)
    시트 열 이름과 동일한 키를 사용: SCHEDULE_COLUMNS 참고
    ============================================================ */
+// ※ 이 레포는 공개이므로 실제 일정·주소·모델명은 넣지 않는다. 실데이터는 Apps Script(시트)에서만 불러온다.
 const SAMPLE = {
+  flights:[],
   schedule:[
     {id:"M001",date:"2026-12-01",city:"hangzhou",time:"10:30",agency:"Lacoco",agent:"Mag J",models:"10명 이상",gift:"바이오던스 + 뉴믹스",transport:"DiDi",travelMin:20,status:"확정",addr:"(시트의 영문 주소)",addrLocal:"(시트의 중국어 주소)",lat:"",lng:"",phone:"+86 000 0000 0000",wechat:"(WeChat ID)",modelList:"(모델 이름 · 카드 링크)",giftReady:"준비 완료",note:"샘플 데이터입니다. 시트 연동 후 실제 값으로 바뀝니다."},
     {id:"M002",date:"2026-12-01",city:"hangzhou",time:"14:00",agency:"Sample Agency B",agent:"Agent B",models:"",gift:"",transport:"도보",travelMin:"",status:"확인 중",addr:"",addrLocal:"",lat:"",lng:"",phone:"",wechat:"",modelList:"",giftReady:"",note:""},
@@ -269,7 +272,8 @@ const SAMPLE = {
   ],
 };
 // 일정 시트(탭 이름: "일정") 열 이름. 실제 시트 헤더가 다르면 Apps Script의 HEADER_MAP에서 매핑
-const SCHEDULE_COLUMNS="미팅 ID,날짜,도시,시간,에이전시명,담당 에이전트,예정 모델 인원,선물,이동수단,이동시간(분),상태,주소,중국어/현지어 주소,위도,경도,연락처,위챗/메신저 ID,모델 명단,선물 준비,비고";
+// 일정 시트("TRIP SCHEDULE")의 실제 열: 일정ID, 도시, 날짜, 시작시간, 미팅소요시간(분), 일정유형, 에이전시명, 미팅 담당자,
+// 장소유형, 미팅 주소, 미팅예정모델 인원, 미팅예정 모델명, 에이전시 선물, 업커밍 모델, 과거 인타운 모델, 일정상태, 비고
 
 const EMERGENCY=[
   {n:"일행 연락처",v:"(앱에 고정 입력 — 확인 필요)"},
@@ -293,6 +297,8 @@ let S={
   fx:LS.get("fx",{CNY_KRW:CONFIG.DEFAULT_FX.CNY_KRW,MNT_KRW:CONFIG.DEFAULT_FX.MNT_KRW,at:null}),
   lastSync:LS.get("lastSync",null),
   user:LS.get("user",CONFIG.USERS[0]),
+  code:LS.get("code",""),
+  flights:LS.get("flights",[]),
   date:null, meeting:null, tab:"schedule",
 };
 const $=s=>document.querySelector(s);
@@ -319,7 +325,7 @@ function copy(text,msg){
    동기화 (Apps Script) — 오프라인 큐
    ============================================================ */
 async function api(action,payload){
-  const res=await fetch(CONFIG.API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,code:CONFIG.ACCESS_CODE,user:S.user,...payload})});
+  const res=await fetch(CONFIG.API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action,code:S.code,user:S.user,...payload})});
   if(!res.ok)throw new Error("HTTP "+res.status);
   const j=await res.json();if(j.error)throw new Error(j.error);return j;
 }
@@ -336,8 +342,9 @@ async function syncNow(manual){
     }
     // 2) 일정·기록·영수증 내려받기 (읽기)
     const d=await api("pull",{});
-    if(d.schedule&&d.schedule.length){S.schedule=d.schedule;LS.set("schedule",S.schedule)}
+    if(d.schedule&&d.schedule.length){S.schedule=d.schedule.map(normMeeting);LS.set("schedule",S.schedule)}
     if(d.lodging){S.lodging=d.lodging;LS.set("lodging",S.lodging)}
+    if(d.flights){S.flights=d.flights;LS.set("flights",S.flights)}
     if(d.notes){ // 서버가 더 최신이면 반영(대기 중인 내 변경은 보존)
       const pend=new Set(S.queue.filter(o=>o.type==="note").map(o=>o.data.meetingId));
       for(const k in d.notes)if(!pend.has(k))S.notes[k]=d.notes[k];
@@ -352,7 +359,9 @@ async function syncNow(manual){
     S.lastSync=Date.now();LS.set("lastSync",S.lastSync);
     if(manual)toast("동기화 완료");
     render();
-  }catch(e){if(manual)toast("연결 실패 — 로밍/네트워크 확인 후 다시 시도")}
+  }catch(e){
+    if(String(e.message)==="forbidden"){S.code="";LS.set("code","");$("#pin").classList.remove("hidden");toast("접속 코드가 맞지 않습니다")}
+    else if(manual)toast("연결 실패 — 로밍/네트워크 확인 후 다시 시도")}
   finally{syncNow.busy=false;renderSync()}
 }
 function renderSync(){
@@ -387,18 +396,33 @@ const mins=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]
 /* ============================================================
    날짜 · 일정 렌더
    ============================================================ */
+// 시트 값 정리: 일정ID가 없으면 날짜·시간·에이전시로 임시 ID 생성, 시간 오타(1:00 → 13:00) 보정
+function normMeeting(m){
+  const o={...m};
+  o.time=normTime(o.time);
+  o.kind=/이동/.test(o.type||"")?"transit":"meeting";
+  if(!o.id)o.id="auto_"+[o.date,o.time,o.agency||o.type||""].join("_").replace(/[^\w가-힣-]+/g,"");
+  if(o.models==="확인중")o.models="";
+  if(/^\s*X\s*$/i.test(o.gift||""))o.gift="없음";
+  return o;
+}
+function normTime(t){
+  const m=/^(\d{1,2}):(\d{2})/.exec(String(t||"").trim());if(!m)return "";
+  let h=+m[1];if(h>=1&&h<=7)h+=12; // 출장 미팅은 오전 8시 이전이 없음 → 오후로 보정
+  return pad(h)+":"+m[2];
+}
 function dates(){
   const set=new Set(S.schedule.map(m=>m.date));
-  // 출장 기간(11/29~12/6) 전체 + 일정에 있는 날짜
-  for(let d=parseD("2026-11-29");d<=parseD("2026-12-06");d.setDate(d.getDate()+1))set.add(ymd(d));
+  const all=[...set,...S.lodging.flatMap(l=>[l.from,l.to]),...S.flights.map(f=>f.date)].filter(Boolean).sort();
+  if(all.length)for(let d=parseD(all[0]);d<=parseD(all[all.length-1]);d.setDate(d.getDate()+1))set.add(ymd(d));
   return [...set].sort();
 }
 function pickToday(){
   const ds=dates(),t=ymd(localNow());
   return ds.includes(t)?t:(ds.find(d=>d>=t)||ds[0]);
 }
-function dayItems(d){return S.schedule.filter(m=>m.date===d).sort((a,b)=>(mins(a.time)??0)-(mins(b.time)??0))}
-function dayCity(d){const it=dayItems(d);if(it.length)return cityOf(it[0]);const l=S.lodging.find(x=>x.from<=d&&d<=x.to);return CITIES[l?.city]||CITIES.shanghai}
+function dayItems(d){return S.schedule.filter(m=>m.date===d).sort((a,b)=>(mins(a.time)??9999)-(mins(b.time)??9999))}
+function dayCity(d){const it=dayItems(d).filter(m=>m.kind!=="transit");if(it.length)return cityOf(it[0]);const l=S.lodging.find(x=>x.from<=d&&d<=x.to);return CITIES[l?.city]||CITIES.shanghai}
 
 function renderTabs(){
   const ds=dates();
@@ -454,10 +478,11 @@ function closeDriver(){$("#driver").classList.add("hidden")}
 
 function renderDay(){
   const items=dayItems(S.date);
+  const meets=items.filter(m=>m.kind!=="transit");
   const notes=S.notes;
   const metCount=items.reduce((a,m)=>a+((notes[m.id]?.met||[]).length),0);
   const spent=S.receipts.filter(r=>r.date===S.date&&r.cur==="CNY").reduce((a,r)=>a+(+r.amount||0),0);
-  $("#stats").innerHTML=`<div class="stat"><b>${items.length}</b><span>오늘 미팅</span></div><div class="stat"><b>${metCount}</b><span>만난 모델</span></div><div class="stat"><b>${spent.toLocaleString()}</b><span>오늘 지출 (CNY)</span></div>`;
+  $("#stats").innerHTML=`<div class="stat"><b>${meets.length}</b><span>오늘 미팅</span></div><div class="stat"><b>${metCount}</b><span>만난 모델</span></div><div class="stat"><b>${spent.toLocaleString()}</b><span>오늘 지출 (CNY)</span></div>`;
   const today=ymd(localNow())===S.date,nowM=localNow().getHours()*60+localNow().getMinutes();
   let nextId=null;if(today){const n=items.find(m=>(mins(m.time)??-1)>=nowM&&m.status!=="완료"&&m.status!=="취소");nextId=n?.id}
   if(!items.length){$("#timeline").innerHTML=`<div class="empty">이 날은 등록된 미팅이 없습니다</div>`}
@@ -465,23 +490,34 @@ function renderDay(){
     let h="",nowPlaced=!today;
     items.forEach((m,i)=>{
       const t=mins(m.time);
+      if(m.kind==="transit"){
+        h+=`<div class="item"><div class="time">${esc(m.time||"")}</div><div class="card" style="background:var(--soft)"><div class="ag">🚆 ${esc(m.city)} <small>${esc(m.type||"")}</small></div><div class="meta"><span>${esc(m.note||"출발 시각·승차권은 시트의 FLIGHT & TRAIN 확인")}</span></div></div></div>`;return;
+      }
       if(!nowPlaced&&t!=null&&t>nowM){h+=`<div class="nowline"></div>`;nowPlaced=true}
       const has=notes[m.id]&&(notes[m.id].content||(notes[m.id].met||[]).length||(notes[m.id].discussed||[]).length||(notes[m.id].followups||[]).length);
       const unk=v=>v?esc(v):`<span style="color:var(--amber)">확인 중</span>`;
       h+=`<div class="item"><div class="time">${esc(m.time||"--:--")}</div>
         <div class="card ${m.id===nextId?"next":""}" onclick="openMeeting('${m.id}')">
           <div class="row1"><div class="ag">${esc(m.agency)} <small>· ${esc(m.agent||"담당 미정")}</small></div>${statusBadge(m.status)}</div>
-          <div class="meta"><span>👥 <b>${unk(m.models)}</b></span><span>🎁 <b>${unk(m.gift)}</b></span></div>
+          <div class="meta"><span>👥 <b>${unk(m.models)}</b></span><span>🎁 <b>${unk(m.gift)}</b></span>${m.duration?`<span>⏱ <b>${esc(m.duration)}분</b></span>`:""}${m.placeType?`<span>📍 <b>${esc(m.placeType)}</b></span>`:""}</div>
           ${has?`<span class="rec">● 기록 있음</span>`:""}
           <div class="acts" onclick="event.stopPropagation()">${actionButtons(m)}</div>
         </div></div>`;
       const nx=items[i+1];
-      if(nx&&(m.transport||m.travelMin)){h+=`<div class="travel">${esc(m.transport||"이동")}${m.travelMin?` · 약 ${esc(m.travelMin)}분`:""} · 다음 방문지로 이동</div>`}
-      else if(nx){h+=`<div class="travel" style="opacity:.5">이동</div>`}
+      if(nx&&nx.kind!=="transit"){
+        const a=mins(m.time),b=mins(nx.time),dur=+m.duration||0;
+        const gap=(a!=null&&b!=null&&dur)?b-(a+dur):null;
+        const moved=(m.addrLocal||m.addr)&&(nx.addrLocal||nx.addr)&&(m.addrLocal||m.addr)!==(nx.addrLocal||nx.addr);
+        const txt=(moved?`${esc(cc(nx).ride)}로 이동`:"같은 장소")+(gap!=null?` · 사이 간격 ${gap}분`:"");
+        h+=`<div class="travel"${gap!=null&&gap<0?' style="color:var(--red)"':""}>${txt}${gap!=null&&gap<0?" ⚠ 시간 겹침":""}</div>`;
+      }
     });
     if(!nowPlaced)h+=`<div class="nowline"></div>`;
     $("#timeline").innerHTML=h;
   }
+  // 항공·기차
+  const fl=S.flights.filter(f=>f.date===S.date);
+  $("#flightBox").innerHTML=fl.length?`<h2 class="sec">항공·기차</h2>`+fl.map(f=>`<div class="card" style="margin-bottom:8px"><div class="ag">${esc(f.from)} → ${esc(f.to)} <small>${esc(f.no)}</small></div><div class="meta"><span>탑승 <b>${esc(f.dep)}</b></span><span>도착 <b>${esc(f.arr)}</b></span></div></div>`).join(""):"";
   // 숙소 카드
   const lod=S.lodging.filter(l=>l.from<=S.date&&S.date<=l.to);
   $("#lodgingBox").innerHTML=lod.length?`<h2 class="sec">숙소</h2>`+lod.map(l=>{
@@ -491,7 +527,7 @@ function renderDay(){
       <div class="meta"><span>체크인 <b>${esc(l.from.slice(5))}</b></span><span>체크아웃 <b>${esc(l.to.slice(5))}</b></span>${l.booking?`<span>예약 <b>${esc(l.booking)}</b></span>`:""}</div>
       <div class="acts">${lodgingActs(fake)}</div></div>`}).join(""):"";
   // 하루 동선 지도
-  $("#dayActs").innerHTML=items.length?routeButtons(items):"";
+  $("#dayActs").innerHTML=meets.length?routeButtons(meets):"";
 }
 const LODG={};
 function lodgingActs(f){
@@ -542,7 +578,9 @@ function renderDetail(){
     <dl class="kv">
       ${row("주소",esc(m.addr))}${row(k.addrLabel,esc(m.addrLocal))}
       ${row("연락처",esc(m.phone))}${row(k.msgr,esc(m.wechat))}
-      ${row("예정 모델",esc(m.models))}${row("모델 명단",lnk(m.modelList))}
+      ${row("일정 유형",esc(m.type))}${row("소요시간",m.duration?esc(m.duration)+"분":"")}
+      ${row("예정 모델",esc(m.models))}${row("예정 모델명",lnk(m.modelList))}
+      ${row("업커밍 모델",esc(m.upcoming))}${row("과거 인타운",esc(m.past))}
       ${row("선물",esc(m.gift)+(m.giftReady?` · ${esc(m.giftReady)}`:""))}${row("비고",esc(m.note))}
     </dl>
     <h2 class="sec">미팅 기록</h2>
@@ -763,18 +801,22 @@ addEventListener("resize",()=>{clearTimeout(render._t);render._t=setTimeout(rend
 /* ============================================================
    접속 코드 · 시작
    ============================================================ */
-function checkPin(){
-  if($("#pinIn").value===CONFIG.ACCESS_CODE){LS.set("pinOk",true);$("#pin").classList.add("hidden");boot()}else toast("코드가 맞지 않습니다")
+async function checkPin(){
+  S.code=$("#pinIn").value.trim();if(!S.code)return;
+  try{const r=await api("pull",{});LS.set("code",S.code);$("#pin").classList.add("hidden");$("#pinIn").value="";
+    if(!S.booted)boot();else syncNow(false)}
+  catch(e){S.code="";toast(String(e.message)==="forbidden"?"코드가 맞지 않습니다":"연결 실패 — 네트워크 확인")}
 }
 function boot(){
-  S.date=pickToday();
+  S.booted=true;S.date=pickToday();
   // 오늘이 출장 기간이 아니면(데모/사전 확인) 첫 미팅 날짜로
   clocks();setInterval(clocks,20000);
   render();refreshFx();syncNow(false);
   setInterval(()=>{if(S.tab==="schedule"&&!S.meeting)renderDay()},60000);
   addEventListener("online",()=>syncNow(false));
 }
-if(CONFIG.ACCESS_CODE&&!LS.get("pinOk",false)){$("#pin").classList.remove("hidden")}else boot();
+S.schedule=S.schedule.map(normMeeting);
+if(CONFIG.API_URL&&CONFIG.REQUIRE_CODE&&!S.code){$("#pin").classList.remove("hidden")}else boot();
 </script>
 </body>
 </html>

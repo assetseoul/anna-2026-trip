@@ -2,28 +2,40 @@
  * Scouting Trip 2026 — Apps Script 중간 서버
  * 배포: 확장 프로그램 > Apps Script > 이 코드 붙여넣기 > 배포 > 웹 앱
  *       (실행 계정: 나 / 액세스: 모든 사용자)  → 발급된 URL을 앱의 CONFIG.API_URL에 입력
- * 일정 탭은 읽기만 하고, 미팅기록·영수증 탭과 드라이브 폴더에만 쓴다.
+ * 일정 탭은 읽기만 하고(assignIds 수동 실행 시에만 일정ID 칸을 채움), 미팅기록·영수증 탭과 드라이브 폴더에만 쓴다.
  */
-var ACCESS_CODE = "";                 // 앱 CONFIG.ACCESS_CODE와 동일하게
-var SCHEDULE_TAB = "일정";
-var LODGING_TAB  = "숙소";
-var NOTES_TAB    = "미팅기록";
-var RECEIPT_TAB  = "영수증";
+// 접속 코드는 코드에 쓰지 않고 스크립트 속성(프로젝트 설정 > 스크립트 속성 > ACCESS_CODE)에 저장한다.
+function accessCode_() { return PropertiesService.getScriptProperties().getProperty("ACCESS_CODE") || ""; }
+
+var SCHEDULE_TAB = "TRIP SCHEDULE";
+var LODGING_TAB  = "HOTEL";
+var FLIGHT_TAB   = "FLIGHT & TRAIN";
+var AGENCY_TAB   = "AGENCY INFO(필요한 경우 입력,,)";
+var NOTES_TAB    = "미팅기록";      // 앱이 자동 생성
+var RECEIPT_TAB  = "영수증";        // 앱이 자동 생성
 var DRIVE_FOLDER_NAME = "ScoutingTrip2026_영수증";
 
-// 앱 필드 → 시트 헤더(실제 열 이름에 맞게 수정)
+// 앱 필드 → 일정 탭 헤더 (실제 시트 기준)
 var HEADER_MAP = {
-  id:"미팅 ID", date:"날짜", city:"도시", time:"시간", agency:"에이전시명", agent:"담당 에이전트",
-  models:"예정 모델 인원", gift:"선물", transport:"이동수단", travelMin:"이동시간(분)", status:"상태",
-  addr:"주소", addrLocal:"중국어/현지어 주소", lat:"위도", lng:"경도", phone:"연락처", wechat:"위챗/메신저 ID",
-  modelList:"모델 명단", giftReady:"선물 준비", note:"비고"
+  id:"일정ID", city:"도시", date:"날짜", time:"시작시간", duration:"미팅소요시간(분)", type:"일정유형",
+  agency:"에이전시명", agent:"미팅 담당자", placeType:"장소유형", addr:"미팅 주소", models:"미팅예정모델 인원",
+  modelList:"미팅예정 모델명", gift:"에이전시 선물", upcoming:"업커밍 모델", past:"과거 인타운 모델",
+  status:"일정상태", note:"비고"
 };
-var CITY_ALIAS = {"항저우":"hangzhou","hangzhou":"hangzhou","상하이":"shanghai","shanghai":"shanghai","베이징":"beijing","beijing":"beijing","울란바토르":"ulaanbaatar","ulaanbaatar":"ulaanbaatar"};
+var CITY_ALIAS = {"항저우":"hangzhou","상하이":"shanghai","베이징":"beijing","울란바토르":"ulaanbaatar"};
+
+// 도시 값이 "항저우 -> 상하이"(이동 행)이면 도착 도시를 쓴다.
+function cityKey_(v) {
+  var parts = String(v || "").split(/->|→|-\>/).map(function (x) { return x.trim(); });
+  var last = parts[parts.length - 1];
+  return CITY_ALIAS[last] || CITY_ALIAS[String(last).toLowerCase()] || last.toLowerCase();
+}
 
 function doPost(e) {
   try {
     var req = JSON.parse(e.postData.contents);
-    if (ACCESS_CODE && req.code !== ACCESS_CODE) return out({error: "forbidden"});
+    var code = accessCode_();
+    if (code && req.code !== code) return out({error: "forbidden"});
     if (req.action === "pull") return out(pull());
     if (req.action === "push") return out(push(req.ops || [], req.user));
     return out({error: "unknown action"});
@@ -44,16 +56,35 @@ function rows(sh) {
 }
 
 function pull() {
-  var sched = rows(sheet(SCHEDULE_TAB)).filter(function (r) { return r[HEADER_MAP.id]; }).map(function (r) {
+  var lodging = rows(sheet(LODGING_TAB)).filter(function (r) { return r["도시"]; }).map(function (r) {
+    return {city: cityKey_(r["도시"]), from: normDate(r["체크인 날짜"]), to: normDate(r["체크아웃 날짜"]),
+            name: r["호텔명"], addr: r["호텔 주소"], addrLocal: r["호텔 주소"], booking: ""};
+  });
+  var agencies = {};
+  rows(sheet(AGENCY_TAB)).forEach(function (r) { if (r["에이전시명"]) agencies[String(r["에이전시명"]).trim().toLowerCase()] = r; });
+
+  var sched = rows(sheet(SCHEDULE_TAB)).filter(function (r) { return r[HEADER_MAP.date]; }).map(function (r) {
     var m = {};
     for (var k in HEADER_MAP) m[k] = r[HEADER_MAP[k]] || "";
-    m.city = CITY_ALIAS[String(m.city).toLowerCase().trim()] || CITY_ALIAS[m.city] || m.city;
+    m.city = cityKey_(m.city);
     m.date = normDate(m.date);
+    // 장소유형이 호텔인데 주소가 비어 있으면 그날 묵는 호텔 정보를 사용
+    if (!m.addr && m.placeType === "호텔") {
+      var h = lodging.filter(function (l) { return l.city === m.city && l.from <= m.date && m.date < l.to; })[0];
+      if (h) { m.addr = h.addr; m.hotel = h.name; }
+    }
+    m.addrLocal = m.addr;
+    // AGENCY INFO 탭에 있으면 연락처·위챗·오피스 주소 보강
+    var a = agencies[String(m.agency).trim().toLowerCase()];
+    if (a) {
+      var c = String(a["담당자 연락처 / WeChat"] || "").trim();
+      if (/^\+?[\d\s\-()]{7,}$/.test(c)) m.phone = c; else m.wechat = c;
+      if (!m.addr && a["오피스 주소 (현지어)"]) { m.addr = a["오피스 주소 (현지어)"]; m.addrLocal = m.addr; }
+    }
     return m;
   });
-  var lodging = rows(sheet(LODGING_TAB)).map(function (r) {
-    return {city: CITY_ALIAS[String(r["도시"]).toLowerCase()] || r["도시"], from: normDate(r["체크인"]), to: normDate(r["체크아웃"]),
-            name: r["숙소명"], addr: r["주소"], addrLocal: r["현지어 주소"], booking: r["예약 정보"]};
+  var flights = rows(sheet(FLIGHT_TAB)).filter(function (r) { return r["탑승일"]; }).map(function (r) {
+    return {from: r["탑승역"], to: r["도착역"], no: r["편명"], date: normDate(r["탑승일"]), dep: r["탑승시간"], arr: r["도착시간"]};
   });
   var notes = {};
   rows(sheet(NOTES_TAB, ["미팅 ID","미팅 내용","논의 모델","실물 미팅 모델","피드백","팔로업","작성자","수정 시각"])).forEach(function (r) {
@@ -63,7 +94,7 @@ function pull() {
     var links = (r["사진 링크"] || "").split("\n").filter(String);
     return {id: r["ID"], date: r["날짜"], cat: r["분류"], amount: Number(r["금액"]), cur: r["통화"], memo: r["메모"], meetingId: r["연결 미팅 ID"], photos: links, by: r["작성자"], at: Number(r["등록 시각"]) || 0};
   });
-  return {schedule: sched, lodging: lodging, notes: notes, receipts: receipts};
+  return {schedule: sched, lodging: lodging, flights: flights, notes: notes, receipts: receipts};
 }
 function j(s) { try { return JSON.parse(s || "[]"); } catch (e) { return []; } }
 function normDate(s) {
@@ -122,4 +153,19 @@ function saveReceipt(d) {
 function deleteReceipt(id) {
   var sh = sheet(RECEIPT_TAB); if (!sh) return;
   var r = findRow(sh, 1, id); if (r > 0) sh.deleteRow(r);
+}
+
+/**
+ * (선택) 일정 탭의 비어 있는 "일정ID" 칸에 고유 번호(M001…)를 채운다. 스크립트 편집기에서 한 번만 직접 실행.
+ * 시간·에이전시명이 바뀌어도 미팅 기록과의 연결이 끊기지 않게 하는 용도. 이 함수만 일정 탭에 값을 쓴다.
+ * 행을 삭제·정렬한 뒤에는 이미 채운 ID가 그대로 따라가므로 안전하다(ID 열 값은 덮어쓰지 않음).
+ */
+function assignIds() {
+  var sh = sheet(SCHEDULE_TAB); if (!sh) return;
+  var v = sh.getDataRange().getValues(), h = v[0];
+  var ci = h.indexOf(HEADER_MAP.id), di = h.indexOf(HEADER_MAP.date); if (ci < 0 || di < 0) return;
+  var max = 0; v.slice(1).forEach(function (r) { var m = /^M(\d+)$/.exec(String(r[ci])); if (m) max = Math.max(max, +m[1]); });
+  for (var i = 1; i < v.length; i++) {
+    if (v[i][di] && !v[i][ci]) { max++; sh.getRange(i + 1, ci + 1).setValue("M" + ("00" + max).slice(-3)); }
+  }
 }
