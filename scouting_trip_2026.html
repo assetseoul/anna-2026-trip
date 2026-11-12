@@ -493,6 +493,31 @@ function statusBadge(s){
   return s?`<span class="badge ${m[s]||"b-wait"}">${esc(s)}</span>`:"";
 }
 // 이 미팅이 열리는 곳: 장소유형이 '호텔'이면 그날 묵는 호텔 정보를 쓴다.
+function platform(){
+  const ua=navigator.userAgent;
+  if(/Android/i.test(ua))return "android";
+  if(/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1))return "ios";
+  return "desktop";
+}
+// 고덕지도: 웹 페이지(uri.amap.com)를 거치면 앱이 열릴 때 검색어를 잃어버려 메인 화면만 뜬다.
+// 그래서 앱 전용 주소(iosamap:// · androidamap://)로 바로 열고, 앱이 없을 때만 웹으로 간다.
+function amapUrls(m){
+  const pl=placeOf(m),q=encodeURIComponent(pl.query),ll=m.lat&&m.lng;
+  const nm=encodeURIComponent(m.agency||pl.hotelName||"목적지");
+  return {
+    web:ll?`https://uri.amap.com/navigation?to=${m.lng},${m.lat},${nm}&mode=car&src=scoutingtrip&callnative=1`:`https://uri.amap.com/search?keyword=${q}&src=scoutingtrip&callnative=1`,
+    ios:`iosamap://poi?sourceApplication=scoutingtrip&name=${q}&dev=0`,
+    android:`androidamap://poi?sourceApplication=scoutingtrip&keywords=${q}&dev=0`
+  };
+}
+function openAmap(id){
+  const m=byId(id),pl=placeOf(m),u=amapUrls(m),pf=platform();
+  if(pl.query)copy(pl.query,"주소를 복사했어요 — 고덕지도 검색칸에 붙여넣을 수도 있어요");
+  if(pf==="desktop"||(m.lat&&m.lng)){window.open(u.web,"_blank","noopener");return}
+  location.href=u[pf];
+  // 앱이 열리면 이 화면은 숨겨진다. 그대로면 앱이 없는 것이므로 웹으로 연다.
+  setTimeout(()=>{if(!document.hidden)location.href=u.web},1600);
+}
 function lodgingFor(m){return S.lodging.find(l=>l.city===m.city&&l.from<=m.date&&m.date<l.to)||null}
 function placeOf(m){
   const hotel=m.placeType==="호텔"?lodgingFor(m):null;
@@ -514,7 +539,7 @@ function actionButtons(m,extra){
     const amap=ll?`https://uri.amap.com/navigation?to=${m.lng},${m.lat},${nm}&mode=car&src=scoutingtrip&callnative=1`:`https://uri.amap.com/search?keyword=${q}&src=scoutingtrip&callnative=1`;
     const apple=ll?`https://maps.apple.com/?daddr=${ll}&dirflg=d`:`https://maps.apple.com/?q=${q}`;
     if(ll||pl.known){
-      b+=`<a class="act" href="${amap}" target="_blank" rel="noopener">고덕지도</a>`;
+      b+=`<button class="act" onclick="openAmap('${m.id}')">고덕지도</button>`;
       b+=`<a class="act only-mob" href="${apple}" target="_blank" rel="noopener">애플지도</a>`;
     }else b+=none("지도");
     b+=`<button class="act red" onclick="didi('${m.id}')">DiDi</button>`;
