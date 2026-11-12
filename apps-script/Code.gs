@@ -55,6 +55,27 @@ function rows(sh) {
   return v.slice(1).map(function (r) { var o = {}; h.forEach(function (k, i) { o[k] = r[i]; }); return o; });
 }
 
+// 미팅기록·영수증 탭용: 값 그대로 읽고, 날짜·시각 칸(Date)은 밀리초 숫자로 바꾼다.
+function rowsRaw(sh) {
+  if (!sh || sh.getLastRow() < 2) return [];
+  var v = sh.getDataRange().getValues(), h = v[0];
+  return v.slice(1).map(function (r) {
+    var o = {}; h.forEach(function (k, i) { o[k] = (r[i] instanceof Date) ? r[i].getTime() : r[i]; }); return o;
+  });
+}
+// 시각 칸: 숫자(예전 방식)·Date·"2026-11-12 14:05:22" 문자열 모두 밀리초로 읽는다.
+function toMs_(v) {
+  if (typeof v === "number") return v;
+  var n = Number(v); if (v !== "" && !isNaN(n)) return n;
+  var t = Date.parse(String(v).replace(" ", "T") + "+09:00"); return isNaN(t) ? 0 : t;
+}
+// 사람이 읽는 날짜·시각 형식으로 칸에 쓴다.
+function stamp_(sh, row, col, ms) {
+  var c = sh.getRange(row, col);
+  c.setNumberFormat("yyyy-mm-dd hh:mm:ss");
+  c.setValue(new Date(Number(ms) || Date.now()));
+}
+
 function pull() {
   var lodging = rows(sheet(LODGING_TAB)).filter(function (r) { return r["도시"]; }).map(function (r) {
     return {city: cityKey_(r["도시"]), from: normDate(r["체크인 날짜"]), to: normDate(r["체크아웃 날짜"]),
@@ -87,19 +108,20 @@ function pull() {
     return {from: r["탑승역"], to: r["도착역"], no: r["편명"], date: normDate(r["탑승일"]), dep: r["탑승시간"], arr: r["도착시간"]};
   });
   var notes = {};
-  rows(sheet(NOTES_TAB, ["미팅 ID","미팅 내용","논의 모델","실물 미팅 모델","피드백","팔로업","작성자","수정 시각"])).forEach(function (r) {
-    notes[r["미팅 ID"]] = {content: r["미팅 내용"], discussed: j(r["논의 모델"]), met: j(r["실물 미팅 모델"]), followups: j(r["팔로업"]), by: r["작성자"], at: Number(r["수정 시각"]) || null};
+  rowsRaw(sheet(NOTES_TAB, ["미팅 ID","미팅 내용","논의 모델","실물 미팅 모델","피드백","팔로업","작성자","수정 시각"])).forEach(function (r) {
+    notes[r["미팅 ID"]] = {content: r["미팅 내용"], discussed: j(r["논의 모델"]), met: j(r["실물 미팅 모델"]), followups: j(r["팔로업"]), by: r["작성자"], at: toMs_(r["수정 시각"]) || null};
   });
-  var receipts = rows(sheet(RECEIPT_TAB, ["ID","날짜","분류","금액","통화","메모","연결 미팅 ID","사진 링크","작성자","등록 시각"])).map(function (r) {
-    var links = (r["사진 링크"] || "").split("\n").filter(String);
-    return {id: r["ID"], date: r["날짜"], cat: r["분류"], amount: Number(r["금액"]), cur: r["통화"], memo: r["메모"], meetingId: r["연결 미팅 ID"], photos: links, by: r["작성자"], at: Number(r["등록 시각"]) || 0};
+  var receipts = rowsRaw(sheet(RECEIPT_TAB, ["ID","날짜","분류","금액","통화","메모","연결 미팅 ID","사진 링크","작성자","등록 시각"])).map(function (r) {
+    var links = String(r["사진 링크"] || "").split("\n").filter(String);
+    var d = r["날짜"] instanceof Date ? Utilities.formatDate(new Date(r["날짜"].getTime()), "Asia/Seoul", "yyyy-MM-dd") : normDate(r["날짜"]);
+    return {id: r["ID"], date: d, cat: r["분류"], amount: Number(r["금액"]), cur: r["통화"], memo: r["메모"], meetingId: r["연결 미팅 ID"], photos: links, by: r["작성자"], at: toMs_(r["등록 시각"])};
   });
   return {schedule: sched, lodging: lodging, flights: flights, notes: notes, receipts: receipts};
 }
 function j(s) { try { return JSON.parse(s || "[]"); } catch (e) { return []; } }
 function normDate(s) {
   s = String(s || "").trim();
-  var m = s.match(/(\d{4})[-./](\d{1,2})[-./](\d{1,2})/);
+  var m = s.match(/(\d{4})\s*[-./]\s*(\d{1,2})\s*[-./]\s*(\d{1,2})/);
   return m ? m[1] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[3]).slice(-2) : s;
 }
 
@@ -129,7 +151,8 @@ function saveNote(d) {
   var feedback = (d.met || []).map(function (r) { return r.name + ": " + (r.feedback || ""); }).join("\n");
   var row = [d.meetingId, d.content || "", JSON.stringify(d.discussed || []), JSON.stringify(d.met || []), feedback, JSON.stringify(d.followups || []), d.by || "", d.at || Date.now()];
   var r = findRow(sh, 1, d.meetingId);
-  if (r > 0) sh.getRange(r, 1, 1, row.length).setValues([row]); else sh.appendRow(row);
+  if (r > 0) sh.getRange(r, 1, 1, row.length).setValues([row]); else { sh.appendRow(row); r = sh.getLastRow(); }
+  stamp_(sh, r, 8, d.at);
 }
 function folderFor(dateStr) {
   var roots = DriveApp.getFoldersByName(DRIVE_FOLDER_NAME);
@@ -148,7 +171,8 @@ function saveReceipt(d) {
     var file = folderFor(d.date).createFile(Utilities.newBlob(Utilities.base64Decode(b64), "image/jpeg", name));
     links.push(file.getUrl());
   });
-  sh.appendRow([d.id, d.date, d.cat, d.amount, d.cur, d.memo || "", d.meetingId || "", links.join("\n"), d.by || "", d.at || Date.now()]);
+  sh.appendRow([d.id, "'" + d.date, d.cat, d.amount, d.cur, d.memo || "", d.meetingId || "", links.join("\n"), d.by || "", d.at || Date.now()]);
+  stamp_(sh, sh.getLastRow(), 10, d.at);
 }
 function deleteReceipt(id) {
   var sh = sheet(RECEIPT_TAB); if (!sh) return;
