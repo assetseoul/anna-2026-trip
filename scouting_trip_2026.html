@@ -58,11 +58,14 @@ a{color:inherit}
 
 /* top bar — 큰 날짜 + 두 도시 시각 (Today 레퍼런스) */
 #top{padding:max(14px,env(safe-area-inset-top)) 18px 0}
-.hero-row1{display:flex;align-items:center;justify-content:space-between;height:20px}
+.hero-row1{display:flex;align-items:center;justify-content:space-between;height:32px}
 .city-h{font-size:12px;letter-spacing:.14em;color:var(--red);font-weight:800;white-space:nowrap}
-#sync{font-size:11px;color:var(--mute);display:flex;gap:8px;align-items:center;height:20px;overflow:hidden;white-space:nowrap}
+#sync{font-size:11px;color:var(--mute);display:flex;gap:10px;align-items:center;height:32px;white-space:nowrap}
 #sync .pill{background:var(--amber);color:#fff;border-radius:99px;padding:1px 8px;font-weight:700}
-#sync button{color:var(--teal);font-weight:700;font-size:11px}
+#sync button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 14px;border-radius:99px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+#sync button svg{width:14px;height:14px}
+#sync.busy button svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .hero-row2{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;height:164px;padding-top:6px}
 .big-date{display:flex;flex-direction:column;min-width:0}
 .bd-wk{font-size:15px;color:var(--mute);font-weight:600;margin-bottom:8px}
@@ -146,11 +149,30 @@ h2.sec{font-size:12px;letter-spacing:.08em;color:var(--mute);text-transform:uppe
 .act{flex:1 1 auto;min-width:64px;padding:9px 10px;border-radius:14px;background:var(--soft);font-size:12px;font-weight:700;text-align:center;text-decoration:none;color:var(--ink);border:1px solid var(--line)}
 .act.red{background:var(--red);color:#fff;border-color:var(--red)}
 .act.off{opacity:.45;border-style:dashed;font-weight:500}
+button:active,.act:active,.btn:active{opacity:.82}
+/* 앱 아이콘 (정사각) — icons/ 폴더에 공식 로고 PNG가 있으면 자동으로 그것을 쓴다 */
+.dock{flex:0 0 100%;display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
+.ib{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;padding:0;text-decoration:none;color:inherit;width:54px;cursor:pointer}
+.ib em{font-style:normal;font-size:10.5px;font-weight:700;color:var(--mute);white-space:nowrap}
+.mcard.next .ib em{color:var(--cink)}
+.ico{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.2),inset 0 0 0 .5px rgba(0,0,0,.1);transition:transform .1s}
+.ico svg{width:27px;height:27px;display:block}
+.ico img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ib:active .ico{transform:scale(.93)}
+.ico-amap{background:linear-gradient(160deg,#4FA0FF,#1D6FF5)}
+.ico-didi{background:linear-gradient(160deg,#FFA640,#FF7A12)}
+.ico-applemaps{background:linear-gradient(135deg,#E3F4D9 0 45%,#FFF6CF 45% 70%,#FFFFFF 70%)}
+.ico-wechat{background:#07C160}
+.ico-googlemaps{background:#fff}
+.ico-ubcab{background:#FFC928;color:#161616;font-weight:900;font-size:15px;letter-spacing:-.03em}
+.ico-chat{background:var(--ink);color:var(--bg)}
+.ib.off .ico{filter:grayscale(1);opacity:.35}
+.ib.off em{opacity:.7}
 .act.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
 /* detail */
 #detail{background:var(--card);border-radius:26px;padding:18px;margin-top:4px}
-.mobile-back{display:inline-block;margin-bottom:8px;color:var(--teal);font-weight:700}
+.mobile-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;padding:8px 16px;border-radius:99px;background:var(--soft);border:1px solid var(--line);color:var(--ink);font-weight:800;font-size:13px}
 .kv{display:grid;grid-template-columns:90px 1fr;gap:6px 10px;margin:10px 0;font-size:13px}
 .kv dt{color:var(--mute)}
 .kv dd{word-break:break-word}
@@ -172,7 +194,7 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
 .lines{display:flex;flex-direction:column;gap:8px}
 .line{background:var(--soft);border-radius:12px;padding:8px;display:grid;gap:6px}
 .line .two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.line .x{justify-self:end;color:var(--red);font-size:12px;font-weight:700}
+.line .x{justify-self:end;color:var(--red);font-size:12px;font-weight:800;padding:5px 14px;border:1px solid var(--red);border-radius:99px;background:transparent}
 .btn{padding:10px 14px;border-radius:12px;font-weight:800;background:var(--soft);border:1px solid var(--line)}
 .btn.red{background:var(--red);color:#fff;border-color:var(--red)}
 .btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -307,7 +329,7 @@ body:not([data-tab="schedule"]) .hero-row1{margin-bottom:6px}
   <header id="top">
     <section class="hero">
       <div class="hero-row1"><span class="city-h" id="cityHead"></span>
-        <div id="sync"><span id="syncTxt"></span><span class="pill hidden" id="pendPill"></span><button onclick="syncNow(true)">동기화</button></div></div>
+        <div id="sync"><span id="syncTxt"></span><span class="pill hidden" id="pendPill"></span><button id="syncBtn" onclick="syncNow(true)" aria-label="지금 동기화"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14.5-4.3M4 5v3.5h3.5"/><path d="M4 13a8 8 0 0 0 14.5 4.3M20 19v-3.5h-3.5"/></svg><span>동기화</span></button></div></div>
       <div class="hero-row2"><div class="big-date" id="bigDate"></div><div class="clocks" id="clocks"></div></div>
     </section>
     <nav id="nav"></nav>
@@ -464,7 +486,7 @@ async function api(action,payload){
 function enqueue(op){S.queue.push(op);LS.set("queue",S.queue);renderSync();syncNow(false)}
 async function syncNow(manual){
   if(!CONFIG.API_URL){if(manual)toast("데모 모드: API_URL 미설정 (이 기기에만 저장)");return}
-  if(syncNow.busy)return;syncNow.busy=true;
+  if(syncNow.busy)return;syncNow.busy=true;$("#sync").classList.add("busy");
   try{
     // 1) 전송 대기분 일괄 전송
     if(S.queue.length){
@@ -494,7 +516,7 @@ async function syncNow(manual){
   }catch(e){
     if(String(e.message)==="forbidden"){S.code="";LS.set("code","");$("#pin").classList.remove("hidden");toast("접속 코드가 맞지 않습니다")}
     else if(manual)toast("연결 실패 — 로밍/네트워크 확인 후 다시 시도")}
-  finally{syncNow.busy=false;renderSync()}
+  finally{syncNow.busy=false;$("#sync").classList.remove("busy");renderSync()}
 }
 function renderSync(){
   const t=S.lastSync?`마지막 동기화 ${new Date(S.lastSync).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}`:(CONFIG.API_URL?"아직 동기화 안 됨":"데모 모드 · 이 기기에만 저장");
@@ -638,33 +660,47 @@ function placeOf(m){
   const name=hotel?clean(hotel.name):"";
   return {isHotel:m.placeType==="호텔",hotelName:name,addr,query:addr||name,known:!!(addr||name)};
 }
+/* 앱 아이콘: 공식 로고 PNG를 icons/ 폴더(amap.png, didi.png, applemaps.png, wechat.png, googlemaps.png, ubcab.png)에 넣으면 자동 적용.
+   파일이 없으면 아래 기본 그림을 쓴다. */
+const ICON_FILES=["amap","didi","applemaps","wechat","googlemaps","ubcab"],ICON_OK={};
+function probeIcons(){let n=0;ICON_FILES.forEach(k=>{const i=new Image();i.onload=()=>{ICON_OK[k]=true;if(++n&&S.booted)clearTimeout(probeIcons.t),probeIcons.t=setTimeout(render,50)};i.src="icons/"+k+".png"})}
+const GLYPH={
+  amap:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M12 2.4a6.6 6.6 0 0 0-6.6 6.6c0 4.7 6.6 12.6 6.6 12.6s6.6-7.9 6.6-12.6A6.6 6.6 0 0 0 12 2.4zm0 9a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z"/></svg>',
+  didi:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M5 4h6.6a8 8 0 0 1 0 16H5zm3.8 3.6v8.8h2.8a4.4 4.4 0 0 0 0-8.8z"/></svg>',
+  applemaps:'<svg viewBox="0 0 24 24"><path fill="#2C7BFF" d="M12 2.8l7.2 17.2-7.2-4-7.2 4z"/></svg>',
+  wechat:'<svg viewBox="0 0 24 24"><path fill="#fff" d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>',
+  googlemaps:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M19.527 4.799c1.212 2.608.937 5.678-.405 8.173-1.101 2.047-2.744 3.74-4.098 5.614-.619.858-1.244 1.75-1.669 2.727-.141.325-.263.658-.383.992-.121.333-.224.673-.34 1.008-.109.314-.236.684-.627.687h-.007c-.466-.001-.579-.53-.695-.887-.284-.874-.581-1.713-1.019-2.525-.51-.944-1.145-1.817-1.79-2.671L19.527 4.799zM8.545 7.705l-3.959 4.707c.724 1.54 1.821 2.863 2.871 4.18.247.31.494.622.737.936l4.984-5.925-.029.01c-1.741.601-3.691-.291-4.392-1.987a3.377 3.377 0 0 1-.209-.716c-.063-.437-.077-.761-.004-1.198l.001-.007zM5.492 3.149l-.003.004c-1.947 2.466-2.281 5.88-1.117 8.77l4.785-5.689-.058-.05-3.607-3.035zM14.661.436l-3.838 4.563a.295.295 0 0 1 .027-.01c1.6-.551 3.403.15 4.22 1.626.176.319.323.683.377 1.045.068.446.085.773.012 1.22l-.003.016 3.836-4.561A8.382 8.382 0 0 0 14.67.439l-.009-.003zM9.466 5.868L14.162.285l-.047-.012A8.31 8.31 0 0 0 11.986 0a8.439 8.439 0 0 0-6.169 2.766l-.016.018 3.665 3.084z"/></svg>',
+  ubcab:'UB',
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>'
+};
+const icoTile=k=>`<span class="ico ico-${k}">${ICON_OK[k]?`<img src="icons/${k}.png" alt="">`:GLYPH[k]}</span>`;
 function actionButtons(m,extra){
   const c=cityOf(m),k=cc(m),pl=placeOf(m);
   const ll=m.lat&&m.lng?`${m.lat},${m.lng}`:"";
   const q=encodeURIComponent(pl.query);   // 주소(또는 호텔 이름)만 보낸다. 에이전시 이름은 섞지 않는다.
-  const none=l=>`<span class="act off" title="시트에 주소가 없어요">${l} · 주소 없음</span>`;
-  let b="";
+  const ib=(icon,label,attrs,tag)=>`<${tag||"button"} class="ib" ${attrs}>${icoTile(icon)}<em>${label}</em></${tag||"button"}>`;
+  const off=(icon,label)=>`<span class="ib off" title="시트에 주소가 없어요">${icoTile(icon)}<em>${label}</em></span>`;
+  let dock="";
   if(c.country==="CN"){
-    const nm=encodeURIComponent(m.agency||pl.hotelName||"목적지");
-    const amap=ll?`https://uri.amap.com/navigation?to=${m.lng},${m.lat},${nm}&mode=car&src=scoutingtrip&callnative=1`:`https://uri.amap.com/search?keyword=${q}&src=scoutingtrip&callnative=1`;
     const apple=ll?`https://maps.apple.com/?daddr=${ll}&dirflg=d`:`https://maps.apple.com/?q=${q}`;
     if(ll||pl.known){
-      b+=`<button class="act" onclick="openAmap('${m.id}')">고덕지도</button>`;
-      b+=`<a class="act only-mob" href="${apple}" target="_blank" rel="noopener">애플지도</a>`;
-    }else b+=none("지도");
-    b+=`<button class="act red" onclick="didi('${m.id}')">DiDi</button>`;
-    if(m.wechat)b+=`<button class="act" onclick="wechat('${m.id}')">위챗</button>`;
+      dock+=ib("amap","고덕지도",`onclick="openAmap('${m.id}')"`);
+      dock+=`<a class="ib only-mob" href="${apple}" target="_blank" rel="noopener">${icoTile("applemaps")}<em>애플지도</em></a>`;
+    }else{dock+=off("amap","주소 없음");}
+    dock+=ib("didi","DiDi",`onclick="didi('${m.id}')"`);
+    if(m.wechat)dock+=ib("wechat","위챗",`onclick="wechat('${m.id}')"`);
   }else{
     const g=ll?`https://www.google.com/maps/dir/?api=1&destination=${ll}`:`https://www.google.com/maps/search/?api=1&query=${q}`;
-    if(ll||pl.known)b+=`<a class="act" href="${g}" target="_blank" rel="noopener">구글지도</a>`;else b+=none("지도");
-    b+=`<button class="act red" onclick="ubcab('${m.id}')">UBCab</button>`;
-    if(m.wechat)b+=`<button class="act" onclick="messenger('${m.id}')">메신저</button>`;
+    if(ll||pl.known)dock+=`<a class="ib" href="${g}" target="_blank" rel="noopener">${icoTile("googlemaps")}<em>구글지도</em></a>`;else dock+=off("googlemaps","주소 없음");
+    dock+=ib("ubcab","UBCab",`onclick="ubcab('${m.id}')"`);
+    if(m.wechat)dock+=ib("chat","메신저",`onclick="messenger('${m.id}')"`);
   }
+  let b=`<div class="dock">${dock}</div>`;
   if(m.phone){
     b+=`<a class="act only-mob" href="tel:${esc(m.phone.replace(/[^\d+]/g,""))}">전화</a>`;
     b+=`<button class="act only-desk" onclick="copy('${esc(m.phone)}','번호를 복사했습니다')">번호 복사</button>`;
   }
-  if(pl.addr)b+=`<button class="act dark" onclick="showDriver('${m.id}')">기사용</button>`;
+  if(pl.addr)b+=`<button class="act dark" onclick="showDriver('${m.id}')">기사용 주소 카드</button>`;
   return b+(extra||"");
 }
 const byId=id=>S.schedule.find(m=>m.id===id)||LODG[id];
@@ -1111,7 +1147,7 @@ function boot(){
   // 새로고침하면 보던 화면(탭·날짜·미팅)으로 돌아온다. 앱을 새로 열면 오늘 날짜부터.
   const sd=SS.get("date");if(sd&&dates().includes(sd))S.date=sd;
   // 오늘이 출장 기간이 아니면(데모/사전 확인) 첫 미팅 날짜로
-  clocks();setInterval(clocks,20000);
+  clocks();setInterval(clocks,20000);probeIcons();
   render();
   const st=SS.get("tab"),sm=SS.get("meeting");
   if(st&&st!=="schedule"&&document.getElementById(st))go(st);
