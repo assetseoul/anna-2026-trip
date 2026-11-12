@@ -425,6 +425,7 @@ const EMERGENCY=[
   {n:"주몽골 대한민국 대사관",v:"(번호 확인 후 입력)"},
 ];
 
+const APP_VERSION="2026-11-12 · 좌표 r3";
 /* ============================================================
    상태 · 저장소
    ============================================================ */
@@ -447,6 +448,7 @@ let S={
   user:LS.get("user",CONFIG.USERS[0]),
   code:LS.get("code",""),
   flights:LS.get("flights",[]),
+  srv:LS.get("srv",null),
   date:null, meeting:null, tab:"schedule",
 };
 const $=s=>document.querySelector(s);
@@ -498,6 +500,7 @@ async function syncNow(manual){
     const d=await api("pull",{});
     if(d.schedule&&d.schedule.length){S.schedule=d.schedule.map(normMeeting);LS.set("schedule",S.schedule)}
     if(d.lodging){S.lodging=d.lodging.map(normLodging);LS.set("lodging",S.lodging)}
+    S.srv={at:Date.now(),lodgingKey:!!(d.lodging&&d.lodging.some(l=>"coord" in l)),scheduleKey:!!(d.schedule&&d.schedule.some(m=>"coord" in m))};LS.set("srv",S.srv);
     if(d.flights){S.flights=d.flights;LS.set("flights",S.flights)}
     if(d.notes){ // 서버가 더 최신이면 반영(대기 중인 내 변경은 보존)
       const pend=new Set(S.queue.filter(o=>o.type==="note").map(o=>o.data.meetingId));
@@ -819,7 +822,7 @@ function renderDay(){
   // 숙소 카드
   const lod=S.lodging.filter(l=>l.from<=S.date&&S.date<=l.to);
   $("#lodgingBox").innerHTML=lod.length?`<h2 class="sec">숙소</h2>`+lod.map(l=>{
-    const fake={id:"L-"+l.city+"-"+l.from,city:l.city,agency:l.name,addr:l.addr,addrLocal:l.addrLocal,lat:"",lng:"",phone:"",wechat:"",placeType:"",date:S.date};
+    const fake={id:"L-"+l.city+"-"+l.from,city:l.city,agency:l.name,addr:l.addr,addrLocal:l.addrLocal,lat:l.lat||"",lng:l.lng||"",phone:"",wechat:"",placeType:"",date:S.date};
     LODG[fake.id]=fake;
     const title=l.name?esc(l.name):`<span style="color:var(--amber)">숙소 미정 · 시트 HOTEL 탭에 입력해 주세요</span>`;
     return `<div class="card" style="margin-bottom:8px"><div class="ag">${title}</div>
@@ -890,7 +893,7 @@ function renderDetail(){
     <div class="meta"><span><b>${esc(m.date.slice(5).replace("-","/"))} ${esc(m.time||"")}</b></span>${statusBadge(m.status)}</div>
     <div class="acts">${actionButtons(m)}</div>
     <dl class="kv">
-      ${row("장소",esc(placeLabel(m)))}${row("주소",esc(placeOf(m).addr)||'<span style="color:var(--amber)">시트에 주소가 없어요</span>')}${row("좌표",placeOf(m).hasLL?`${placeOf(m).lat}, ${placeOf(m).lng}`:`<span style="color:var(--amber)">${m.coordBad?esc("⚠ "+m.coordBad+" (입력값: "+m.coord+")"):"좌표 없음 — 시트의 '좌표' 열에 넣으면 지도가 정확해져요"}</span>`)}
+      ${row("장소",esc(placeLabel(m)))}${row("주소",esc(placeOf(m).addr)||'<span style="color:var(--amber)">시트에 주소가 없어요</span>')}${row("지도 기준",placeOf(m).hasLL?'<b style="color:var(--teal)">좌표 (정확)</b>':'주소 검색 · '+esc(placeOf(m).query||"없음"))}${row("좌표",placeOf(m).hasLL?`${placeOf(m).lat}, ${placeOf(m).lng}`:`<span style="color:var(--amber)">${m.coordBad?esc("⚠ "+m.coordBad+" (입력값: "+m.coord+")"):"좌표 없음 — 시트의 '좌표' 열에 넣으면 지도가 정확해져요"}</span>`)}
       ${row("연락처",esc(m.phone))}${row(k.msgr,esc(m.wechat))}
       ${row("일정 유형",esc(m.type))}${row("소요시간",m.duration?esc(m.duration)+"분":"")}
       ${row("예정 모델",esc(m.models))}${row("예정 모델명",lnk(m.modelList))}
@@ -1147,6 +1150,20 @@ function coordHelpHtml(){
   });
   return h;
 }
+function statusHtml(){
+  const sc=S.schedule.filter(m=>m.lat&&m.lng).length,lc=S.lodging.filter(l=>l.lat&&l.lng).length;
+  const yn=(v)=>v===true?'<b style="color:var(--teal)">예</b>':v===false?'<b style="color:var(--red)">아니오</b>':'<span style="color:var(--mute)">아직 모름 (동기화 필요)</span>';
+  const bad=S.schedule.filter(m=>m.coordBad).length+S.lodging.filter(l=>l.coordBad).length;
+  let h=`<h2 class="sec">내 데이터 상태</h2><div class="fx"><dl class="kv" style="margin:0">
+    <dt>앱 버전</dt><dd>${esc(APP_VERSION)}</dd>
+    <dt>마지막 동기화</dt><dd>${S.lastSync?new Date(S.lastSync).toLocaleString("ko-KR"):"아직 없음"}</dd>
+    <dt>서버가 좌표 전달 (숙소)</dt><dd>${yn(S.srv?S.srv.lodgingKey:null)}</dd>
+    <dt>서버가 좌표 전달 (일정)</dt><dd>${yn(S.srv?S.srv.scheduleKey:null)}</dd>
+    <dt>앱이 읽은 좌표</dt><dd>숙소 ${lc}곳 · 일정 ${sc}건${bad?` · <span style="color:var(--amber)">읽지 못한 값 ${bad}곳</span>`:""}</dd></dl>`;
+  if(S.srv&&(!S.srv.lodgingKey||!S.srv.scheduleKey))h+=`<div class="saved" style="margin-top:10px;color:var(--red);line-height:1.6">⚠ 서버(Apps Script)가 '좌표' 열을 아직 전달하지 않아요. <b>최신 Code.gs로 바꾸고 '새 버전'으로 배포</b>해야 해요.</div>`;
+  else if(S.srv&&lc+sc===0)h+=`<div class="saved" style="margin-top:10px;line-height:1.6">서버는 정상이에요. 시트의 '좌표' 칸이 비어 있거나 모양을 못 읽었어요.</div>`;
+  return h+`</div>`;
+}
 function renderMore(){
   $("#more").innerHTML=`<h2 class="sec" style="margin-top:0">사용자</h2>
   <div class="fx"><label class="f" style="margin-top:0">작성자 이름 (기록·영수증에 표시)</label><select onchange="S.user=this.value;LS.set('user',S.user)">${CONFIG.USERS.map(u=>`<option ${u===S.user?"selected":""}>${u}</option>`).join("")}</select></div>
@@ -1160,7 +1177,7 @@ function renderMore(){
   <h2 class="sec">데이터</h2>
   <div class="fx"><div class="saved">일정 출처: ${CONFIG.API_URL?"Google 시트 (Apps Script)":"내장 샘플 (API_URL 미설정)"}</div>
   <div class="acts" style="margin-top:10px"><button class="act" onclick="syncNow(true)">지금 동기화</button><button class="act" onclick="if(confirm('이 기기의 임시 데이터를 모두 지울까요? (전송 대기 중인 기록도 사라집니다)')){Object.keys(localStorage).filter(k=>k.startsWith('st26:')).forEach(k=>localStorage.removeItem(k));location.reload()}">이 기기 데이터 초기화</button></div></div>`;
-  $("#more").insertAdjacentHTML("beforeend",coordHelpHtml()+diagHtml());
+  $("#more").insertAdjacentHTML("beforeend",statusHtml()+coordHelpHtml()+diagHtml());
 }
 
 /* ============================================================
