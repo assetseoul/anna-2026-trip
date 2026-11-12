@@ -94,6 +94,7 @@ h2.sec{font-size:13px;letter-spacing:.06em;color:var(--mute);text-transform:uppe
 .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .act{flex:1 1 auto;min-width:64px;padding:8px 10px;border-radius:12px;background:var(--soft);font-size:12px;font-weight:700;text-align:center;text-decoration:none;color:var(--ink);border:1px solid var(--line)}
 .act.red{background:var(--red);color:#fff;border-color:var(--red)}
+.act.off{opacity:.45;border-style:dashed;font-weight:500}
 .act.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
 /* detail */
@@ -309,6 +310,10 @@ const LS={
   get(k,d){try{const v=localStorage.getItem("st26:"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem("st26:"+k,JSON.stringify(v))}catch(e){toast("저장 공간이 부족합니다")}}
 };
+const SS={
+  get(k){try{return sessionStorage.getItem("st26:"+k)}catch(e){return null}},
+  set(k,v){try{sessionStorage.setItem("st26:"+k,v)}catch(e){}}
+};
 let S={
   schedule:LS.get("schedule",null)||SAMPLE.schedule,
   lodging:LS.get("lodging",null)||SAMPLE.lodging,
@@ -469,22 +474,36 @@ function statusBadge(s){
   const m={"확정":"b-ok","확인 중":"b-wait","완료":"b-done","취소":"b-cancel"};
   return s?`<span class="badge ${m[s]||"b-wait"}">${esc(s)}</span>`:"";
 }
+// 이 미팅이 열리는 곳: 장소유형이 '호텔'이면 그날 묵는 호텔 정보를 쓴다.
+function lodgingFor(m){return S.lodging.find(l=>l.city===m.city&&l.from<=m.date&&m.date<l.to)||null}
+function placeOf(m){
+  const hotel=m.placeType==="호텔"?lodgingFor(m):null;
+  const clean=v=>String(v||"").replace(/\r/g,"").trim();
+  // 주소가 여러 줄이면 가장 자세한 한 줄(시·성·市 포함, 없으면 가장 긴 줄)만 쓴다
+  const pick=v=>{const ls=clean(v).split("\n").map(x=>x.trim()).filter(Boolean);if(ls.length<2)return ls[0]||"";return ls.find(x=>/[省市]/.test(x))||ls.sort((a,b)=>b.length-a.length)[0]};
+  const addr=pick(m.addrLocal||m.addr)||pick(hotel&&(hotel.addrLocal||hotel.addr));
+  const name=hotel?clean(hotel.name):"";
+  return {isHotel:m.placeType==="호텔",hotelName:name,addr,query:addr||name,known:!!(addr||name)};
+}
 function actionButtons(m,extra){
-  const c=cityOf(m),k=cc(m);
-  const q=encodeURIComponent((m.agency||"")+" "+(m.addr||""));
+  const c=cityOf(m),k=cc(m),pl=placeOf(m);
   const ll=m.lat&&m.lng?`${m.lat},${m.lng}`:"";
+  const q=encodeURIComponent(pl.query);   // 주소(또는 호텔 이름)만 보낸다. 에이전시 이름은 섞지 않는다.
+  const none=l=>`<span class="act off" title="시트에 주소가 없어요">${l} · 주소 없음</span>`;
   let b="";
   if(c.country==="CN"){
-    // 고덕(Amap) URI: 좌표+이름이 있으면 경로, 없으면 검색
-    const amap=ll?`https://uri.amap.com/navigation?to=${m.lng},${m.lat},${encodeURIComponent(m.agency||"목적지")}&mode=car&callnative=1`:`https://uri.amap.com/search?keyword=${encodeURIComponent(m.addrLocal||m.addr||m.agency||"")}&callnative=1`;
+    const nm=encodeURIComponent(m.agency||pl.hotelName||"목적지");
+    const amap=ll?`https://uri.amap.com/navigation?to=${m.lng},${m.lat},${nm}&mode=car&src=scoutingtrip&callnative=1`:`https://uri.amap.com/search?keyword=${q}&src=scoutingtrip&callnative=1`;
     const apple=ll?`https://maps.apple.com/?daddr=${ll}&dirflg=d`:`https://maps.apple.com/?q=${q}`;
-    b+=`<a class="act" href="${amap}" target="_blank" rel="noopener">고덕지도</a>`;
-    b+=`<a class="act only-mob" href="${apple}" target="_blank" rel="noopener">애플지도</a>`;
+    if(ll||pl.known){
+      b+=`<a class="act" href="${amap}" target="_blank" rel="noopener">고덕지도</a>`;
+      b+=`<a class="act only-mob" href="${apple}" target="_blank" rel="noopener">애플지도</a>`;
+    }else b+=none("지도");
     b+=`<button class="act red" onclick="didi('${m.id}')">DiDi</button>`;
     if(m.wechat)b+=`<button class="act" onclick="wechat('${m.id}')">위챗</button>`;
   }else{
     const g=ll?`https://www.google.com/maps/dir/?api=1&destination=${ll}`:`https://www.google.com/maps/search/?api=1&query=${q}`;
-    b+=`<a class="act" href="${g}" target="_blank" rel="noopener">구글지도</a>`;
+    if(ll||pl.known)b+=`<a class="act" href="${g}" target="_blank" rel="noopener">구글지도</a>`;else b+=none("지도");
     b+=`<button class="act red" onclick="ubcab('${m.id}')">UBCab</button>`;
     if(m.wechat)b+=`<button class="act" onclick="messenger('${m.id}')">메신저</button>`;
   }
@@ -492,17 +511,22 @@ function actionButtons(m,extra){
     b+=`<a class="act only-mob" href="tel:${esc(m.phone.replace(/[^\d+]/g,""))}">전화</a>`;
     b+=`<button class="act only-desk" onclick="copy('${esc(m.phone)}','번호를 복사했습니다')">번호 복사</button>`;
   }
-  if(m.addrLocal)b+=`<button class="act dark" onclick="showDriver('${m.id}')">기사용</button>`;
+  if(pl.addr)b+=`<button class="act dark" onclick="showDriver('${m.id}')">기사용</button>`;
   return b+(extra||"");
 }
-const byId=id=>S.schedule.find(m=>m.id===id);
-function didi(id){const m=byId(id);copy(m.addrLocal||m.addr||m.agency,"주소 복사 완료 — DiDi에서 붙여넣기");location.href="didichuxing://"}
-function ubcab(id){const m=byId(id);copy(m.addr||m.addrLocal||m.agency,"주소 복사 완료 — UBCab에서 붙여넣기")}
+const byId=id=>S.schedule.find(m=>m.id===id)||LODG[id];
+function didi(id){const m=byId(id),pl=placeOf(m);if(!pl.known)toast("주소 정보가 없어요 — 시트에 입력해 주세요");else copy(pl.addr||pl.hotelName,"주소 복사 완료 — DiDi에서 붙여넣기");location.href="didichuxing://"}
+function ubcab(id){const m=byId(id),pl=placeOf(m);if(!pl.known)toast("주소 정보가 없어요 — 시트에 입력해 주세요");else copy(pl.addr||pl.hotelName,"주소 복사 완료 — UBCab에서 붙여넣기")}
 function wechat(id){const m=byId(id);copy(m.wechat,"위챗 ID 복사 완료");location.href="weixin://"}
 function messenger(id){const m=byId(id);copy(m.wechat,"메신저 ID 복사 완료")}
-function showDriver(id){const m=byId(id);$("#drvAddr").textContent=m.addrLocal||m.addr;$("#drvSub").textContent=m.agency+(m.agent?" · "+m.agent:"");$("#driver").classList.remove("hidden")}
+function showDriver(id){const m=byId(id),pl=placeOf(m);$("#drvAddr").textContent=pl.addr;$("#drvSub").textContent=m.agency+(m.agent?" · "+m.agent:"");$("#driver").classList.remove("hidden")}
 function closeDriver(){$("#driver").classList.add("hidden")}
 
+function placeLabel(m){
+  const pl=placeOf(m);
+  if(!pl.isHotel)return m.placeType;
+  return pl.hotelName||"호텔 (이름 미정)";
+}
 function renderDay(){
   const items=dayItems(S.date);
   const meets=items.filter(m=>m.kind!=="transit");
@@ -526,7 +550,7 @@ function renderDay(){
       h+=`<div class="item"><div class="time">${esc(m.time||"--:--")}</div>
         <div class="card ${m.id===nextId?"next":""}" onclick="openMeeting('${m.id}')">
           <div class="row1"><div class="ag">${esc(m.agency)} <small>· ${esc(m.agent||"담당 미정")}</small></div>${statusBadge(m.status)}</div>
-          <div class="meta"><span>👥 <b>${unk(m.models)}</b></span><span>🎁 <b>${unk(m.gift)}</b></span>${m.duration?`<span>⏱ <b>${esc(m.duration)}분</b></span>`:""}${m.placeType?`<span>📍 <b>${esc(m.placeType)}</b></span>`:""}</div>
+          <div class="meta"><span>👥 <b>${unk(m.models)}</b></span><span>🎁 <b>${unk(m.gift)}</b></span>${m.duration?`<span>⏱ <b>${esc(m.duration)}분</b></span>`:""}${m.placeType?`<span>📍 <b>${esc(placeLabel(m))}</b></span>`:""}</div>
           ${has?`<span class="rec">● 기록 있음</span>`:""}
           <div class="acts" onclick="event.stopPropagation()">${actionButtons(m)}</div>
         </div></div>`;
@@ -548,18 +572,17 @@ function renderDay(){
   // 숙소 카드
   const lod=S.lodging.filter(l=>l.from<=S.date&&S.date<=l.to);
   $("#lodgingBox").innerHTML=lod.length?`<h2 class="sec">숙소</h2>`+lod.map(l=>{
-    const fake={id:"L-"+l.name,city:l.city,agency:l.name,addr:l.addr,addrLocal:l.addrLocal,lat:"",lng:"",phone:"",wechat:""};
+    const fake={id:"L-"+l.city+"-"+l.from,city:l.city,agency:l.name,addr:l.addr,addrLocal:l.addrLocal,lat:"",lng:"",phone:"",wechat:"",placeType:"",date:S.date};
     LODG[fake.id]=fake;
-    return `<div class="card" style="margin-bottom:8px"><div class="ag">${esc(l.name)}</div>
+    const title=l.name?esc(l.name):`<span style="color:var(--amber)">숙소 미정 · 시트 HOTEL 탭에 입력해 주세요</span>`;
+    return `<div class="card" style="margin-bottom:8px"><div class="ag">${title}</div>
       <div class="meta"><span>체크인 <b>${esc(l.from.slice(5))}</b></span><span>체크아웃 <b>${esc(l.to.slice(5))}</b></span>${l.booking?`<span>예약 <b>${esc(l.booking)}</b></span>`:""}</div>
       <div class="acts">${lodgingActs(fake)}</div></div>`}).join(""):"";
   // 하루 동선 지도
   $("#dayActs").innerHTML=meets.length?routeButtons(meets):"";
 }
 const LODG={};
-function lodgingActs(f){
-  const old=S.schedule;S.schedule=[...old,f];const html=actionButtons(f);S.schedule=old;return html;
-}
+function lodgingActs(f){return actionButtons(f)}
 // 하루 동선: 지도 API 키가 없으므로 지도 앱 연결 + 순서 목록으로 대체
 function routeButtons(items){
   const c=cityOf(items[0]);
@@ -573,18 +596,18 @@ function routeButtons(items){
 }
 function routeText(){return dayItems(S.date).map((m,i)=>`${i+1}. ${m.time} ${m.agency} — ${m.addrLocal||m.addr||""}`).join("\n")}
 
-function setDate(d){S.date=d;S.meeting=null;render()}
+function setDate(d){S.date=d;S.meeting=null;SS.set("date",d);SS.set("meeting","");render()}
 
 /* ============================================================
    미팅 상세 + 기록
    ============================================================ */
 function openMeeting(id){
-  S.meeting=id;renderDetail();
+  S.meeting=id;SS.set("meeting",id);renderDetail();
   if(!isDesk()){$("#listCol").classList.add("hidden");$("#deskSide").classList.add("hidden");$("#dateTabs").classList.add("hidden");$("#detailWrap").classList.remove("hidden");scrollTo(0,0)}
   else $("#detailWrap").classList.remove("hidden");
 }
 function closeMeeting(){
-  flushNote();S.meeting=null;
+  flushNote();S.meeting=null;SS.set("meeting","");
   $("#listCol").classList.remove("hidden");$("#deskSide").classList.remove("hidden");$("#dateTabs").classList.remove("hidden");
   if(!isDesk())$("#detailWrap").classList.add("hidden");
   render();
@@ -603,7 +626,7 @@ function renderDetail(){
     <div class="meta"><span><b>${esc(m.date.slice(5).replace("-","/"))} ${esc(m.time||"")}</b></span>${statusBadge(m.status)}</div>
     <div class="acts">${actionButtons(m)}</div>
     <dl class="kv">
-      ${row("주소",esc(m.addr))}${row(k.addrLabel,esc(m.addrLocal))}
+      ${row("장소",esc(placeLabel(m)))}${row("주소",esc(placeOf(m).addr)||'<span style="color:var(--amber)">시트에 주소가 없어요</span>')}
       ${row("연락처",esc(m.phone))}${row(k.msgr,esc(m.wechat))}
       ${row("일정 유형",esc(m.type))}${row("소요시간",m.duration?esc(m.duration)+"분":"")}
       ${row("예정 모델",esc(m.models))}${row("예정 모델명",lnk(m.modelList))}
@@ -838,7 +861,7 @@ function renderNav(){
 }
 function go(tab){
   if(S.meeting&&tab!=="schedule")flushNote();
-  S.tab=tab;
+  S.tab=tab;SS.set("tab",tab);
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===tab));
   $("#dateTabs").classList.toggle("hidden",tab!=="schedule"||(!!S.meeting&&!isDesk()));
   render();scrollTo(0,0);
@@ -864,9 +887,15 @@ async function checkPin(){
 }
 function boot(){
   S.booted=true;S.date=pickToday();
+  // 새로고침하면 보던 화면(탭·날짜·미팅)으로 돌아온다. 앱을 새로 열면 오늘 날짜부터.
+  const sd=SS.get("date");if(sd&&dates().includes(sd))S.date=sd;
   // 오늘이 출장 기간이 아니면(데모/사전 확인) 첫 미팅 날짜로
   clocks();setInterval(clocks,20000);
-  render();refreshFx();syncNow(false);
+  render();
+  const st=SS.get("tab"),sm=SS.get("meeting");
+  if(st&&st!=="schedule"&&document.getElementById(st))go(st);
+  else if(sm&&byId(sm)&&byId(sm).date===S.date)openMeeting(sm);
+  refreshFx();syncNow(false);
   setInterval(()=>{if(S.tab==="schedule"&&!S.meeting)renderDay()},60000);
   addEventListener("online",()=>syncNow(false));
 }
