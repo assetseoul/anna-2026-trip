@@ -551,13 +551,27 @@ const mins=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]
 // 시트 값 정리: 일정ID가 없으면 날짜·시간·에이전시로 임시 ID 생성, 시간 오타(1:00 → 13:00) 보정
 // 구글/애플 지도에서 복사한 "위도, 경도" 글자를 숫자 두 개로 바꾼다
 function parseCoord(v){
-  const m=/(-?\d{1,3}\.\d+)\s*[,，;\s]\s*(-?\d{1,3}\.\d+)/.exec(String(v||""));
-  return m?{lat:+m[1],lng:+m[2]}:null;
+  const t=String(v||"");
+  const fix=(la,ln)=>{la=+la;ln=+ln;if(la>60&&ln<=60)[la,ln]=[ln,la];return {lat:la,lng:ln}}; // 경도, 위도 순서로 붙여넣은 경우 바로잡기
+  let m=/!3d(-?\d{1,3}\.\d+)!4d(-?\d{1,3}\.\d+)/.exec(t);          // 구글 지도 주소창 링크 (장소 좌표)
+  if(m)return fix(m[1],m[2]);
+  m=/@(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)/.exec(t);                    // 구글 지도 주소창 링크 (@위도,경도)
+  if(m)return fix(m[1],m[2]);
+  m=/(-?\d{1,3}\.\d+)\s*°?\s*([NSns])?\s*[,，;\s]\s*(-?\d{1,3}\.\d+)\s*°?\s*([EWew])?/.exec(t);   // 30.2084, 120.2108 / 31.2197° N, 121.4750° E
+  if(!m)return null;
+  let la=+m[1],ln=+m[3];if(/s/i.test(m[2]||""))la=-Math.abs(la);if(/w/i.test(m[4]||""))ln=-Math.abs(ln);
+  return fix(la,ln);
 }
-function normLodging(l){const o={...l},c=parseCoord(o.coord);if(c){o.lat=c.lat;o.lng=c.lng}return o}
+// '좌표' 칸에 뭔가 적혀 있는데 읽지 못한 경우 이유를 알려 주기 위한 판별
+function coordProblem(raw){
+  const t=String(raw||"").trim();if(!t||parseCoord(t))return "";
+  if(/^[0-9A-Z]{4,8}\+[0-9A-Z]{2,}/i.test(t))return "플러스 코드는 쓸 수 없어요. 숫자 두 개(위도, 경도)가 필요해요";
+  return "좌표 모양을 읽지 못했어요. 예: 30.2084, 120.2108";
+}
+function normLodging(l){const o={...l},c=parseCoord(o.coord);if(c){o.lat=c.lat;o.lng=c.lng}else if(o.coord)o.coordBad=coordProblem(o.coord);return o}
 function normMeeting(m){
   const o={...m};
-  const c=parseCoord(o.coord);if(c){o.lat=c.lat;o.lng=c.lng}
+  const c=parseCoord(o.coord);if(c){o.lat=c.lat;o.lng=c.lng}else if(o.coord)o.coordBad=coordProblem(o.coord);
   o.time=normTime(o.time);
   o.kind=/이동/.test(o.type||"")?"transit":"meeting";
   if(!o.id)o.id="auto_"+[o.date,o.time,o.agency||o.type||""].join("_").replace(/[^\w가-힣-]+/g,"");
@@ -876,7 +890,7 @@ function renderDetail(){
     <div class="meta"><span><b>${esc(m.date.slice(5).replace("-","/"))} ${esc(m.time||"")}</b></span>${statusBadge(m.status)}</div>
     <div class="acts">${actionButtons(m)}</div>
     <dl class="kv">
-      ${row("장소",esc(placeLabel(m)))}${row("주소",esc(placeOf(m).addr)||'<span style="color:var(--amber)">시트에 주소가 없어요</span>')}${row("좌표",placeOf(m).hasLL?`${placeOf(m).lat}, ${placeOf(m).lng}`:'<span style="color:var(--amber)">좌표 없음 — 시트의 \'좌표\' 열에 넣으면 지도가 정확해져요</span>')}
+      ${row("장소",esc(placeLabel(m)))}${row("주소",esc(placeOf(m).addr)||'<span style="color:var(--amber)">시트에 주소가 없어요</span>')}${row("좌표",placeOf(m).hasLL?`${placeOf(m).lat}, ${placeOf(m).lng}`:`<span style="color:var(--amber)">${m.coordBad?esc("⚠ "+m.coordBad+" (입력값: "+m.coord+")"):"좌표 없음 — 시트의 '좌표' 열에 넣으면 지도가 정확해져요"}</span>`)}
       ${row("연락처",esc(m.phone))}${row(k.msgr,esc(m.wechat))}
       ${row("일정 유형",esc(m.type))}${row("소요시간",m.duration?esc(m.duration)+"분":"")}
       ${row("예정 모델",esc(m.models))}${row("예정 모델명",lnk(m.modelList))}
@@ -1126,7 +1140,7 @@ function coordHelpHtml(){
   S.schedule.filter(m=>m.kind!=="transit").forEach(m=>{const pl=placeOf(m);if(!pl.hasLL&&(pl.addr||pl.hotelName))add(pl.isHotel?(pl.hotelName||"호텔"):m.agency,pl.addr||pl.hotelName,false,pl.addr||pl.hotelName)});
   S.lodging.forEach(l=>{if(!(l.lat&&l.lng)&&(l.addr||l.name))add(l.name||"숙소",l.addr||l.name,false,l.addr||l.name)});
   const items=[...seen.values()];
-  let h=`<h2 class="sec">좌표 채우기 (${items.length}곳)</h2><div class="fx"><div class="saved" style="line-height:1.6">시험 결과, <b>좌표가 있으면 어느 지도에서든 정확히 열려요.</b><br>① 아래 <b>구글에서 찾기</b>를 눌러 장소를 찾아요.<br>② 지도에서 그 장소를 <b>길게 눌러</b> 핀을 꽂고, 맨 위에 뜨는 숫자(예: 30.2084, 120.2108)를 눌러 <b>복사</b>해요.<br>③ 시트 <b>TRIP SCHEDULE</b>(미팅)과 <b>HOTEL</b>(숙소) 탭의 <b>'좌표' 열</b>에 붙여넣어요.<br>※ 반드시 <b>구글 또는 애플 지도</b>에서 복사한 숫자를 쓰세요.</div></div>`;
+  let h=`<h2 class="sec">좌표 채우기 (${items.length}곳)</h2><div class="fx"><div class="saved" style="line-height:1.65"><b>좌표가 있으면 어느 지도에서든 정확히 열려요.</b><br><br><b>💻 컴퓨터가 가장 쉬워요</b><br>① 아래 <b>구글에서 찾기</b>를 눌러 장소를 찾아요.<br>② 지도의 핀 위에서 <b>오른쪽 클릭</b> → 맨 위에 나온 숫자(예: 31.2197, 121.4750)를 <b>클릭하면 복사</b>돼요.<br>③ 시트 <b>TRIP SCHEDULE</b>(미팅), <b>HOTEL</b>(숙소) 탭의 <b>'좌표' 열</b>에 붙여넣어요.<br><br><b>📱 폰에서는</b><br>지도의 <b>빈 곳을 길게 눌러</b> 핀을 꽂고 나오는 숫자를 복사해요. (장소를 눌렀을 때 나오는 <b>6FCG+V6</b> 같은 글자는 '플러스 코드'라서 쓸 수 없어요.)<br><br>✅ 이런 모양을 다 읽어요: <b>31.2197, 121.4750</b> · <b>31.2197° N, 121.4750° E</b> · 구글 지도 <b>주소창 링크 통째로</b><br>※ 반드시 <b>구글 또는 애플 지도</b>에서 복사한 숫자를 쓰세요.</div></div>`;
   if(!items.length)return h+`<div class="empty" style="margin-top:10px">좌표가 없는 장소가 없어요 🎉</div>`;
   items.forEach(it=>{
     h+=`<div class="card" style="margin-top:10px"><div class="ag" style="font-size:15px">${esc([...new Set(it.labels)].join(" · "))}</div><div style="font-size:12px;color:var(--mute);margin:4px 0 8px;word-break:break-all">${esc(it.addr)}</div><div class="acts" style="margin-top:0"><a class="act" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cnSimplify(it.addr))}">구글에서 찾기</a><button class="act" onclick="copy('${esc(it.addr).replace(/'/g,"&#39;")}','주소를 복사했습니다')">주소 복사</button></div></div>`;
