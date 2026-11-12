@@ -651,6 +651,16 @@ function openAmap(id){
   setTimeout(()=>{if(!document.hidden)location.href=u.web},1600);
 }
 function lodgingFor(m){return S.lodging.find(l=>l.city===m.city&&l.from<=m.date&&m.date<l.to)||null}
+// 호실·층·여러 번지까지 들어 있는 주소는 지도 검색이 못 찾는 경우가 많다 → 건물/번지까지만 남긴다. (기사용 카드에는 원문 그대로)
+function cnSimplify(a){
+  let s=String(a||"").trim();
+  if(!/[一-鿿]/.test(s))return s;
+  s=s.replace(/[、，,;；].*$/,"");                                   // 번지가 여러 개면 첫 번째만
+  s=s.replace(/\d+\s*(号楼|栋|幢|座|楼|层|層|F|室|单元).*$/i,"");       // 동·층·호실 제거
+  s=s.replace(/[A-Za-z]?\d{3,4}$/,"");                              // 끝에 붙은 호실 번호 (A301, 1502)
+  s=s.replace(/[\s\-]+$/,"");
+  return s||String(a).trim();
+}
 function placeOf(m){
   const hotel=m.placeType==="호텔"?lodgingFor(m):null;
   const clean=v=>String(v||"").replace(/\r/g,"").trim();
@@ -658,7 +668,8 @@ function placeOf(m){
   const pick=v=>{const ls=clean(v).split("\n").map(x=>x.trim()).filter(Boolean);if(ls.length<2)return ls[0]||"";return ls.find(x=>/[省市]/.test(x))||ls.sort((a,b)=>b.length-a.length)[0]};
   const addr=pick(m.addrLocal||m.addr)||pick(hotel&&(hotel.addrLocal||hotel.addr));
   const name=hotel?clean(hotel.name):"";
-  return {isHotel:m.placeType==="호텔",hotelName:name,addr,query:addr||name,known:!!(addr||name)};
+  const cn=cityOf(m).country==="CN",mapAddr=cn?cnSimplify(addr):addr;
+  return {isHotel:m.placeType==="호텔",hotelName:name,addr,query:mapAddr||name,known:!!(addr||name)};
 }
 /* 앱 아이콘: 공식 로고 PNG를 icons/ 폴더(amap.png, didi.png, applemaps.png, wechat.png, googlemaps.png, ubcab.png)에 넣으면 자동 적용.
    파일이 없으면 아래 기본 그림을 쓴다. */
@@ -686,6 +697,7 @@ function actionButtons(m,extra){
     if(ll||pl.known){
       dock+=ib("amap","고덕지도",`onclick="openAmap('${m.id}')"`);
       dock+=`<a class="ib only-mob" href="${apple}" target="_blank" rel="noopener">${icoTile("applemaps")}<em>애플지도</em></a>`;
+      dock+=`<a class="ib" href="${ll?`https://www.google.com/maps/dir/?api=1&destination=${ll}`:`https://www.google.com/maps/search/?api=1&query=${q}`}" target="_blank" rel="noopener">${icoTile("googlemaps")}<em>구글지도</em></a>`;
     }else{dock+=off("amap","주소 없음");}
     dock+=ib("didi","DiDi",`onclick="didi('${m.id}')"`);
     if(m.wechat)dock+=ib("wechat","위챗",`onclick="wechat('${m.id}')"`);
@@ -763,8 +775,9 @@ function renderDay(){
             <div class="mc-sub">${esc(m.agent||"담당 미정")}</div>
             <div class="meta"><span>👥 <b>${unk(m.models)}</b></span><span>🎁 <b>${unk(m.gift)}</b></span>${m.duration?`<span>⏱ <b>${esc(m.duration)}분</b></span>`:""}${m.placeType?`<span>📍 <b>${esc(placeLabel(m))}</b></span>`:""}</div>
             ${has?`<span class="rec">● 기록 있음</span>`:""}
-            <div class="acts" onclick="event.stopPropagation()">${actionButtons(m)}</div>
-          </div></div></div>`;
+          </div>
+          <div class="acts" style="grid-column:1/-1" onclick="event.stopPropagation()">${actionButtons(m)}</div>
+          </div></div>`;
       const nx=items[i+1];
       if(nx&&nx.kind!=="transit")h+=gapLine(m,nx);
     });
@@ -1056,6 +1069,40 @@ function fxK(v){const r=FXs.from==="CNY"?S.fx.CNY_KRW:S.fx.MNT_KRW;FXs.amt=Strin
 /* ============================================================
    더보기
    ============================================================ */
+// 지도 연결 진단: '주소가 문제인지, 연결 방식이 문제인지'를 직접 눌러서 가려낸다.
+function diagTests(){
+  const withAddr=S.schedule.find(m=>m.kind!=="transit"&&placeOf(m).addr&&cityOf(m).country==="CN");
+  const full=withAddr?placeOf(withAddr).addr:"",simp=full?cnSimplify(full):"";
+  const t=[{id:"lm",label:"① 아주 유명한 장소",note:"어느 지도 앱이든 찾는 곳 (东方明珠 · 상하이 동방명주)",q:"东方明珠广播电视塔"}];
+  if(full){
+    t.push({id:"orig",label:"② 시트 주소 그대로",note:full,q:full});
+    if(simp!==full)t.push({id:"simp",label:"③ 시트 주소 (줄인 것)",note:simp+"  ← 앱이 실제로 쓰는 검색어",q:simp});
+  }
+  t.push({id:"ll",label:"④ 좌표로 열기",note:"天安门 (39.9087, 116.3975) — 주소 검색을 거치지 않음",q:"天安门",lat:39.9087,lon:116.3975});
+  return t;
+}
+function diagLinks(t){
+  const pf=platform(),enc=encodeURIComponent,q=enc(t.q),ll=t.lat!=null;
+  const amapApp=pf==="desktop"?"":ll
+    ?(pf==="ios"?`iosamap://viewMap?sourceApplication=scoutingtrip&poiname=${q}&lat=${t.lat}&lon=${t.lon}&dev=0`:`androidamap://viewMap?sourceApplication=scoutingtrip&poiname=${q}&lat=${t.lat}&lon=${t.lon}&dev=0`)
+    :(pf==="ios"?`iosamap://poi?sourceApplication=scoutingtrip&name=${q}&dev=0`:`androidamap://poi?sourceApplication=scoutingtrip&keywords=${q}&dev=0`);
+  return [
+    ["고덕 앱",amapApp,"폰에서만"],
+    ["고덕 웹",ll?`https://uri.amap.com/marker?position=${t.lon},${t.lat}&name=${q}&src=scoutingtrip&callnative=0`:`https://uri.amap.com/search?keyword=${q}&src=scoutingtrip&callnative=0`],
+    ["애플지도",ll?`https://maps.apple.com/?ll=${t.lat},${t.lon}&q=${q}`:`https://maps.apple.com/?q=${q}`],
+    ["구글지도",`https://www.google.com/maps/search/?api=1&query=${ll?t.lat+","+t.lon:q}`]
+  ];
+}
+function diagHtml(){
+  const pf=platform(),pfName={ios:"아이폰",android:"안드로이드",desktop:"컴퓨터"}[pf];
+  let h=`<h2 class="sec">지도 연결 진단</h2><div class="fx"><div class="saved" style="line-height:1.6">지금 기기: <b>${pfName}</b><br>각 줄의 버튼을 눌러서 <b>어느 지도에서 열리는지</b> 확인해 보세요.<br>· ①은 되는데 ②③이 안 되면 → <b>주소</b> 문제예요.<br>· ①도 안 되면 → <b>그 지도 앱/연결</b> 문제예요.<br>· ④만 되면 → 주소 검색이 약한 거라 시트에 <b>좌표</b>를 넣는 게 좋아요.<br>※ 구글지도는 중국에서 로밍·eSIM(한국 망)으로만 열려요.</div></div>`;
+  diagTests().forEach(t=>{
+    h+=`<div class="card" style="margin-top:10px"><div class="ag">${esc(t.label)}</div><div class="addr" style="font-size:12px;color:var(--mute);margin:4px 0 8px;word-break:break-all">${esc(t.note)}</div><div class="acts" style="margin-top:0">`+
+      diagLinks(t).map(([n,u,off])=>u?`<a class="act" href="${u}" target="_blank" rel="noopener">${n}</a>`:`<span class="act off">${n} · ${off}</span>`).join("")+
+      `<button class="act" onclick="copy('${esc(t.q).replace(/'/g,"&#39;")}','검색어를 복사했습니다')">복사</button></div></div>`;
+  });
+  return h;
+}
 function renderMore(){
   $("#more").innerHTML=`<h2 class="sec" style="margin-top:0">사용자</h2>
   <div class="fx"><label class="f" style="margin-top:0">작성자 이름 (기록·영수증에 표시)</label><select onchange="S.user=this.value;LS.set('user',S.user)">${CONFIG.USERS.map(u=>`<option ${u===S.user?"selected":""}>${u}</option>`).join("")}</select></div>
@@ -1063,12 +1110,13 @@ function renderMore(){
   ${EMERGENCY.map(e=>`<div class="fu-row"><b>${esc(e.n)}</b><small>${esc(e.v)}</small></div>`).join("")}
   <h2 class="sec">도시별 도구</h2>
   <table class="tb"><tr><th></th><th>중국</th><th>몽골</th></tr>
-   <tr><td>지도</td><td>고덕·애플</td><td>구글 / MAPS.ME</td></tr>
+   <tr><td>지도</td><td>고덕·애플·구글</td><td>구글 / MAPS.ME</td></tr>
    <tr><td>차량</td><td>DiDi</td><td>UBCab (현금·QPay)</td></tr>
    <tr><td>환율</td><td>CNY</td><td>MNT</td></tr></table>
   <h2 class="sec">데이터</h2>
   <div class="fx"><div class="saved">일정 출처: ${CONFIG.API_URL?"Google 시트 (Apps Script)":"내장 샘플 (API_URL 미설정)"}</div>
   <div class="acts" style="margin-top:10px"><button class="act" onclick="syncNow(true)">지금 동기화</button><button class="act" onclick="if(confirm('이 기기의 임시 데이터를 모두 지울까요? (전송 대기 중인 기록도 사라집니다)')){Object.keys(localStorage).filter(k=>k.startsWith('st26:')).forEach(k=>localStorage.removeItem(k));location.reload()}">이 기기 데이터 초기화</button></div></div>`;
+  $("#more").insertAdjacentHTML("beforeend",diagHtml());
 }
 
 /* ============================================================
