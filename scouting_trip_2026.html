@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#E9E6E1">
+<meta name="theme-color" content="#E9E6E1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Scouting Trip">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231C1C1C'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23E0262E'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231C1C1C'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23E0262E'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
 <title>Scouting Trip 2026 · 상하이 항저우 울란바토르</title>
 <style>
 :root{
@@ -21,7 +25,13 @@
 html,body{height:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
 button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer;border:0;background:none}
+button{cursor:pointer;border:0;background:none;-webkit-appearance:none;appearance:none;touch-action:manipulation}
+a,label,summary{touch-action:manipulation}
+/* iOS Safari: 글자 크기 16px 미만 입력칸을 누르면 화면이 확대되는 문제 방지 */
+input,select,textarea{font-size:16px}
+textarea{-webkit-appearance:none;appearance:none;border-radius:12px}
+summary::-webkit-details-marker{display:none}
+html{-webkit-text-size-adjust:100%}
 a{color:inherit}
 .hidden{display:none!important}
 
@@ -35,7 +45,7 @@ a{color:inherit}
 #sync{font-size:11px;color:var(--mute);margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 #sync .pill{background:var(--amber);color:#fff;border-radius:99px;padding:1px 8px;font-weight:700}
 #sync button{color:var(--teal);font-weight:700;font-size:11px}
-#dateTabs{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+#dateTabs{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 0 2px;scrollbar-width:none}
 #dateTabs::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;min-width:52px;text-align:center;padding:7px 10px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
 .chip .d{font-weight:800;font-size:16px}
@@ -147,6 +157,9 @@ input[type=date]::-webkit-date-and-time-value{text-align:left}
 #nav button{white-space:nowrap;color:inherit;opacity:.6;padding:9px 14px;border-radius:99px;font-weight:700;font-size:13px}
 #nav button.on{background:var(--red);opacity:1;color:#fff}
 
+#lightbox{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:16px}
+#lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+#lightbox span{color:#fff;font-size:14px}
 #toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:80;font-size:13px;opacity:0;pointer-events:none;transition:.2s;max-width:86vw;text-align:center}
 #toast.on{opacity:1}
 
@@ -185,7 +198,7 @@ table.tb th{background:var(--soft);font-size:11px;color:var(--mute)}
 <div id="pin" class="hidden">
   <div style="font-weight:800;font-size:18px">Scouting Trip 2026</div>
   <div style="color:var(--mute)">접속 코드를 입력하세요</div>
-  <input id="pinIn" type="text" inputmode="numeric" maxlength="8" autocomplete="off">
+  <input id="pinIn" type="password" maxlength="32" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')checkPin()">
   <button class="btn dark" onclick="checkPin()">입장</button>
 </div>
 
@@ -232,6 +245,7 @@ table.tb th{background:var(--soft);font-size:11px;color:var(--mute)}
 </div>
 
 <div id="driver" class="hidden"><button onclick="closeDriver()">닫기</button><div class="addr" id="drvAddr"></div><div class="sub" id="drvSub"></div></div>
+<div id="lightbox" class="hidden" onclick="this.classList.add('hidden')"></div>
 <div id="toast"></div>
 
 <script>
@@ -323,9 +337,15 @@ const cc=m=>COUNTRY[cityOf(m).country];
 
 function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(()=>e.classList.remove("on"),1800)}
 function copy(text,msg){
-  const done=()=>toast(msg||"복사했습니다");
-  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done,fallback)}else fallback();
-  function fallback(){const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(e){}t.remove();done()}
+  let ok=false;
+  try{ // 누른 순간 안에서 바로 복사 (iOS Safari는 비동기 복사를 막는 경우가 있음)
+    const t=document.createElement("textarea");t.value=text;t.setAttribute("readonly","");
+    t.style.cssText="position:fixed;top:0;left:0;opacity:0;font-size:16px";
+    document.body.appendChild(t);t.focus();t.select();t.setSelectionRange(0,t.value.length);
+    ok=document.execCommand("copy");t.remove();
+  }catch(e){}
+  if(!ok&&navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).catch(()=>{});
+  toast(msg||"복사했습니다");
 }
 
 /* ============================================================
@@ -476,9 +496,9 @@ function actionButtons(m,extra){
   return b+(extra||"");
 }
 const byId=id=>S.schedule.find(m=>m.id===id);
-function didi(id){const m=byId(id);copy(m.addrLocal||m.addr||m.agency,"주소 복사 완료 — DiDi에서 붙여넣기");setTimeout(()=>{location.href="didichuxing://"},400)}
+function didi(id){const m=byId(id);copy(m.addrLocal||m.addr||m.agency,"주소 복사 완료 — DiDi에서 붙여넣기");location.href="didichuxing://"}
 function ubcab(id){const m=byId(id);copy(m.addr||m.addrLocal||m.agency,"주소 복사 완료 — UBCab에서 붙여넣기")}
-function wechat(id){const m=byId(id);copy(m.wechat,"위챗 ID 복사 완료");setTimeout(()=>{location.href="weixin://"},400)}
+function wechat(id){const m=byId(id);copy(m.wechat,"위챗 ID 복사 완료");location.href="weixin://"}
 function messenger(id){const m=byId(id);copy(m.wechat,"메신저 ID 복사 완료")}
 function showDriver(id){const m=byId(id);$("#drvAddr").textContent=m.addrLocal||m.addr;$("#drvSub").textContent=m.agency+(m.agent?" · "+m.agent:"");$("#driver").classList.remove("hidden")}
 function closeDriver(){$("#driver").classList.add("hidden")}
@@ -765,9 +785,9 @@ async function loadPhotos(){
 }
 async function viewPhoto(id){
   const r=S.receipts.find(x=>x.id===id);const p=r&&photoOf(r);if(!p)return;
-  const w=window.open("");
-  try{const src=p.startsWith("data:")?p:await fetchPhoto(p);w&&w.document.write(`<img src="${src}" style="max-width:100%">`)}
-  catch(e){w&&w.close();toast("사진을 불러오지 못했어요 — 연결을 확인해 주세요")}
+  const lb=$("#lightbox");lb.innerHTML="<span>불러오는 중…</span>";lb.classList.remove("hidden");
+  try{const src=p.startsWith("data:")?p:await fetchPhoto(p);lb.innerHTML='<img src="'+src+'" alt="">'}
+  catch(e){lb.classList.add("hidden");toast("사진을 불러오지 못했어요 — 연결을 확인해 주세요")}
 }
 
 /* ============================================================
