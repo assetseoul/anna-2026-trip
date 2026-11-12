@@ -102,6 +102,11 @@ label.f{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px;font-we
 input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--soft);outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--teal)}
 textarea{min-height:90px;resize:vertical}
+/* 입력칸 높이·모양 통일 (특히 아이폰의 날짜·선택 칸) */
+input[type=text],input[type=number],input[type=date],select{height:44px;line-height:20px;-webkit-appearance:none;appearance:none;min-width:0;display:block}
+select{padding-right:34px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236f6b66' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+input[type=date]::-webkit-date-and-time-value{text-align:left}
+.fx div{min-width:0}
 .lines{display:flex;flex-direction:column;gap:8px}
 .line{background:var(--soft);border-radius:12px;padding:8px;display:grid;gap:6px}
 .line .two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
@@ -111,6 +116,8 @@ textarea{min-height:90px;resize:vertical}
 .btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .btn.sm{padding:6px 10px;font-size:12px}
 .save-row{display:flex;gap:8px;align-items:center;margin-top:14px;position:sticky;bottom:80px}
+.save-row.static{position:static}
+.save-row.static .btn{flex:1}
 .saved{font-size:11px;color:var(--mute)}
 
 /* receipts */
@@ -703,7 +710,7 @@ function renderReceipts(){
     <label class="f">연결 미팅</label>
     <select onchange="RC.meetingId=this.value"><option value="">없음</option>${meet.map(m=>`<option value="${m.id}" ${m.id===RC.meetingId?"selected":""}>${esc(m.time)} ${esc(m.agency)}</option>`).join("")}</select>
     <label class="f">메모</label><input type="text" value="${esc(RC.memo)}" oninput="RC.memo=this.value">
-    <div class="save-row"><button class="btn red" onclick="saveReceipt()">영수증 저장</button></div>
+    <div class="save-row static"><button class="btn red" onclick="saveReceipt()">영수증 저장</button></div>
   </div>
   <h2 class="sec">합계</h2>
   <div class="totals">${Object.keys(tot).sort().map(k=>{const [c,cur]=k.split("|");return `<span>${c} ${tot[k].toLocaleString()} ${cur}</span>`}).join("")||`<span>아직 없음</span>`}</div>
