@@ -37,9 +37,24 @@ function doPost(e) {
     var code = accessCode_();
     if (code && req.code !== code) return out({error: "forbidden"});
     if (req.action === "pull") return out(pull());
+    if (req.action === "photo") return out(photo_(req.url));
     if (req.action === "push") return out(push(req.ops || [], req.user));
     return out({error: "unknown action"});
   } catch (err) { return out({error: String(err)}); }
+}
+// 영수증 사진 한 장을 base64로 돌려준다. 우리 영수증 폴더 안의 파일만 허용한다.
+function photo_(url) {
+  var m = /\/d\/([\w-]+)/.exec(String(url || "")) || /[?&]id=([\w-]+)/.exec(String(url || ""));
+  if (!m) throw new Error("bad url");
+  var file = DriveApp.getFileById(m[1]), ok = false;
+  var ps = file.getParents();
+  while (ps.hasNext()) {
+    var gp = ps.next().getParents();
+    while (gp.hasNext()) { if (gp.next().getName() === DRIVE_FOLDER_NAME) ok = true; }
+  }
+  if (!ok) throw new Error("not allowed");
+  var blob = file.getBlob();
+  return {data: "data:" + blob.getContentType() + ";base64," + Utilities.base64Encode(blob.getBytes())};
 }
 function doGet() { return out({ok: true}); }
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }

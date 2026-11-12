@@ -709,10 +709,10 @@ function renderReceipts(){
   <div class="totals">${Object.keys(tot).sort().map(k=>{const [c,cur]=k.split("|");return `<span>${c} ${tot[k].toLocaleString()} ${cur}</span>`}).join("")||`<span>아직 없음</span>`}</div>
   <h2 class="sec">내역</h2>
   ${Object.keys(grouped).map(d=>`<div style="font-weight:800;margin:10px 0 6px">${d.slice(5).replace("-","/")}</div>`+grouped[d].map(r=>`
-    <div class="rcpt"><img src="${r.photos&&r.photos[0]||r.photo||""}" onclick="viewPhoto('${r.id}')" alt=""><div><b>${esc(r.cat)}</b><div class="saved">${esc(r.memo||"")} ${r.meetingId?"· "+esc(byId(r.meetingId)?.agency||""):""}</div><div class="saved">${esc(r.by||"")}</div></div>
+    <div class="rcpt"><img ${photoAttr(r)} onclick="viewPhoto('${r.id}')" alt=""><div><b>${esc(r.cat)}</b><div class="saved">${esc(r.memo||"")} ${r.meetingId?"· "+esc(byId(r.meetingId)?.agency||""):""}</div><div class="saved">${esc(r.by||"")}</div></div>
     <div class="amt">${(+r.amount).toLocaleString()} ${r.cur}<small>≈ ${krw(r).toLocaleString()}원</small><button class="btn sm" style="margin-top:4px" onclick="delReceipt('${r.id}')">삭제</button></div></div>`).join("")).join("")||`<div class="empty">등록된 영수증이 없습니다</div>`}
   `;
-  fxHint();
+  fxHint();loadPhotos();
   const dz=$("#drop");if(dz){["dragover","dragenter"].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.add("over")}));["dragleave","drop"].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.remove("over")}));dz.addEventListener("drop",ev=>addPhotos(ev.dataTransfer.files))}
 }
 function fxHint(){
@@ -733,7 +733,35 @@ function delReceipt(id){
   S.receipts=S.receipts.filter(r=>r.id!==id);LS.set("receipts",S.receipts);
   enqueue({opId:uid(),type:"receiptDelete",data:{id}});renderReceipts();
 }
-function viewPhoto(id){const r=S.receipts.find(x=>x.id===id);const p=r&&(r.photos&&r.photos[0]||r.photo);if(!p)return;const w=window.open("");w&&w.document.write(`<img src="${p}" style="max-width:100%">`)}
+// 서버에 저장된 사진은 드라이브 링크라서 그대로는 그림으로 못 쓴다 → 필요할 때 서버에서 받아 와 보여 준다.
+const PH={}, PHQ=new Set();
+const BLANK_IMG="data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='64' height='64' fill='#ccc'/><text x='32' y='40' font-size='24' text-anchor='middle'>📷</text></svg>");
+function photoOf(r){return (r.photos&&r.photos[0])||r.photo||""}
+function photoAttr(r){
+  const p=photoOf(r);if(!p)return 'src="'+BLANK_IMG+'"';
+  if(p.startsWith("data:"))return `src="${p}"`;
+  if(PH[p])return `src="${PH[p]}"`;
+  return `src="${BLANK_IMG}" data-link="${esc(p)}"`;
+}
+async function fetchPhoto(link){
+  if(PH[link])return PH[link];
+  const r=await api("photo",{url:link});PH[link]=r.data;return r.data;
+}
+async function loadPhotos(){
+  if(!CONFIG.API_URL)return;
+  for(const img of document.querySelectorAll("img[data-link]")){
+    const link=img.dataset.link;if(PHQ.has(link))continue;PHQ.add(link);
+    try{const d=await fetchPhoto(link);document.querySelectorAll("img").forEach(i=>{if(i.dataset.link===link){i.src=d;i.removeAttribute("data-link")}})}
+    catch(e){/* 연결이 없으면 다음 화면 갱신 때 다시 시도 */}
+    finally{PHQ.delete(link)}
+  }
+}
+async function viewPhoto(id){
+  const r=S.receipts.find(x=>x.id===id);const p=r&&photoOf(r);if(!p)return;
+  const w=window.open("");
+  try{const src=p.startsWith("data:")?p:await fetchPhoto(p);w&&w.document.write(`<img src="${src}" style="max-width:100%">`)}
+  catch(e){w&&w.close();toast("사진을 불러오지 못했어요 — 연결을 확인해 주세요")}
+}
 
 /* ============================================================
    환율
