@@ -20,7 +20,7 @@ var HEADER_MAP = {
   id:"일정ID", city:"도시", date:"날짜", time:"시작시간", duration:"미팅소요시간(분)", type:"일정유형",
   agency:"에이전시명", agent:"미팅 담당자", placeType:"장소유형", addr:"미팅 주소", models:"미팅예정모델 인원",
   modelList:"미팅예정 모델명", gift:"에이전시 선물", upcoming:"업커밍 모델", past:"과거 인타운 모델",
-  status:"일정상태", note:"비고"
+  status:"일정상태", note:"비고", coord:"좌표"
 };
 var CITY_ALIAS = {"항저우":"hangzhou","상하이":"shanghai","베이징":"beijing","울란바토르":"ulaanbaatar"};
 
@@ -94,7 +94,7 @@ function stamp_(sh, row, col, ms) {
 function pull() {
   var lodging = rows(sheet(LODGING_TAB)).filter(function (r) { return r["도시"]; }).map(function (r) {
     return {city: cityKey_(r["도시"]), from: normDate(r["체크인 날짜"]), to: normDate(r["체크아웃 날짜"]),
-            name: r["호텔명"], addr: r["호텔 주소"], addrLocal: r["호텔 주소"], booking: ""};
+            name: r["호텔명"], addr: r["호텔 주소"], addrLocal: r["호텔 주소"], booking: "", coord: r["좌표"] || ""};
   });
   var agencies = {};
   rows(sheet(AGENCY_TAB)).forEach(function (r) { if (r["에이전시명"]) agencies[String(r["에이전시명"]).trim().toLowerCase()] = r; });
